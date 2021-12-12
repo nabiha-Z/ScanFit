@@ -1,0 +1,2 @@
+.drop-down{position:relative;box-shadow:0 2px 5px -1px #d1d2d3;padding:10px;margin-bottom:20px;display:flex;flex-direction:row;border-radius:8px}.drop-down label{font-family:Arial,Helvetica,sans-serif;font-weight:700;letter-spacing:1px}.drop-down select{position:absolute;content:"";left:90px;top:-3px;width:60%;border:transparent;border-top:#fff;cursor:pointer}select option{cursor:pointer}
+/*# sourceMappingURL=33.cfe0b7f6.chunk.css.map */
