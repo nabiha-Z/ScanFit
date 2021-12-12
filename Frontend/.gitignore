@@ -8,8 +8,13 @@
 # testing
 /coverage
 
+<<<<<<< HEAD
 # # production
 # /build
+=======
+# production
+/build
+>>>>>>> 5540d54a8763a067394209d24c81b73923fb9850
 
 # misc
 .DS_Store
@@ -21,4 +26,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+<<<<<<< HEAD
 .eslintcache
+=======
+>>>>>>> 5540d54a8763a067394209d24c81b73923fb9850
