@@ -1,0 +1,53 @@
+[
+    {
+        "id":1,
+        "title":"Plot for sale",
+        "picture":"#",
+        "description":"",
+        "area":"4500 sq ft",
+        "location" :"Bahria Town phase 8 Islamabad",
+        "features":"",
+        "type":"Residential Plot"
+    },
+    {
+        "id":2,
+        "title":"House for sale",
+        "picture":"#",
+        "description":"",
+        "area":"1 marla",
+        "location" :"Bani gala Islamabad",
+        "features":"double-story",
+        "type":"House"
+    },
+    {
+        "id":3,
+        "title":"Plot for sale",
+        "picture":"#",
+        "description":"",
+        "area":"27,500 sq ft",
+        "location" :"DHA phase 4 Islamabad",
+        "features":"",
+        "type":"Commercial Plot"
+    },
+    {
+        "id":4,
+        "title":"Building for sale",
+        "picture":"#",
+        "description":"",
+        "area":"20,250 sq ft",
+        "location" :"Bahria Town phase 4 Islamabad",
+        "features":"",
+        "type":"building"
+    },
+    {
+        "id":5,
+        "title":"Plot for sale",
+        "picture":"#",
+        "description":"",
+        "area":"21,500 sq ft",
+        "location" :"Gulberg Islamabad",
+        "features":"",        
+        "type":"Residential Plot"
+    }
+    
+]

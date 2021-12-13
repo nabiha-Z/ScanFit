@@ -51,14 +51,7 @@ class Mobilemenu extends Component {
                             }
                         </li>
                     )) : null}
-                    {/* Pages End */}
-                    {/* Social Media Start */}
-                    <li className="menu-section-title">Get Social</li>
-                    <li className="menu-item"> <Link to="#"> <i className="flaticon-facebook" />Facebook</Link> </li>
-                    <li className="menu-item"> <Link to="#"> <i className="flaticon-linkedin" /> Linkedin </Link> </li>
-                    <li className="menu-item"> <Link to="#"> <i className="flaticon-twitter" /> Twitter </Link> </li>
-                    <li className="menu-item"> <Link to="#"> <i className="flaticon-instagram" /> Instagram </Link> </li>
-                    {/* Social Media End */}
+                   
                 </ul>
             </div>
         );

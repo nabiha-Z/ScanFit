@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 import user from "../models/users.js";
-import listing from "../models/listings.js";
+import listing from "../models/products.js";
 
 
 import jwt from "jsonwebtoken";
@@ -578,9 +578,6 @@ export const forgotPassword = async (req, res) => {
                 });
 
                 console.log("mail= ", users.email);
-
-
-
                 var currentDateTime = new Date();
                 var mailOptions = {
                     from: 'no-reply@gmail.com',

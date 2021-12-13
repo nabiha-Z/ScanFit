@@ -21,7 +21,7 @@ class Menu extends Component {
             <Link to="/" >Home</Link>
           </li>
           <li className="menu-item menu-item-has-children">
-            <Link to="/listing-grid">Products</Link>
+            <Link to="/products">Products</Link>
           </li>
           <li className="menu-item menu-item-has-children">
             <Link to="/about" >About Us</Link>

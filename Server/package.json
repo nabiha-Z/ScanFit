@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-<<<<<<< HEAD
   "type": "module",
   "scripts": {
     "start": "nodemon index.js"
@@ -30,19 +29,4 @@
     "react-redux": "^7.2.4",
     "redux": "^4.1.1"
   }
-=======
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nabiha-Z/OutfitAdobe.git"
-  },
-  "author": "Nabiha",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/nabiha-Z/OutfitAdobe/issues"
-  },
-  "homepage": "https://github.com/nabiha-Z/OutfitAdobe#readme"
->>>>>>> 5540d54a8763a067394209d24c81b73923fb9850
 }

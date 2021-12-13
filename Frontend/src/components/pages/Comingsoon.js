@@ -7,11 +7,7 @@ class Comingsoon extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Acres - Real Estate React Template | Coming Soon</title>
-                    <meta
-                        name="description"
-                        content="#"
-                    />
+                    <title>Outfit Adobe | Coming Soon</title>
                 </MetaTags>
                 <Content/>
             </Fragment>

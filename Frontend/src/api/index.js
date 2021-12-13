@@ -4,26 +4,11 @@ import Cookies from 'js-cookie';
 // const API = axios.create({ baseURL: 'https://localhost:5000/' });
 const API = axios.create({ baseURL: 'http://localhost:5000/' });
 
-// API.interceptors.request.use(req => {
-//   if (Cookies.get('token')) {
-//     req.headers.authorization = `Bearer ${Cookies.get('token')}`;
-//   }
-
-// return req;
-// });
-
-
-
-// export const fetchunapproved = () => API.get(`user/unapproved`);
-// export const fetchpropertydealers = () => API.get(`user/propertydealers`);
-// export const getApprovedRequested = () => API.get(`listings/ApprovedRequested`);
 
 export const fetchadmin =()=> API.get(`user/`);
-export const fetchListings = () => API.get(`listings/`);
+export const fetchProducts = () => API.get(`products/`);
 export const fetchLocations = () => API.get(`location/`);
 export const fetchCategory = () => API.get(`categories/`);
-export const recentLists = () => API.get(`listings/recent`);
-export const projects = () => API.get(`projects`);
 export const fetchuserlistings = userdata => API.post(`listings/getuserlistings`, userdata);
 export const createListing = userdata => API.post(`listings/createlist`, userdata);
 export const login = userdata => API.post(`user/login`, userdata);

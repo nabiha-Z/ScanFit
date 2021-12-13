@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import jwt_decode from "jwt-decode";
-import { fetchListings, favourite } from '../../../api/index';
+import { fetchProducts, favourite } from '../../../api/index';
 
 
 const gallerytip = (
@@ -51,10 +51,10 @@ const areatip = (
 function Content() {
 
     const routerHistory = useHistory();
-    const [items, setitems] = useState([]);
+    const [products, setproducts] = useState([]);
     const [nonfeatured, setnonfeatured] = useState([]);
     const [currentPage, setcurrentPage] = useState(1);
-    const [itemsPerPage, setitemsPerPage] = useState(6);
+    const [productsPerPage, setproductsPerPage] = useState(6);
     const [loading, setloading] = useState(false);
     
 
@@ -62,18 +62,16 @@ function Content() {
     async function place() {
         setloading(true);
         console.log("here");
-        await fetchListings()
+        await fetchProducts()
             .then(function (response) {
 
                 if (response.data.message === true) {
 
-                    setitems(response.data.featured);
-                    setnonfeatured(response.data.nonFeatured);
-                    console.log("res= ", response.data.nonFeatured);
+                    setproducts(response.data.products);
                     setloading(false);
                 }
 
-                //console.log("items= ", items); 
+                //console.log("products= ", products); 
 
 
 
@@ -100,9 +98,9 @@ function Content() {
     };
 
     // this.state = {
-    //     items: places,
+    //     products: places,
     //     currentPage: 1,
-    //     itemsPerPage: 6,
+    //     productsPerPage: 6,
     //     loading: false
     // };
 
@@ -136,7 +134,6 @@ function Content() {
 
             const user = jwt_decode(token);
             const user_id = user.id;
-            console.log("currentuser");
             console.log(user_id);
 
             await favourite({ item, user_id })
@@ -146,7 +143,7 @@ function Content() {
                     if (response.data.message === true) {
                         alert("Saved");
                     } else {
-                        alert("Already in saved items");
+                        alert("Already in saved products");
                     }
 
 
@@ -168,22 +165,22 @@ function Content() {
 
     }
 
-    // const { items, currentPage, itemsPerPage } = this.state;
+    // const { products, currentPage, productsPerPage } = this.state;
 
-    // const { items, currentPage, itemsPerPage } = this.state;
+    // const { products, currentPage, productsPerPage } = this.state;
 
-    // Logic for displaying items
-    const indexOfLastitem = currentPage * itemsPerPage;
-    const indexOfFirstitem = indexOfLastitem - itemsPerPage;
+    // Logic for displaying products
+    const indexOfLastitem = currentPage * productsPerPage;
+    const indexOfFirstitem = indexOfLastitem - productsPerPage;
 
 
     const RenderItem = ({ list }) => {
         //console.log("list length= ", list.length);
-        const currentitems = list.slice(indexOfFirstitem, indexOfLastitem);
+        const currentproducts = list.slice(indexOfFirstitem, indexOfLastitem);
 
 
         return (
-            currentitems.map((item, i) => {
+            currentproducts.map((item, i) => {
 
                 return (<div key={i} className="col-md-6 col-sm-8" style={{ justifyContent: 'center' }}>
                     <div className="listing">
@@ -228,29 +225,8 @@ function Content() {
                         </div> */}
                             <h5 className="listing-title"> <Link to="/listing-details-v1" title={item.title}>{item.title}</Link> </h5>
                             <p className="listing-text">{item.location}</p>
-                            <span className="listing-price">{item.price}$ {item.type ==="Rent"?<span>/month</span> :""} </span>
+                            <span className="listing-price">{item.price} RS/-</span>
                             <p className="listing-text">{item.description}</p>
-
-                            <div className="acr-listing-icons">
-                                {/* <OverlayTrigger overlay={bedstip}>
-                                <div className="acr-listing-icon">
-                                    <i className="flaticon-bedroom" />
-                                    <span className="acr-listing-icon-value">{item.beds}</span>
-                                </div>
-                            </OverlayTrigger>
-                            <OverlayTrigger overlay={bathstip}>
-                                <div className="acr-listing-icon">
-                                    <i className="flaticon-bathroom" />
-                                    <span className="acr-listing-icon-value">{item.bathrooms}</span>
-                                </div>
-                            </OverlayTrigger> */}
-                                <OverlayTrigger overlay={areatip}>
-                                    <div className="acr-listing-icon">
-                                        <i className="flaticon-ruler" />
-                                        <span className="acr-listing-icon-value">{item.area}</span>
-                                    </div>
-                                </OverlayTrigger>
-                            </div>
                             <div className="listing-gallery-wrapper">
 
                                 <button onClick={() => showDetails(item)} className="btn-custom btn-sm secondary">View Details</button>
@@ -269,7 +245,7 @@ function Content() {
     }
     // Logic for displaying page numbers
     const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(items.length / itemsPerPage); i++) {
+    for (let i = 1; i <= Math.ceil(products.length / productsPerPage); i++) {
         pageNumbers.push(i);
     }
     const renderPagination = pageNumbers.map(number => {
@@ -336,7 +312,7 @@ function Content() {
                             {/* Listing Start */}
                             {loading === false ?
                                        <>
-                                    {items.length != 0 && <RenderItem list={items} />}
+                                    {products.length != 0 && <RenderItem list={products} />}
                                     {nonfeatured.length != 0 && <RenderItem list={nonfeatured} />}
                                     </> 
                                     

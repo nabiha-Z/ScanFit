@@ -32,41 +32,9 @@ const Userbreadcrumb =()=>  {
         
     }, [user])
 
-    const Submit = ()=>{
 
-        history.push('/submit-listing');
-
-    }
-
-    const onRequest = ()=>{
-        
-        requestListing({
-            token: Cookies.get('token')
-            
-        })
-        .then(function (response) {
-            
-            user=null;
-            console.log(response.data.message);
-            
-        })
-        
-        .catch(function (error) {
-
-        });
-        
-        
-
-    }
-
-    const checkLimit = () =>{
-        console.log("user = ", user.limit)
-        if(user.limit > 1){
-            alert("you cannot add more listings")
-        }
-    }
         return (
-            <div className="subheader subheader-2 user-subheader bg-cover bg-center" style={{ backgroundImage: "url(/homeImg.jpg)" }}>
+            <div className="subheader subheader-2 user-subheader bg-cover bg-center" style={{ backgroundImage: "url(/images/img2.png)" }}>
                 <div className="container">
                     <div className="media">
                         <img src={process.env.PUBLIC_URL + "/assets/img/people/1.jpg"} alt="agent" />

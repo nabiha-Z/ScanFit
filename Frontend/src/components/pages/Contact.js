@@ -10,11 +10,7 @@ class Contact extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Re Marketing | Contact Us</title>
-                    <meta
-                        name="description"
-                        content="#"
-                    />
+                    <title>Outfit Adobe | Contact Us</title>
                 </MetaTags>
                 <Header/>
                 <Breadcrumb breadcrumb={{pagename:'Contact Us'}} />

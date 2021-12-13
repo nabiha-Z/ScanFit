@@ -10,21 +10,16 @@ class Footercontent extends Component {
                     <div className="row">
                         <div className="col-lg-3 col-md-4 col-sm-12 footer-widget">
                             <div className="footer-logo">
-                                <img src="/RE2.png" alt="acres" />
+                                <img src="/logo2.png" alt="acres" />
                                 
                             </div>
                             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's </p>
-                            <ul className="social-media">
-                                <li> <Link to="#"> <i className="fab fa-facebook-f" /> </Link> </li>
-                                <li> <Link to="#"> <i className="fab fa-twitter" /> </Link> </li>
-                                <li> <Link to="#"> <i className="fab fa-pinterest-p" /> </Link> </li>
-                                <li> <Link to="#"> <i className="fab fa-linkedin-in" /> </Link> </li>
-                            </ul>
+                           
                         </div>
                         <div className="col-lg-2 offset-md-1 col-md-4 col-sm-6 footer-widget">
                             <h5 className="widget-title">Menu</h5>
                             <ul>
-                                <li> <Link to="/listing-grid">Find Home</Link> </li>
+                                <li> <Link to="/products">Find Dress</Link> </li>
                                 {Cookies.get('mail')===undefined?<li> <Link to="/login">Add Listings</Link> </li>:  <li> <Link to="/submit-listing">Add Listing</Link> </li>}
                                
                                 <li> <Link to="/listing-grid">Listings</Link> </li>
@@ -39,30 +34,16 @@ class Footercontent extends Component {
                                 <li> <Link to="#">Cookie Policy</Link> </li>
                             </ul>
                         </div>
-                        {/* <div className="col-lg-4 col-md-12 footer-widget">
-                            <h5 className="widget-title">Newsletter</h5>
-                            <p>Join our newsletter today, and get the best flats that we have to offer.</p>
-                            <form method="post">
-                                <div className="form-group">
-                                    <input type="text" className="form-control" placeholder="Email Address" name="newsletter-email" />
-                                </div>
-                                <button type="submit" className="btn-custom primary light btn-block" name="button">Join Newsletter</button>
-                            </form>
-                        </div> */}
+                       
                     </div>
                 </div>
                 <div className="footer-bottom">
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-7">
-                                <p className="m-0">© Copyright 2021 - <Link to="#">Re Marketing</Link> All Rights Reserved.</p>
+                                <p className="m-0">© Copyright 2021 - <Link to="#">Outfit Adobe</Link> All Rights Reserved.</p>
                             </div>
-                            {/* <div className="col-lg-5">
-                                <ul>
-                                    
-                                    <li> <Link to="#">View Brokers</Link> </li>
-                                </ul>
-                            </div> */}
+                            
                         </div>
                     </div>
                 </div>

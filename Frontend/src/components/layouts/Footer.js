@@ -15,50 +15,20 @@ class Footer extends Component {
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-5 col-sm-12 footer-widget">
-                                <div className="footer-logo"> <img src={"/RE2.png"} alt="acres" /> </div>
+                                <div className="footer-logo"> <img src={"/images/logo2.png"} alt="acres" /> </div>
                                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's </p>
-                                <Dropdown className="acr-language-selector">
-                                    <Dropdown.Toggle as={NavLink} className="dropdownicon">
-                                        <img src={process.env.PUBLIC_URL + "/assets/img/flags/united-states.png"} alt="flag" />
-                                        <span>English</span>
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu className="dropdown-menu">
-                                        <ul>
-                                            <li> <Link to="#"><img src={process.env.PUBLIC_URL + "/assets/img/flags/germany.png"} alt="flag" /> German</Link> </li>
-                                            <li> <Link to="#"><img src={process.env.PUBLIC_URL + "/assets/img/flags/russia.png"} alt="flag" /> Russian</Link> </li>
-                                            <li> <Link to="#"><img src={process.env.PUBLIC_URL + "/assets/img/flags/united-states.png"} alt="flag" />English</Link> </li>
-                                            <li> <Link to="#"><img src={process.env.PUBLIC_URL + "/assets/img/flags/spain.png"} alt="flag" /> Spanish</Link> </li>
-                                        </ul>
-                                    </Dropdown.Menu>
-                                </Dropdown>
+                              
                             </div>
                             <div className="col-lg-2 offset-lg-1 col-sm-4 footer-widget">
                                 <h5 className="widget-title">Menu</h5>
                                 <ul>
-                                    <li> <Link to="/listing-grid">Find Home</Link> </li>
-                                    <li> <Link to="/submit-listing">Add Listing</Link> </li>
-                                    <li> <Link to="/listing-grid">Listings</Link> </li>
-                                    <li> <Link to="/blog-grid">Blog</Link> </li>
-                                </ul>
-                            </div>
-                            <div className="col-lg-2 col-sm-4 footer-widget">
-                                <h5 className="widget-title">Information</h5>
-                                <ul>
-                                    <li> <Link to="/about">About Us</Link> </li>
-                                    <li> <Link to="/contact">Contact Us</Link> </li>
-                                    <li> <Link to="/services">Services</Link> </li>
+                                    <li> <Link to="/listing-grid">Find Dress</Link> </li>
+                                    <li> <Link to="/about">Contact Us</Link> </li>
                                     <li> <Link to="/faq">FAQ</Link> </li>
                                 </ul>
                             </div>
-                            <div className="col-lg-2 col-sm-4 footer-widget">
-                                <h5 className="widget-title">Legal</h5>
-                                <ul>
-                                    <li> <Link to="/legal">Privacy Policy</Link> </li>
-                                    <li> <Link to="/legal">Refund Policy</Link> </li>
-                                    <li> <Link to="/legal">Cookie Policy</Link> </li>
-                                    <li> <Link to="/legal">Legal Terms</Link> </li>
-                                </ul>
-                            </div>
+                            
+                            
                         </div>
                     </div>
                 </div>
@@ -68,15 +38,9 @@ class Footer extends Component {
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-7">
-                                <p className="m-0">© Copyright 2020 - <Link to="#">Re Marketing</Link> All Rights Reserved.</p>
+                                <p className="m-0">© Copyright 2020 - <Link to="#">Outfit Adobe</Link> All Rights Reserved.</p>
                             </div>
-                            <div className="col-lg-5">
-                                <ul>
-                                    <li> <Link to="/listing-grid">Find a Home</Link> </li>
-                                    <li> <Link to="/submit-listing">Add Listing</Link> </li>
-                                    <li> <Link to="/agency-archive">View Agencies</Link> </li>
-                                </ul>
-                            </div>
+                           
                         </div>
                     </div>
                 </div>

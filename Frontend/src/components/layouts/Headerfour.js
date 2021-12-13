@@ -43,34 +43,6 @@ const Headerfour = () => {
         setnavtoggle(!navtoggle)
     }
 
-    const Submit = () => {
-
-        history.push('/submit-listing');
-
-    }
-
-    const onRequest = () => {
-        console.log("in onreq");
-
-        requestListing({
-            token: Cookies.get('token')
-
-        })
-            .then(function (response) {
-
-                user = null;
-                console.log(response.data.message);
-
-            })
-
-            .catch(function (error) {
-
-            });
-
-
-
-    }
-
     return (
         <Fragment>
             {/* Aside (Mobile Navigation) */}

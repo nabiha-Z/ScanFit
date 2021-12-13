@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-<<<<<<< HEAD
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
@@ -25,17 +24,6 @@ ReactDOM.render(
     <App />
   </BrowserRouter>,
   document.getElementById('acres')
-=======
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
->>>>>>> 5540d54a8763a067394209d24c81b73923fb9850
 );
 
 // If you want to start measuring performance in your app, pass a function

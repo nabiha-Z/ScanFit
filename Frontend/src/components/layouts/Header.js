@@ -46,32 +46,7 @@ const Header = () => {
         setnavtoggle(!navtoggle)
     }
 
-    const Submit = ()=>{
 
-        history.push('/submit-listing');
-
-    }
-
-    const onRequest = ()=>{
-        
-        requestListing({
-            token: Cookies.get('token')
-            
-        })
-        .then(function (response) {
-            
-            user=null;
-            console.log(response.data.message);
-            
-        })
-        
-        .catch(function (error) {
-
-        });
-        
-        
-
-    }
 
     return (
         <Fragment>
