@@ -23,13 +23,11 @@ class Menu extends Component {
           <li className="menu-item menu-item-has-children">
             <Link to="/products">Products</Link>
           </li>
+          
           <li className="menu-item menu-item-has-children">
             <Link to="/about" >About Us</Link>
           </li>
-          <li className="menu-item menu-item-has-children">
-            <Link to="/faq">Cart</Link>
-          </li>
-
+         
         
           <li className="menu-item menu-item-has-children">
             {Cookies.get("mail") === undefined ? (

@@ -62,7 +62,7 @@ const Headerfour = () => {
             {/* Header Start */}
             <header className="main-header">
                 {/* Top Header Start */}
-                <div className="top-header">
+                {/* <div className="top-header">
                     <div className="container">
                         <div className="top-header-inner">
 
@@ -76,7 +76,7 @@ const Headerfour = () => {
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> */}
                 {/* Top Header End */}
                 <nav className="navbar" >
                     <div className="container">
@@ -85,15 +85,19 @@ const Headerfour = () => {
                         <div className="header-controls">
                             <ul className="header-controls-inner d-none d-lg-flex">
 
-                                <li>
+                                {Cookies.get('mail') === undefined ? <>
+                                    <li className="menu-item menu-item-has-children" > <Link to="/login" style={{color:'#0A648C'}}>Login</Link> </li>
+                                    <li>or</li>
+                                    <li className="menu-item menu-item-has-children"> <Link to="/register" style={{color:'#0A648C'}}> Signup</Link> </li></> : <li>
                                     <Link>
-                                    <img
-                                        src={"/cart.png"}
-                                        alt="cart"
-                                        style={{ width: '40%', height: 'auto' }}
-                                    />
+                                        <img
+                                            src={"/cart.png"}
+                                            alt="cart"
+                                            style={{ width: '40%', height: 'auto' }}
+                                        />
                                     </Link>
-                                </li>
+                                </li>}
+
 
                             </ul>
                             {/* Toggler */}

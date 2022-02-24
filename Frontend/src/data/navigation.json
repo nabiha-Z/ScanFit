@@ -24,11 +24,6 @@
                 "linkText": "Products"
             },
             {
-                "id": 33,
-                "link": "/faq",
-                "linkText": "FAQ"
-            },
-            {
                 "id": 34,
                 "link": "/cart",
                 "linkText": "Cart"
@@ -38,16 +33,10 @@
     },
     {
         "id": 3,
-        "linkText": "Login",
-        "link": "/login",
-        "child": false,
-        "icon": "list"
-    },
-    {
-        "id": 4,
-        "link": "/register",
-        "linkText": "Register",
+        "linkText": "Profile",
+        "link": "/profile",
         "child": false,
         "icon": "list"
     }
+    
 ]
