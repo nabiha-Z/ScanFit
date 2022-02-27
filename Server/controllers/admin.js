@@ -48,17 +48,17 @@ export const login = async (req, res) => {
       process.env.SECRET,
       { expiresIn: "6h" }
     );
-    res.status(200).json({ token });
+    res.status(200).json({ message:true, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong." });
   }
 };
 
 export const signup = async (req, res) => {
-  console.log("fwfwe");
+ 
   const { first, last, email, password } = req.body;
   console.log(first, last, email, password);
-  console.log(req.body);
+
 
   try {
     console.log("before");

@@ -5,9 +5,9 @@ import Slider from 'react-slick';
 import axios from 'axios';
 import store from '../../../redux/store.js';
 import Cookies from 'js-cookie';
-import {forgotPassword} from '../../../api';
+import { forgotPassword } from '../../../api';
 import 'antd/dist/antd.css';
-import { message,Space } from 'antd';
+import { message, Space } from 'antd';
 
 
 const images = [
@@ -16,7 +16,7 @@ const images = [
     { img: 'assets/img/coming-soon/3.jpg', title: "Quote of the day", text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" },
 ];
 
-function Content(){
+function Content() {
 
 
     const routerHistory = useHistory();
@@ -51,7 +51,7 @@ function Content(){
     //               } catch (e) {
     //                 return null;
     //               }
-                    
+
     //             } 
 
     //         })
@@ -63,25 +63,25 @@ function Content(){
     const resetPassword = async () => {
         console.log("email: ", email)
         await forgotPassword({
-          email: email
-    
+            email: email
+
         })
-          .then(function (response) {
-            console.log(response.data.message);
-            if (response.data.message === true) {
-              setEmail("");
-             message.success(response.data.success)
-              routerHistory.push('/login');
-            } else {
-              //alert("not found");
-              message.error( response.data.error)
-            }
-    
-          })
-          .catch(function (error) {
-    
-          });
-      }
+            .then(function (response) {
+                console.log(response.data.message);
+                if (response.data.message === true) {
+                    setEmail("");
+                    message.success(response.data.success)
+                    routerHistory.push('/login');
+                } else {
+                    //alert("not found");
+                    message.error(response.data.error)
+                }
+
+            })
+            .catch(function (error) {
+
+            });
+    }
 
     return (
         <div className="acr-auth-container">
@@ -91,16 +91,16 @@ function Content(){
                         <h3>Forgot Password?</h3>
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
 
-                        
+
                     </div>
                     <div className="form-group">
                         <label>Email</label>
                         <input type="text" className="form-control form-control-light" placeholder="Username" name="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
                     </div>
-                    
-                
+
+
                     <button className="btn-custom secondary btn-block" onClick={() => resetPassword()}>Send Reset Instructions</button>
-                    
+
                     <p className="text-center mb-0">Don't have an account? <Link to="/register">Create One</Link> </p>
                 </form>
             </div>

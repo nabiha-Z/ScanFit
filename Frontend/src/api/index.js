@@ -4,6 +4,13 @@ import Cookies from 'js-cookie';
 // const API = axios.create({ baseURL: 'https://localhost:5000/' });
 const API = axios.create({ baseURL: 'http://localhost:5000/' });
 
+API.interceptors.request.use(req => {
+    if (Cookies.get('token')) {
+      req.headers.authorization = `Bearer ${Cookies.get('token')}`;
+    }
+  
+  return req;
+  });
 
 export const fetchadmin =()=> API.get(`user/`);
 export const fetchProducts = () => API.get(`products/`);
