@@ -147,7 +147,8 @@ const Content = (props) => {
                             <ul>
 
                                 <li> <Link className="active" to="/profile"> Edit Profile</Link> </li>
-                               
+                                <li> <Link  to="/profile"> Favourites </Link> </li>
+                                <li> <Link  to="/measuremenets"> Body Measurements </Link> </li>
                                 <li> <Link className="logout" to="/" onClick={() => {
                                     Cookies.remove('token');
                                     Cookies.remove('mail');

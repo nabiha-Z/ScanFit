@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import Banner from './Banner';
 import Categories from './Categories';
 import CompanySlider from '../../layouts/CompanySlider';
+import LatestProducts from '../../layouts/LatestProduct';
 
 
 class Content extends Component {
@@ -16,7 +17,7 @@ class Content extends Component {
                 <div className="acr-footer footer-2">
                     {/* <App /> */}
                 </div>
-                <CompanySlider/>
+                <LatestProducts/>
                 {/* <Latestblog/> */}
                
             </Fragment>

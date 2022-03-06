@@ -2,8 +2,7 @@ import React, { Component, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import Slider from 'react-slick';
-import axios from 'axios';
-import store from '../../../redux/store.js';
+import './login.css';
 import Cookies from 'js-cookie';
 import {login} from '../../../api/index';
 
@@ -82,13 +81,13 @@ function Content(){
                         <Link to="/forgotpassword" className="forgot-password">Forgot Password?</Link>
                     </div>
                     <button className="btn-custom secondary btn-block" onClick={() => API()}>Login</button>
-                    <div className="auth-seperator">
+                    {/* <div className="auth-seperator">
                         <span>OR</span>
                     </div>
                     <div className="social-login">
 
                         <button type="button" className="acr-social-login google"><i className="fab fa-google" /> Continue with Google</button>
-                    </div>
+                    </div> */}
                     <p className="text-center mb-0">Don't have an account? <Link to="/register">Create One</Link> </p>
                 </form>
             </div>
