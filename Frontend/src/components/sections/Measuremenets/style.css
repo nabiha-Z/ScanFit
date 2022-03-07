@@ -114,3 +114,69 @@
     font-size: 20px;
     margin: 5px;
 }
+.modalWrapper {
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgb(79, 79, 79, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+  }
+  
+  .modal {
+      
+    width: 40%;
+    height: 70%;
+    background: white;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    animation: fadeInDown 0.8s;
+  }
+
+  .heading {
+      text-align: center;
+      margin: 10px;
+      font-weight: bold;
+  }
+  .body {
+    text-align: center;
+    margin: 10px;
+    font-weight: 300;
+}
+  .btnClose {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    border-radius: 10px;
+    border:none;
+    background-color: rgb(255, 255, 255);
+    font-size: 20px;
+    font-weight: bold;
+
+  }
+  .bodyModal{
+      margin: 20px;
+      align-self: center;
+      width: 80%;
+      height: 60%;
+  }
+  
+  @keyframes fadeInDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

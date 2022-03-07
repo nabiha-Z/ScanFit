@@ -2,81 +2,79 @@ import React, { Component, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import styles from './style.css';
+import  './style.css';
+import EditMeasurements from './EditMeasurement';
 import 'antd/dist/antd.css';
-import { message, Space } from 'antd';
-import UpArrow from '@material-ui/icons/ExpandLessTwoTone';
-import jwt_decode from "jwt-decode";
 import { BsCameraFill, BsArrowRightShort, BsPencil, BsTrash } from 'react-icons/bs';
-import { useHistory } from 'react-router';
-import { loginuser, subuserCount, updateProfile, updatepassword } from '../../../api';
+import { useHistory } from 'react-router'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 
 const Content = (props) => {
 
-    const [showButton, setShowButton] = useState(false);
-    const routerHistory = useHistory();
-    const [useremail, setuseremail] = useState("");
-    const [contact, setcontact] = useState("");
+   
+    const [description, setDesc] = useState("");
+    const [modalOpen, setModalOpen] = useState(false);
+    const [length, setLength] = useState("");
+    const [title, setTitle] = useState("");
+    const [measuremenets, setMeasuremenets] = useState("");
+    const [img, setImg] = useState("");
     const [list, setList] = useState(
         [
             {
                 id: '1',
                 title: 'Shoulders Length',
-                img: '/images/model1.png'
+                img: '/images/model1.png',
+                desc: "Linear distance between the two shoulder points",
+                inch: '14'
             },
             {
                 id: '2',
                 title: 'Arms Length',
-                img: '/images/model1.png'
+                img: '/images/model1.png',
+                desc: "Linear distance between the the shoulder point and hand",
+                inch: '21'
             },
             {
                 id: '3',
                 title: 'Full Length',
-                img: '/images/model1.png'
+                img: '/images/model1.png',
+                desc: "Linear distance between the shoulder point and foot point",
+                inch: '57'
             },
             {
                 id: '4',
                 title: 'Chest Front Length',
-                img: '/images/model1.png'
+                img: '/images/model1.png',
+                desc: "Linear distance between the two chest points",
+                inch: '19'
             },
             {
                 id: '5',
                 title: 'Knee Length',
-                img: '/images/model1.png'
+                img: '/images/model1.png',
+                desc: "Linear distance between the shoulder point and knee point",
+                inch: '30'
             },
 
 
         ]);
-    const [user, setuser] = useState({});
-    const [error, seterror] = useState("");
-    const [password, setpassword] = useState("");
-    const [measuremenets, setMeasuremenets] = useState("");
-    const [newPassword, setnewPassword] = useState("");
 
-    useEffect(() => {
-
-
-        window.addEventListener("scroll", () => {
-            if (window.pageYOffset > 300) {
-                setShowButton(true);
-            } else {
-                setShowButton(false);
-            }
-        });
-
-    }, [])
-
-
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-    };
 
     const List = (props) => {
         return (
             <>
-                <div className='list-container'>
+                <div className='list-container' onClick={() => {
+
+                    setModalOpen(true)
+                    setTitle(props.title)
+                    setImg(props.img)
+                    setDesc(props.desc)
+                    setLength(props.inch)
+                    
+                }}>
+                    
                     <img src="/images/humanIcon.png" className='human-icon' />
                     <p>{props.title}</p>
                     <BsArrowRightShort className='right-arrow' />
@@ -84,6 +82,7 @@ const Content = (props) => {
             </>
 
         );
+        
     }
 
     return (
@@ -116,19 +115,19 @@ const Content = (props) => {
                                 <div className="acr-welcome-message">
                                     <div className='top-header'>
                                         <h3>Your Body Measurements</h3>
-                                        <Link className='measurementBtn'>Edit Measuremenets<span><BsPencil className="cameraIcon" /></span></Link>
+                                        <Link className='measurementBtn' onClick={()=>{return(<EditMeasurements/>)}}>Edit Measuremenets<span><BsPencil className="cameraIcon" /></span></Link>
                                     </div>
 
                                     <div className='list'>
                                         {list.map((item, key) => (
                                             <>
-                                                <List title={item.title} img={item.img} />
+                                                <List title={item.title} img={item.img} desc={item.desc} inch={item.inch}/>
                                             </>
                                         ))}
                                     </div>
 
                                     <div className="footer-buttons">
-                    
+
                                         <Link className='deleteBtn'>Delete <span><BsTrash className="cameraIcon" /></span></Link>
                                     </div>
 
@@ -137,15 +136,24 @@ const Content = (props) => {
                             </>
 
                         )}
+                        {modalOpen ? (<>
+                            <div className="modalWrapper">
+                                <div className="modal">
+                                    <button onClick={() => setModalOpen(false)} className='btnClose'> X </button>
+                                    <h5 className="heading">{title}</h5>
+                                    <img src={img} className='bodyModal' />
+                                    <p className="body">{description}</p>
+                                    <h4 className="heading" style={{fontSize:40}}>{length} in</h4>
+                                </div>
+
+                            </div></>) : ""}
+
                     </div>
+
                 </div>
             </div>
 
-            {showButton && (
-                <button onClick={() => scrollToTop()} className="back-to-top" >
-                    <UpArrow />
-                </button>
-            )}
+
         </div>
 
 
