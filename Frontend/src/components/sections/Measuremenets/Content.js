@@ -1,22 +1,23 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import Cookies from 'js-cookie';
-import  './style.css';
+import './style.css';
 import EditMeasurements from './EditMeasurement';
 import 'antd/dist/antd.css';
 import { BsCameraFill, BsArrowRightShort, BsPencil, BsTrash } from 'react-icons/bs';
 import { useHistory } from 'react-router'
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import axios from 'axios';
+import { fetchMeasurements } from '../../../api/index';
 
 
 const Content = (props) => {
 
-   
+
     const [description, setDesc] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
     const [length, setLength] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [userMeasurements, setUserMeasurements] = useState([]);
     const [title, setTitle] = useState("");
     const [measuremenets, setMeasuremenets] = useState("");
     const [img, setImg] = useState("");
@@ -61,6 +62,32 @@ const Content = (props) => {
 
         ]);
 
+    const item = {
+        id: '5',
+        title: 'Knee Length',
+        img: '/images/model1.png',
+        desc: "Linear distance between the shoulder point and knee point",
+
+    }
+
+    useEffect(async () => {
+        await fetchMeasurements({ uid: Cookies.get('id') })
+            .then((response) => {
+                console.log("response: ", response.data)
+                if (response.data.message === true) {
+                    console.log("mes: ", response.data.measurement)
+                    setUserMeasurements(response.data.measurement)
+                } else {
+                    console.log(response.data.error)
+                }
+
+            }).catch((err) => {
+                console.log("error:", err.message)
+            })
+
+    }, [])
+
+
 
     const List = (props) => {
         return (
@@ -72,9 +99,9 @@ const Content = (props) => {
                     setImg(props.img)
                     setDesc(props.desc)
                     setLength(props.inch)
-                    
+
                 }}>
-                    
+
                     <img src="/images/humanIcon.png" className='human-icon' />
                     <p>{props.title}</p>
                     <BsArrowRightShort className='right-arrow' />
@@ -82,9 +109,19 @@ const Content = (props) => {
             </>
 
         );
-        
+
     }
 
+    const openCamera = async () => {
+        alert("send")
+        await axios.post('http://127.0.0.1:5000/', { user: Cookies.get('id') })
+            .then((res) => {
+
+                console.log(res.data)
+            }).catch((err) => {
+
+            })
+    }
     return (
         <div className="section">
             <div className="container">
@@ -103,27 +140,28 @@ const Content = (props) => {
                         </div>
                     </div>
                     <div className="col-lg-8">
-                        {measuremenets.length !== 0 ? (
+                        {userMeasurements.length == 0 ? (
                             <>
+
                                 <div className='void'>
                                     <h5>Start of with our body tracking feature to get your body measurements. </h5>
-                                    <Link className='measurementBtn'>Take Measuremenets <span><BsCameraFill className="cameraIcon" /></span></Link>
+                                    <Link className='measurementBtn' onClick={() => openCamera()} >Take Measuremenets <span><BsCameraFill className="cameraIcon" /></span></Link>
                                 </div>
                             </>
                         ) : (
                             <>
+                                {console.log("meas: ", userMeasurements)}
                                 <div className="acr-welcome-message">
                                     <div className='top-header'>
                                         <h3>Your Body Measurements</h3>
-                                        <Link className='measurementBtn' onClick={()=>{return(<EditMeasurements/>)}}>Edit Measuremenets<span><BsPencil className="cameraIcon" /></span></Link>
+                                        <Link className='measurementBtn' onClick={() => { return (<EditMeasurements />) }}>Edit Measuremenets<span><BsPencil className="cameraIcon" /></span></Link>
                                     </div>
-
                                     <div className='list'>
-                                        {list.map((item, key) => (
-                                            <>
-                                                <List title={item.title} img={item.img} desc={item.desc} inch={item.inch}/>
-                                            </>
-                                        ))}
+                                        <List title="Shoulders Length" img={item.img} desc={item.desc} inch={userMeasurements[0].shoulders} />
+                                        <List title="Arm Length" img={item.img} desc={item.desc} inch={userMeasurements[0].arms} />
+                                        <List title="Full Length" img={item.img} desc={item.desc} inch={userMeasurements[0].fullLength} />
+                                        <List title="Knee Length" img={item.img} desc={item.desc} inch={userMeasurements[0].knee} />
+
                                     </div>
 
                                     <div className="footer-buttons">
@@ -143,7 +181,7 @@ const Content = (props) => {
                                     <h5 className="heading">{title}</h5>
                                     <img src={img} className='bodyModal' />
                                     <p className="body">{description}</p>
-                                    <h4 className="heading" style={{fontSize:40}}>{length} in</h4>
+                                    <h4 className="heading" style={{ fontSize: 40 }}>{length} in</h4>
                                 </div>
 
                             </div></>) : ""}

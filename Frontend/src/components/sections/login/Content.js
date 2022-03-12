@@ -42,8 +42,9 @@ function Content(){
                    console.log("token: ", response.data.token);
                    try {
                     Cookies.set('token', response.data.token);
-                    const type= response.data.user.type;
+                
                     Cookies.set('mail',email);
+                    Cookies.set('id',response.data.user._id);
                     routerHistory.push('./profile');
                   } catch (e) {
                     return null;

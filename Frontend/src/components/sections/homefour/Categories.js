@@ -6,7 +6,6 @@ import Dots from "react-activity/dist/Dots";
 import "react-activity/dist/Dots.css";
 import { useHistory } from 'react-router';
 import { FiSearch } from 'react-icons/fi';
-import { fetchCategory } from '../../../api/index';
 function Categories() {
 
     const [categories, setCategories] = useState([]);

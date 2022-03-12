@@ -23,34 +23,11 @@ function Banner() {
     const [searched, setsearched] = useState([]);
 
 
-
-    async function getLocations() {
-
-        await fetchLocations()
-            .then(function (response) {
-                setlocations(response.data.locationDetail);
-            })
-            .catch(function (error) {
-
-            });
-
-    }
-
-    async function getCategories() {
-
-        await fetchCategory()
-            .then(function (response) {
-                setcategories(response.data.categoryDetail);
-            })
-            .catch(function (error) {
-
-            });
-
-    }
+   
 
     useEffect(() => {
-        getLocations();
-        getCategories();
+       
+       
     }, [])
 
 
