@@ -4,10 +4,10 @@ import Cookies from 'js-cookie';
 import './style.css';
 import EditMeasurements from './EditMeasurement';
 import 'antd/dist/antd.css';
-import { BsCameraFill, BsArrowRightShort, BsPencil, BsTrash } from 'react-icons/bs';
-import { useHistory } from 'react-router'
-import axios from 'axios';
-import { fetchMeasurements } from '../../../api/index';
+import { BsCameraFill, BsArrowRightShort, BsPencil, BsTrash, BsWindowSidebar } from 'react-icons/bs';
+import 'antd/dist/antd.css';
+import { message } from 'antd';
+import { takeMeasurements, fetchMeasurements, deleteMeasurements, editMeasurements } from '../../../api/index';
 
 
 const Content = (props) => {
@@ -15,12 +15,21 @@ const Content = (props) => {
 
     const [description, setDesc] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
+    const [formModal, setFormModal] = useState(false);
     const [length, setLength] = useState("");
     const [loading, setLoading] = useState(false);
     const [userMeasurements, setUserMeasurements] = useState([]);
     const [title, setTitle] = useState("");
     const [measuremenets, setMeasuremenets] = useState("");
     const [img, setImg] = useState("");
+    const [shoulders, setShoulders] = useState("");
+    const [fullLength, setFullLength] = useState("");
+    const [kneeL, setkneeL] = useState("");
+    const [armsL, setArmsL] = useState("");
+    const [waistL, setWaistL] = useState(24);
+    const [shirtL, setShirtL] = useState(23);
+    const [bottomL, setBottomL] = useState(30);
+
     const [list, setList] = useState(
         [
             {
@@ -77,6 +86,10 @@ const Content = (props) => {
                 if (response.data.message === true) {
                     console.log("mes: ", response.data.measurement)
                     setUserMeasurements(response.data.measurement)
+                    setShoulders(response.data.measurement[0].shoulders)
+                    setArmsL(response.data.measurement[0].arms)
+                    setFullLength(response.data.measurement[0].fullLength)
+                    setkneeL(response.data.measurement[0].knee)
                 } else {
                     console.log(response.data.error)
                 }
@@ -113,15 +126,45 @@ const Content = (props) => {
     }
 
     const openCamera = async () => {
-        alert("send")
-        await axios.post('http://127.0.0.1:5000/', { user: Cookies.get('id') })
+       
+        await takeMeasurements({ user: Cookies.get('id') })
             .then((res) => {
 
                 console.log(res.data)
             }).catch((err) => {
-
+                console.log(err)
             })
     }
+
+    const edit = async () => {
+    
+        await editMeasurements({ mid: userMeasurements[0]._id, shoulders, arms: armsL, fullLength, knee: kneeL })
+            .then((response) => {
+                if (response.data.message === true) {
+                    setFormModal(false)
+                    message.success("Measurements Updated")
+                } else {
+                    message.error(response.data.error)
+                }
+            }).catch((err) => {
+                console.log("err", err.message)
+            })
+    }
+
+    const deleteFunc = async () => {
+        await deleteMeasurements({ mid: userMeasurements[0]._id })
+            .then((response) => {
+                if (response.data.message === true) {
+                    message.success("Deleted")
+                    window.location.reload()
+                } else {
+                    message.error(response.data.error)
+                }
+            }).catch((err) => {
+                console.log("err", err.message)
+            })
+    }
+
     return (
         <div className="section">
             <div className="container">
@@ -154,19 +197,21 @@ const Content = (props) => {
                                 <div className="acr-welcome-message">
                                     <div className='top-header'>
                                         <h3>Your Body Measurements</h3>
-                                        <Link className='measurementBtn' onClick={() => { return (<EditMeasurements />) }}>Edit Measuremenets<span><BsPencil className="cameraIcon" /></span></Link>
+                                       
+                                        <Link className='measurementBtn' onClick={() => setFormModal(true)}>Edit Measuremenets<span><BsPencil className="cameraIcon" /></span></Link>
                                     </div>
+                                     {/* <p>Click on the below tabs to view your measurements seperately in inches.</p> */}
                                     <div className='list'>
-                                        <List title="Shoulders Length" img={item.img} desc={item.desc} inch={userMeasurements[0].shoulders} />
-                                        <List title="Arm Length" img={item.img} desc={item.desc} inch={userMeasurements[0].arms} />
-                                        <List title="Full Length" img={item.img} desc={item.desc} inch={userMeasurements[0].fullLength} />
-                                        <List title="Knee Length" img={item.img} desc={item.desc} inch={userMeasurements[0].knee} />
+                                        <List title="Shoulders Length" img={item.img} desc={item.desc} inch={shoulders} />
+                                        <List title="Arm Length" img={item.img} desc={item.desc} inch={armsL} />
+                                        <List title="Full Length" img={item.img} desc={item.desc} inch={fullLength} />
+                                        <List title="Knee Length" img={item.img} desc={item.desc} inch={kneeL} />
 
                                     </div>
 
                                     <div className="footer-buttons">
 
-                                        <Link className='deleteBtn'>Delete <span><BsTrash className="cameraIcon" /></span></Link>
+                                        <Link className='deleteBtn' onClick={()=>deleteFunc()}>Delete <span><BsTrash className="cameraIcon" /></span></Link>
                                     </div>
 
                                 </div>
@@ -182,6 +227,54 @@ const Content = (props) => {
                                     <img src={img} className='bodyModal' />
                                     <p className="body">{description}</p>
                                     <h4 className="heading" style={{ fontSize: 40 }}>{length} in</h4>
+                                </div>
+
+                            </div></>) : ""}
+
+                        {formModal ? (<>
+                            <div className="modalWrapper">
+                                <div className="modal2">
+                                    <button onClick={() => setFormModal(false)} className='btnClose'> X </button>
+                                    <form onSubmit={e => { e.preventDefault(); }} className='editForm'>
+                                        <div className="auth-text">
+                                            <h3>Edit Your Measurements</h3>
+                                            <p>Enter your changed measurements using the inches scale.</p>
+                                            {/* <h4 style={{ color: '#C72C2C', fontWeight: 20, fontSize: 20 }}>{error}</h4> */}
+                                        </div>
+                                        <div className='editContainer'>
+                                            <div className="form-group">
+                                                <label>Shoulders Length</label>
+                                                <input type="text" className="form-control form-control-light" placeholder="Shoulders in inches" name="shoulders" value={shoulders} onChange={(e) => setShoulders(e.target.value)} required />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Arms Length</label>
+                                                <input type="text" className="form-control form-control-light" placeholder="Arms length in inches" name="armsL" value={armsL} onChange={(e) => setArmsL(e.target.value)}  required />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Full Length</label>
+                                                <input type="text" className="form-control form-control-light" placeholder="Full length in inches" name="fullL" value={fullLength} onChange={(e) => setFullLength(e.target.value)} required />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Knee Length</label>
+                                                <input type="text" className="form-control form-control-light" placeholder="Knee length in inches" name="kneeL" value={kneeL} onChange={(e) => setkneeL(e.target.value)} required />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Waist Length</label>
+                                                <input type="text" className="form-control form-control-light" placeholder="Waist length in inches" name="waistL" value={waistL} onChange={(e) => setWaistL(e.target.value)} required />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Knee Length</label>
+                                                <input type="text" className="form-control form-control-light" placeholder="Tshirt length in inches" name="kneeL" value={shirtL} onChange={(e) => setShirtL(e.target.value)}  required />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Bottom Length</label>
+                                                <input type="text" className="form-control form-control-light" placeholder="Bottom length in inches" name="kneeL" value={bottomL} onChange={(e) => setBottomL(e.target.value)} required />
+                                            </div>
+                                            
+                                        </div>
+                                        <button className="btn-custom secondary btn-block" onClick={() => edit()}>Edit & Save</button>
+
+                                    </form>
                                 </div>
 
                             </div></>) : ""}

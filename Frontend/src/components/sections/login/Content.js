@@ -4,6 +4,8 @@ import { useHistory } from 'react-router';
 import Slider from 'react-slick';
 import './login.css';
 import Cookies from 'js-cookie';
+import 'antd/dist/antd.css';
+import { message } from 'antd';
 import {login} from '../../../api/index';
 
 
@@ -50,8 +52,11 @@ function Content(){
                     return null;
                   }
                     
-                } else if (response.data.message === "false") {
-                    seterror("Login Failed");
+                } else if (response.data.message === false) {
+                    // seterror("Login Failed");
+                    console.log("err:", response.data.error)
+                    message.error(response.data.error)
+                    
                 }
 
             })
@@ -68,7 +73,7 @@ function Content(){
                         <h3>Log Into Your Account</h3>
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
 
-                        <h4 style={{ color: '#C72C2C', fontWeight: 20, fontSize: 20 }}>{error}</h4>
+                        {/* <h4 style={{ color: '#C72C2C', fontWeight: 20, fontSize: 20 }}>{error}</h4> */}
                     </div>
                     <div className="form-group">
                         <label>Username</label>
