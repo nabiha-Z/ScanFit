@@ -5,7 +5,8 @@ import HeaderComponent from '../../helper/Navigationhelper';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import Cookies from 'js-cookie';
-import { loginuser, requestListing } from '../../api';
+import './header.css';
+import { loginuser } from '../../api';
 import { useHistory } from 'react-router';
 
 
@@ -13,18 +14,28 @@ import { useHistory } from 'react-router';
 const Headerfour = () => {
     const [user, setuser] = useState({});
     const [navtoggle, setnavtoggle] = useState(false);
-    let history = useHistory();
+    const [navbar, setNavbar] = useState(false)
+
+
+    const changeBackground = () => {
+      
+        if (window.scrollY >= 300) {
+            setNavbar(true)
+        } else {
+            setNavbar(false)
+        }
+    }
 
     useEffect(() => {
         loginuser({
             id: Cookies.get('id')
         })
             .then(function (response) {
-                 console.log("header rewsponse", response);
+                //  console.log("header rewsponse", response);
                 if (response.data.message == true) {
                     try {
                         setuser(response.data.user);
-                    
+
                     } catch (e) {
                         return null;
                     }
@@ -37,6 +48,13 @@ const Headerfour = () => {
 
             });
 
+            window.addEventListener("scroll", () => {
+                
+                     changeBackground()
+                
+            })
+            
+        
     }, []);
 
     const navtoggleClass = () => {
@@ -60,24 +78,7 @@ const Headerfour = () => {
             </aside>
             <div className="aside-overlay aside-trigger" onClick={() => navtoggleClass()} />
             {/* Header Start */}
-            <header className="main-header">
-                {/* Top Header Start */}
-                {/* <div className="top-header">
-                    <div className="container">
-                        <div className="top-header-inner">
-
-                            <ul className="top-header-nav">
-                                {Cookies.get('mail') === undefined ? <><li> <Link to="/login">Login</Link> </li>
-                                    <li>or</li>
-                                    <li> <Link to="/register"> Signup</Link> </li></> : <Link className="logout" to="/" onClick={() => {
-                                        Cookies.remove('token');
-                                        Cookies.remove('mail');
-                                    }}><i className="flaticon-shut-down-button" /> Logout</Link>}
-                            </ul>
-                        </div>
-                    </div>
-                </div> */}
-                {/* Top Header End */}
+            <header className="main-header" id={navbar? "coloredHeader":"transparentHeader" }>
                 <nav className="navbar" >
                     <div className="container">
                         {/* Menu */}
@@ -86,9 +87,9 @@ const Headerfour = () => {
                             <ul className="header-controls-inner d-none d-lg-flex">
 
                                 {Cookies.get('mail') === undefined ? <>
-                                    <li className="menu-item menu-item-has-children" > <Link to="/login" style={{color:'#0A648C'}}>Login</Link> </li>
+                                    <li className="menu-item menu-item-has-children" > <Link to="/login" id="loginBtn">Login</Link> </li>
                                     <li>or</li>
-                                    <li className="menu-item menu-item-has-children"> <Link to="/register" style={{color:'#0A648C'}}> Signup</Link> </li></> : <li>
+                                    <li className="menu-item menu-item-has-children" > <Link to="/register" id="loginBtn"> Signup</Link> </li></> : <li>
                                     <Link>
                                         <img
                                             src={"/cart.png"}

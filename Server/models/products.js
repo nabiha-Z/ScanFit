@@ -2,16 +2,17 @@ import mongoose from 'mongoose';
 
  const productsSchema = mongoose.Schema({
      title : {type:String,required: true},
-     description : {type:String, required: true},
+     description : {type:String},
      picture : {type:String, required: true},
      price : {type:Number, required: true},
+     main_category : {type:String, required: true},
      category : {type:String, required: true},
-     images : {type:Array, requires: true}, 
+     images : {type:Array}, 
      color : {type:String, required: true}, 
-     sizes : {type:Array, required: true}
+     sizes : {type:Array}
 
 
  });
 //  var db=mongoose.connection;
 // db.createCollection("postListings");
-  export default mongoose.model("products",productsSchema, 'Products') ;
+  export default mongoose.model("products",productsSchema, 'products') ;

@@ -39,7 +39,7 @@ function Categories() {
 
                     <div className='searchbar'>
                         <div className='searchfield'>
-                            <input type='text' className='searchinput' value={searchField} onChange={(e) => setSeacrhField(e.target.value)} />
+                            <input type='text' className='searchinput' placeholder="Search a product" value={searchField} onChange={(e) => setSeacrhField(e.target.value)} />
                             {/* <img src="/images/search.png" className='searchicon'/> */}
                             <FiSearch className='searchicon'/>
                         </div>
@@ -50,7 +50,7 @@ function Categories() {
                         <CategoryConatiner title="Shirts" img="shirt" />
                         <CategoryConatiner title="Jeans" img="jeans" />
                         <CategoryConatiner title="Suits" img="suit" />
-                        <CategoryConatiner title="Accessories" img="accessory" />
+                        {/* <CategoryConatiner title="Accessories" img="accessory" /> */}
 
                     </div>
                    

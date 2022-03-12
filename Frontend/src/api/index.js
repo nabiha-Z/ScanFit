@@ -14,7 +14,7 @@ API.interceptors.request.use(req => {
   });
 
 export const fetchadmin =()=> API.get(`user/`);
-export const fetchProducts = () => API.get(`products/`);
+export const fetchProducts = () => API.get(`admin/getproducts`);
 export const fetchLocations = () => API.get(`location/`);
 export const fetchCategory = () => API.get(`categories/`);
 export const fetchuserlistings = userdata => API.post(`listings/getuserlistings`, userdata);

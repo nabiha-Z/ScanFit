@@ -9,8 +9,8 @@ import { signup } from '../../../api';
 
 
 const images = [
-    { img: 'images/img9.jpg', title: "Quote of the day", text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" },
     { img: 'images/img7.jpg', title: "Quote of the day", text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" },
+    { img: 'images/img9.jpg', title: "Quote of the day", text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" },
     { img: 'images/img1.png', title: "Quote of the day", text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" },
 ];
 
@@ -109,13 +109,13 @@ function Content() {
                         <input type="text" className="form-control form-control-light" placeholder="Address" name="address" value={address} onChange={(e) => setAddress(e.target.value)} required />
                     </div>
                    
-                    <button type="submit" className="btn-custom secondary btn-block" onClick={() => API()}>Register</button>
-                    <div className="auth-seperator">
+                    <button type="submit" className="btn-custom secondary btn-block" style={{width:'100%', marginBottom:10}} onClick={() => API()}>Register</button>
+                    {/* <div className="auth-seperator">
                         <span>OR</span>
                     </div>
                     <div className="social-login">
                         <button type="button" className="acr-social-login google"><i className="fab fa-google" /> Continue with Google</button>
-                    </div>
+                    </div> */}
                     <p className="text-center mb-0">Already have an account? <Link to="/login">Login</Link> </p>
                 </form>
             </div>

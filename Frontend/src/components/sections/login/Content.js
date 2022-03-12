@@ -86,7 +86,7 @@ function Content(){
                     <div className="form-group">
                         <Link to="/forgotpassword" className="forgot-password">Forgot Password?</Link>
                     </div>
-                    <button className="btn-custom secondary btn-block" onClick={() => API()}>Login</button>
+                    <button className="btn-custom secondary btn-block" style={{width:'100%', marginBottom:10}} onClick={() => API()}>Login</button>
                     {/* <div className="auth-seperator">
                         <span>OR</span>
                     </div>

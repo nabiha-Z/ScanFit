@@ -6,7 +6,6 @@ import config from 'config';
 import dotenv from 'dotenv';
 import UserRoutes from './routes/users.js';
 import AdminRoutes from './routes/admin.js';
-import ProductRoutes from './routes/products.js';
 import timeout from "connect-timeout";
 
 const app = express();
@@ -17,7 +16,7 @@ app.use(bodyParser.json({ limit: "20mb", extended: true }))
 app.use(bodyParser.urlencoded({ limit: "20mb", extended: true }))
 app.use('/user', UserRoutes);
 app.use('/admin', AdminRoutes);
-app.use('/product', ProductRoutes);
+
 
 const CONNECTION_URL = config.get('mongoURI');
 const PORT = process.env.PORT || 8000;

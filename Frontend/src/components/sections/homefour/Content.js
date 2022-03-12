@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import Banner from './Banner';
 import Categories from './Categories';
 import CompanySlider from '../../layouts/CompanySlider';
-import LatestProducts from '../../layouts/LatestProduct';
+import LatestProducts from './Latest';
 
 
 class Content extends Component {

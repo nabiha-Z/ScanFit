@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 //import mongoose from "mongoose";
 import nodemailer from 'nodemailer';
 import Admin from "../models/admin.js";
+import products from "../models/products.js";
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -45,14 +46,14 @@ export const login = async (req, res) => {
       process.env.SECRET,
       { expiresIn: "6h" }
     );
-    res.status(200).json({ message:true, token });
+    res.status(200).json({ message: true, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong." });
   }
 };
 
 export const signup = async (req, res) => {
- 
+
   const { first, last, email, password } = req.body;
   console.log(first, last, email, password);
 
@@ -120,13 +121,13 @@ export const getcurrentuser = async (req, res) => {
   console.log(req.body);
   console.log(id);
   try {
-      
-      const listings = await Admin.find({_id:id});
-      console.log(listings);
-      res.status(200).json(listings);
+
+    const listings = await Admin.find({ _id: id });
+    console.log(listings);
+    res.status(200).json(listings);
   }
   catch (error) {
-      res.status(404).json({ message: error.message });
+    res.status(404).json({ message: error.message });
 
   }
 }
@@ -145,7 +146,7 @@ export const userProfile = async (req, res) => {
 
 export const forgotPassword = async (req, res) => {
 
-  
+
   const { email } = req.body;
   // console.log("email rest pass= ", email);
   try {
@@ -158,7 +159,7 @@ export const forgotPassword = async (req, res) => {
         // user.resetToken = token
         // user.expireToken = Date.now() + 3600000
         // user.save().then((result)=>{
-       
+
         var transporter = nodemailer.createTransport({
           // service: 'gmail',//smtp.gmail.com  //in place of service use host...
 
@@ -198,13 +199,13 @@ export const forgotPassword = async (req, res) => {
               process.env.resetToken,
               { expiresIn: "1h" }
             )
-           
+
             const expire = Date.now() + 3600000;
             const { _id, firstName, lastName, email, password, resetToken, expires } = user;
             const a = await Admin.findByIdAndUpdate(_id, { _id, firstName, lastName, email, password, resetToken: token, expires: expire }, { new: true });
-           
+
             return res.status(200).json({ 'message': true, success: "Check your email" })
-            
+
           }
         });
         // console.log("message")
@@ -220,9 +221,9 @@ export const resetPassword = async (req, res) => {
   console.log("reset");
   const { pass, user_email } = req.body;
   try {
-    
+
     let user = await Admin.findOne({ email: user_email, expires: { $gt: Date.now() } })
-    
+
     if (!user) {
       return res.status(200).json({ "message": false, error: "Try again sesssion expired!" });
     } else {
@@ -231,7 +232,7 @@ export const resetPassword = async (req, res) => {
       console.log("user= ", user.user_email);
 
       console.log("before:", user.password);
-      
+
 
       const salt = await bcrypt.genSalt(10);
 
@@ -252,3 +253,124 @@ export const resetPassword = async (req, res) => {
 
 
 }
+
+export const getProducts = async (req, res) => {
+
+  try {
+    await products.find({})
+      .then((data) => {
+        res.status(200).json({ 'message': true, "products": data });
+      }).catch((err) => {
+        res.status(200).json({ 'message': false, "error": err.message });
+      })
+
+  } catch (error) {
+    res.status(201).json({
+      message: error.message
+    });
+
+  }
+}
+
+
+
+export const addProducts = async (req, res) => {
+  console.log("hello");
+  const {
+    title,
+    picture,
+    price,
+    main_category,
+    category,
+    color
+  } = req.body;
+
+  console.log(
+    title,
+    picture,
+    price,
+    category,
+    color);
+  try {
+
+
+    const g = await products.create({
+      title,
+      picture,
+      price,
+      main_category,
+      category,
+      color,
+      sizes: ['s', 'm', 'l']
+    });
+
+    res.status(201).json({
+      message: true
+    });
+
+
+  } catch (error) {
+    console.log(error);
+    res.status(201).json({
+      message: false, error: error.message
+    });
+  }
+}
+
+
+
+// export const deleteProduct = async (req, res) => {
+
+//     const { id, user_id } = req.body;
+//     console.log("id,user_id ", id, user_id);
+
+//     try {
+
+//         // const listDetails = await products.findOne({ _id: id });
+//         // console.log(listDetails);
+
+//         const list = await products.findOne({ _id: id });
+//         // console.log("list = ", list.category)
+//         await products.findOneAndDelete({ _id: id });
+//         const userdata = await user.findOne({ _id: user_id });
+//         // console.log("user" + userdata);
+//         //console.log("initial limit" +userdata.limit);
+//         const limit = userdata.limit + 1;
+//         // console.log("increased limit" + limit);
+//         // console.log("brofre limit user= ", userdata.limit);
+//         userdata.limit = limit;
+//         // console.log("limit user= ", userdata.limit);
+//         const updated = await user.findByIdAndUpdate(user_id, {
+//             ...userdata,
+//             limit
+//         }, {
+//             new: true
+//         });
+
+//         // console.log("updated= ", updated);
+
+//         const fetchData = await ct.findOne({ name: list.category });
+
+//         const counter = await products.countDocuments({ category: list.category });
+//         // console.log("counter = ", counter);
+//         const { _id, name, img, count } = fetchData;
+//         // console.log("count after = ", fetchData.count);
+
+//         const s = await ct.findByIdAndUpdate(_id, { _id, name, img, count: counter }, { new: true });
+//         // console.log("count in table ", s.count);
+//         // console.log("")
+//         //console.log("updated user" +updated);
+
+//         res.status(200).json({ "message": true });
+
+//     } catch (error) {
+
+//         res.status(404).json({
+//             message: error.message
+//         });
+
+//     }
+
+// }
+
+

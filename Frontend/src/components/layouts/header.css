@@ -1,0 +1,33 @@
+#loginBtn{
+    background-color: rgb(18, 54, 63);
+    padding: 5px;
+    border-radius: 15px;
+    color:white;
+    text-align: center;
+    width: 80px;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    cursor: pointer;
+}
+
+#loginBtn:hover{
+    background-color: rgb(226, 230, 231);
+    color:black
+}
+
+#transparentHeader{
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+#coloredHeader{
+    
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(255, 255, 255,0.9);
+    box-shadow: 0px 2px 15px 1px rgb(199, 198, 198);
+    transition: 0.7s ease;
+}

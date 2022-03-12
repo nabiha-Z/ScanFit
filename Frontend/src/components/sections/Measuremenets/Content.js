@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import './style.css';
-import EditMeasurements from './EditMeasurement';
 import 'antd/dist/antd.css';
 import { BsCameraFill, BsArrowRightShort, BsPencil, BsTrash, BsWindowSidebar } from 'react-icons/bs';
 import 'antd/dist/antd.css';
