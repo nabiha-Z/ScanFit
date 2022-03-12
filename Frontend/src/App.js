@@ -20,11 +20,11 @@ const Login = React.lazy(() => import("./components/pages/Login"));
 const forgotPass = React.lazy(() => import("./components/pages/Forgotpassword"));
 const resetPass = React.lazy(() => import("./components/pages/Resetpassword"));
 const Register = React.lazy(() => import("./components/pages/Register"));
-// Listings
 const ProductsList = React.lazy(() => import("./components/pages/ProductsList"));
 const Listingdetailsone = React.lazy(() => import("./components/pages/Listingdetailsone"));
 const Submitlisting = React.lazy(() => import("./components/pages/Submitlisting"));
 const Profile = React.lazy(() => import("./components/pages/Profile"));
+const Measuremenets = React.lazy(() => import("./components/pages/Measurements"));
 const FilterList = React.lazy(() => import("./components/pages/Searchlist"));
 const SavedFavourites = React.lazy(() => import("./components/pages/Profilesavedlistings"));
 const Fetchcategories = React.lazy(() => import("./components/pages/Fetchcategory"));
@@ -71,6 +71,7 @@ function App() {
           <Route path="/resetpassword/:user" component={resetPass} />
           <Route path="/register" component={Register} />
           <Route path="/profile" component= {Profile} />
+          <Route path="/measuremenets" component= {Measuremenets} />
           <Route path="/favourites" component={SavedFavourites} />
           
           {/* Coming Soon Pages */}

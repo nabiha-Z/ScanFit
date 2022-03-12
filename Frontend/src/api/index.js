@@ -2,7 +2,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 // const API = axios.create({ baseURL: 'https://localhost:5000/' });
-const API = axios.create({ baseURL: 'http://localhost:5000/' });
+const API = axios.create({ baseURL: 'http://localhost:8000/' });
+const flaskAPI = axios.create({ baseURL: 'http://127.0.0.1:5000' });
 
 API.interceptors.request.use(req => {
     if (Cookies.get('token')) {
@@ -22,6 +23,10 @@ export const login = userdata => API.post(`user/login`, userdata);
 export const searchLists = userdata => API.post(`listings/search`, userdata);
 export const loginuser = userdata => API.post(`user/loginuser`, userdata);
 export const signup = userdata => API.post(`user/signup`, userdata);
+export const takeMeasurements = userdata => flaskAPI.post(`/`, userdata);
+export const fetchMeasurements = userdata => API.post(`user/getMeassurements`, userdata)
+export const editMeasurements = userdata => API.patch(`user/editMeasurements`, userdata)
+export const deleteMeasurements = userdata => API.post(`user/deleteMeassurements`, userdata)
 export const featureList = userdata => API.post(`listings/featurelist`, userdata);
 export const categoryList = userdata => API.post(`listings/categorylist`, userdata);
 export const addsubuser = userdata => API.post(`user/subusersdata`, userdata);

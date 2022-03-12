@@ -33,6 +33,61 @@
     },
     {
         "id": 3,
+        "linkText": "Men",
+        "child": true,
+        "icon": "layers",
+        "submenu": [
+            {
+                "id": 31,
+                "link": "/",
+                "linkText": "Jeans"
+            },
+            {
+                "id": 32,
+                "link": "/",
+                "linkText": "Shirts"
+            },
+            {
+                "id": 34,
+                "link": "/",
+                "linkText": "Suits"
+            }
+           
+        ]
+    },
+    {
+        "id": 4,
+        "linkText": "Women",
+        "child": true,
+        "icon": "layers",
+        "submenu": [
+            {
+                "id": 31,
+                "link": "/",
+                "linkText": "Dress"
+            },
+            {
+                "id": 32,
+                "link": "/",
+                "linkText": "Shirts"
+            },
+            {
+                "id": 34,
+                "link": "/",
+                "linkText": "Jeans"
+            }
+           
+        ]
+    },
+    {
+        "id": 4,
+        "linkText": "Accessories",
+        "link": "/",
+        "child": false,
+        "icon": "list"
+    },
+    {
+        "id": 5,
         "linkText": "Profile",
         "link": "/profile",
         "child": false,

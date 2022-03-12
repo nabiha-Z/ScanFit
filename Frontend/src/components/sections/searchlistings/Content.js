@@ -9,8 +9,6 @@ import classNames from 'classnames';
 import Cookies from 'js-cookie';
 import { favourite } from '../../../api';
 import jwt_decode from "jwt-decode";
-import axios from 'axios';
-
 
 
 const gallerytip = (

@@ -1,41 +1,32 @@
-import cors from 'cors';
-
-import userlist from './routes/users.js';
-import productRoutes from './routes/products.js';
-import admin from './routes/admin.js'
-
-import dotenv from "dotenv";
 import express from 'express';
-import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
-
-
+import mongoose from 'mongoose';
+import cors from 'cors';
+import config from 'config';
+import dotenv from 'dotenv';
+import UserRoutes from './routes/users.js';
+import AdminRoutes from './routes/admin.js';
+import ProductRoutes from './routes/products.js';
+import timeout from "connect-timeout";
 
 const app = express();
-
-
-
-app.use(bodyParser.json({ limit: "30mb", extended: true }));
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 dotenv.config();
+// app.use(timeout("30s"));
+app.use(bodyParser.json({ limit: "20mb", extended: true }))
+app.use(bodyParser.urlencoded({ limit: "20mb", extended: true }))
+app.use('/user', UserRoutes);
+app.use('/admin', AdminRoutes);
+app.use('/product', ProductRoutes);
 
-
-
-
-app.use('/user',userlist);
-app.use('/products',productRoutes);
-app.use('/admin',admin);
-
-
-//const CONNECTION_URL = 'mongodb+srv://StrikingDash:strikingdash123@cluster0.oss3v.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-const CONNECTION_URL = process.env.SECRETKEY;
-const PORT = process.env.PORT || 5000;
-
+const CONNECTION_URL = config.get('mongoURI');
+const PORT = process.env.PORT || 8000;
 
 mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => app.listen(PORT, () => console.log(`Connected Server running on Port:${PORT} `)))
     .catch((error) => console.log(error.message));
 
+
 mongoose.set('useFindAndModify', false);
+
 

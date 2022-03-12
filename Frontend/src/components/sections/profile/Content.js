@@ -35,11 +35,12 @@ const Content = (props) => {
         });
 
         loginuser({
-            token: Cookies.get('token')
+            id: Cookies.get('id')
         })
             .then(function (response) {
-                //   console.log(response);
-                if (response.data.message === "true") {
+                  console.log(response);
+                if (response.data.message === true) {
+                    console.log("response:", response.data)
                     try {
                         setuser(response.data.user);
                         setusername(response.data.user.name);
@@ -65,34 +66,6 @@ const Content = (props) => {
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
     };
-
-    const addSubuser = async () => {
-
-        const token = Cookies.get("token");
-        const user = jwt_decode(token);
-        const user_id = user.id;
-        console.log(user_id);
-        await subuserCount({ user_id })
-            .then(function (response) {
-                console.log(response.data.count);
-                const subcount = response.data.count;
-                if (subcount === 10) {
-                    alert("no more users can be added!");
-                    routerHistory.push('./profile');
-                }
-                else {
-                    routerHistory.push('./register');
-                }
-
-            }).catch(function (error) {
-
-            });
-
-
-    }
-    const location = {
-        pathname: "/profile-listings", state: { data: user }
-    }
 
     const changeProfile = async () => {
 
@@ -147,10 +120,12 @@ const Content = (props) => {
                             <ul>
 
                                 <li> <Link className="active" to="/profile"> Edit Profile</Link> </li>
-                               
+                                <li> <Link  to="/profile"> Favourites </Link> </li>
+                                <li> <Link  to="/measuremenets"> Body Measurements </Link> </li>
                                 <li> <Link className="logout" to="/" onClick={() => {
                                     Cookies.remove('token');
                                     Cookies.remove('mail');
+                                    Cookies.remove('id');
                                 }}><i className="flaticon-shut-down-button" /> Logout</Link> </li> </ul>
                         </div>
                     </div>

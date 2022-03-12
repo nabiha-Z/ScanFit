@@ -3,12 +3,9 @@ import jwt from "jsonwebtoken";
 //import mongoose from "mongoose";
 import nodemailer from 'nodemailer';
 import Admin from "../models/admin.js";
-import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
-import sendgridTransport from 'nodemailer-sendgrid-transport';
 
 dotenv.config();
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 // const EMAIL = process.env.EMAIL;
 // const host = process.env.HOST;
 

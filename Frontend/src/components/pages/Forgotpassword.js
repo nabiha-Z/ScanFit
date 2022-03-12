@@ -8,7 +8,7 @@ class Forgotpassword extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Re Marketing | Login</title>
+                    <title>Forgot Password</title>
                     <meta
                         name="description"
                         content="#"

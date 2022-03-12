@@ -17,18 +17,18 @@ const Headerfour = () => {
 
     useEffect(() => {
         loginuser({
-            token: Cookies.get('token')
+            id: Cookies.get('id')
         })
             .then(function (response) {
-                console.log("header rewsponse", response);
-                if (response.data.message == "true") {
+                 console.log("header rewsponse", response);
+                if (response.data.message == true) {
                     try {
                         setuser(response.data.user);
-                        console.log("limit=", response.data.user.limit)
+                    
                     } catch (e) {
                         return null;
                     }
-                } else if (response.data.message === "false") {
+                } else if (response.data.message === false) {
 
                 }
 

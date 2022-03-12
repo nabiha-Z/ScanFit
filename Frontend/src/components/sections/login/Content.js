@@ -2,9 +2,10 @@ import React, { Component, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import Slider from 'react-slick';
-import axios from 'axios';
-import store from '../../../redux/store.js';
+import './login.css';
 import Cookies from 'js-cookie';
+import 'antd/dist/antd.css';
+import { message } from 'antd';
 import {login} from '../../../api/index';
 
 
@@ -43,15 +44,19 @@ function Content(){
                    console.log("token: ", response.data.token);
                    try {
                     Cookies.set('token', response.data.token);
-                    const type= response.data.user.type;
+                
                     Cookies.set('mail',email);
+                    Cookies.set('id',response.data.user._id);
                     routerHistory.push('./profile');
                   } catch (e) {
                     return null;
                   }
                     
-                } else if (response.data.message === "false") {
-                    seterror("Login Failed");
+                } else if (response.data.message === false) {
+                    // seterror("Login Failed");
+                    console.log("err:", response.data.error)
+                    message.error(response.data.error)
+                    
                 }
 
             })
@@ -68,7 +73,7 @@ function Content(){
                         <h3>Log Into Your Account</h3>
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
 
-                        <h4 style={{ color: '#C72C2C', fontWeight: 20, fontSize: 20 }}>{error}</h4>
+                        {/* <h4 style={{ color: '#C72C2C', fontWeight: 20, fontSize: 20 }}>{error}</h4> */}
                     </div>
                     <div className="form-group">
                         <label>Username</label>
@@ -82,13 +87,13 @@ function Content(){
                         <Link to="/forgotpassword" className="forgot-password">Forgot Password?</Link>
                     </div>
                     <button className="btn-custom secondary btn-block" onClick={() => API()}>Login</button>
-                    <div className="auth-seperator">
+                    {/* <div className="auth-seperator">
                         <span>OR</span>
                     </div>
                     <div className="social-login">
 
                         <button type="button" className="acr-social-login google"><i className="fab fa-google" /> Continue with Google</button>
-                    </div>
+                    </div> */}
                     <p className="text-center mb-0">Don't have an account? <Link to="/register">Create One</Link> </p>
                 </form>
             </div>
