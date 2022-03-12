@@ -187,6 +187,7 @@ export const updateList = async (req, res) => {
 }
 export const login = async (req, res) => {
     const { email, password } = req.body;
+    console.log("emaiL:  ", email)
     try {
         if (email == "" && password == "") {
             res.status(201).json({ "message": "none" });
