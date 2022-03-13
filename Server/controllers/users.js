@@ -322,13 +322,9 @@ export const forgotPassword = async (req, res) => {
                     console.log("Error");
                     return res.status(200).json({ 'message': false, error: "User dont exists with that email" })
                 }
-                // Users.resetToken = token
-                // Users.expireToken = Date.now() + 3600000
-                // Users.save().then((result)=>{
 
                 var transporter = nodemailer.createTransport({
-                    // service: 'gmail',//smtp.gmail.com  //in place of service use host...
-
+                   
                     host: 'smtp.gmail.com',
                     port: 587,
                     auth: {
@@ -360,7 +356,7 @@ export const forgotPassword = async (req, res) => {
                         const token = jwt.sign(
                             { id: users._id },
                             process.env.resetToken,
-                            { expiresIn: "1h" }
+                            { expiresIn: "600s" }
                         )
 
                         const expire = Date.now() + 3600000;
@@ -465,25 +461,61 @@ export const editMeasurements = async (req, res) => {
         })
 }
 
-export const sendMessage = async (req, res) => {
+// export const sendMessage = async (req, res) => {
 
-    console.log(req.body);
-    const { email: em, phonenumber: ph, msg: msg1 } = req.body;
+//     console.log(req.body);
+//     const { email: em, phonenumber: ph, msg: msg1 } = req.body;
 
-    try {
+//     try {
 
-        const userdata = await Users.findOne({ email: em });
-        console.log("in msg userdata", userdata);
-        const { _id, name, email, phonenumber, password, type, status, masterid, access, limit, message } = userdata;
+//         const userdata = await Users.findOne({ email: em });
+//         console.log("in msg userdata", userdata);
+//         const { _id, name, email, phonenumber, password, type, status, masterid, access, limit, message } = userdata;
 
-        const updated = await Users.findByIdAndUpdate(_id, { _id, name, email, phonenumber: ph, password, type, status, masterid, access, limit, message: msg1 }, {
-            new: true
-        });
-        //console.log("in msg updated",updated);
-        res.status(200).json({ 'message': true });
+//         const updated = await Users.findByIdAndUpdate(_id, { _id, name, email, phonenumber: ph, password, type, status, masterid, access, limit, message: msg1 }, {
+//             new: true
+//         });
+//         //console.log("in msg updated",updated);
+//         res.status(200).json({ 'message': true });
 
 
-    } catch (error) {
-        return res.status(200).json({ message: error.message });
-    }
+//     } catch (error) {
+//         return res.status(200).json({ message: error.message });
+//     }
+// }
+
+export const categorySearch = async (req, res) => {
+
+    console.log("req.body.category", req.body.category)
+    await products.find({category: req.body.category})
+    .then((data) => {
+        res.status(201).json({message: true, products:data})
+    }).catch((err)=>{
+        res.status(201).json({message: false, error:err.message})
+    })
+}
+
+
+export const filterProducts = async (req, res) => {
+    
+    const {color, categ, price} = req.body;
+    await products.find({ $or: [ { category: categ }, { price: price }, {color:color}, { main_category: categ }] })
+    .then((data) => {
+       
+        res.status(201).json({message: true, products:data})
+    }).catch((err)=>{
+        res.status(201).json({message: false, error:err.message})
+    })
+}
+
+export const searchProducts = async (req, res) => {
+    
+    const txt = req.body.searchtxt;
+    await products.find({ $or: [{ title: txt }, { category: txt }, { color: txt }, { price: txt }, {main_category: txt}] })
+    .then((data) => {
+
+        res.status(201).json({message: true, products:data})
+    }).catch((err)=>{
+        res.status(201).json({message: false, error:err.message})
+    })
 }

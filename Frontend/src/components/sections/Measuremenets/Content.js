@@ -29,46 +29,6 @@ const Content = (props) => {
     const [shirtL, setShirtL] = useState(23);
     const [bottomL, setBottomL] = useState(30);
 
-    const [list, setList] = useState(
-        [
-            {
-                id: '1',
-                title: 'Shoulders Length',
-                img: '/images/model1.png',
-                desc: "Linear distance between the two shoulder points",
-                inch: '14'
-            },
-            {
-                id: '2',
-                title: 'Arms Length',
-                img: '/images/model1.png',
-                desc: "Linear distance between the the shoulder point and hand",
-                inch: '21'
-            },
-            {
-                id: '3',
-                title: 'Full Length',
-                img: '/images/model1.png',
-                desc: "Linear distance between the shoulder point and foot point",
-                inch: '57'
-            },
-            {
-                id: '4',
-                title: 'Chest Front Length',
-                img: '/images/model1.png',
-                desc: "Linear distance between the two chest points",
-                inch: '19'
-            },
-            {
-                id: '5',
-                title: 'Knee Length',
-                img: '/images/model1.png',
-                desc: "Linear distance between the shoulder point and knee point",
-                inch: '30'
-            },
-
-
-        ]);
 
     const item = {
         id: '5',

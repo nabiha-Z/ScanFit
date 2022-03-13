@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import './category.css';
 import Dots from "react-activity/dist/Dots";
 import "react-activity/dist/Dots.css";
 import { useHistory } from 'react-router';
+import { searchCategory, search } from '../../../api';
 import { FiSearch } from 'react-icons/fi';
 function Categories() {
 
@@ -14,12 +14,52 @@ function Categories() {
 
     const CategoryConatiner = (props) => {
         var path = "/images/" + props.img + ".png";
+
+        const history = useHistory();
+
+
+        const searchText = async() =>{
+            await search({
+                searchField
+            })
+                .then(function (response) {
+                 
+                    if(response.data.message === true ){
+                        history.push({pathname:'/searchProducts', state:{products:response.data.products}})
+                    }
+                   
+                })
+                .catch(function (error) {
+    
+                });
+    
+    
+        }
+        
+        const searchCat = async(cate) =>{
+            var category = cate.toLowerCase()
+            await searchCategory({category})
+            .then((response)=>{
+                if(response.data.message === true ){
+                    history.push({pathname:'/searchProducts', state:{products:response.data.products}})
+                }
+                
+            }).catch((err)=>{
+                console.log("error:", err.message)
+            })
+        }
+
+
+       
+
         return (
             <>
                 <div className='category-block'>
-                    <div className='category-circle'>
-                        <img src={path} className='image-icon' />
-                    </div>
+                    <Link onClick={()=> searchCat(props.title)}>
+                        <div className='category-circle'>
+                            <img src={path} className='image-icon' />
+                        </div>
+                    </Link>
                     <p>{props.title}</p>
                 </div></>
         )
@@ -41,7 +81,7 @@ function Categories() {
                         <div className='searchfield'>
                             <input type='text' className='searchinput' placeholder="Search a product" value={searchField} onChange={(e) => setSeacrhField(e.target.value)} />
                             {/* <img src="/images/search.png" className='searchicon'/> */}
-                            <FiSearch className='searchicon'/>
+                            <FiSearch className='searchicon' />
                         </div>
                     </div>
                     <div className='categories'>
@@ -53,7 +93,7 @@ function Categories() {
                         {/* <CategoryConatiner title="Accessories" img="accessory" /> */}
 
                     </div>
-                   
+
 
                 </div>
             </div>

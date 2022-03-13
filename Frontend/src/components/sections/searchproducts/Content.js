@@ -1,5 +1,4 @@
 import React, { Component, Fragment, useEffect, useState } from 'react';
-import { useLocation, useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { OverlayTrigger, Tooltip, Dropdown, NavLink } from 'react-bootstrap';
 import Sidebar from '../../layouts/Shopsidebar';
@@ -7,6 +6,7 @@ import Dots from "react-activity/dist/Dots";
 import "react-activity/dist/Dots.css";
 import classNames from 'classnames';
 import Cookies from 'js-cookie';
+import { useLocation, useHistory } from "react-router-dom";
 import { favourite } from '../../../api';
 import jwt_decode from "jwt-decode";
 
@@ -49,11 +49,14 @@ const areatip = (
 
 export default function Content() {
 
+    const location = useLocation();
     const routerHistory = useHistory();
+    console.log(location.state);
     const [items, setitems] = useState([]);
     const [currentPage, setcurrentPage] = useState(1);
     const [itemsPerPage, setitemsPerPage] = useState(6);
     const [loading, setloading] = useState(false);
+    const [products, setProducts] = useState(location.state.products);
     const [searchedList, setsearchedList] = useState([]);
 
     const handleClick = (number) => {
@@ -73,7 +76,7 @@ export default function Content() {
         }, 2000);
 
     }
-    const onFav = (item,e) => {
+    const onFav = (item, e) => {
         e.preventDefault();
 
         if (Cookies.get("token") != undefined) {
@@ -101,33 +104,31 @@ export default function Content() {
         }
     }
     const showDetails = (item) => {
-      
+
         console.log("listing item: ", item.title);
-        routerHistory.push({
-            pathname: "/listing-details-v1",
-            state: { listing:item }
-        });
+        // routerHistory.push({
+        //     pathname: "/listing-details-v1",
+        //     state: { listing: item }
+        // });
 
     }
 
-    let location = useLocation();
-    console.log(location.pathname);
-    var featuredLists =[];
-    var nonfeaturedLists =[];
-    if(location.state != undefined){
-        console.log("state= ", location.state.featured);
-         featuredLists = location.state.featured;
-         nonfeaturedLists = location.state.nonFeature;
-         console.log("type of= ", location.state.featured);
-    }
+
+
+    // if (location.state != undefined) {
+    //     console.log("state= ", location.state.products);
+    //     // products = location.state.featured;
+    //     setProducts(location.state.products)
+
+    // }
 
 
     //setsearchedList(featuredLists);
     // setsearchedList(...searchedList, nonfeaturedLists);
-    const indexOfLastitem = currentPage * itemsPerPage;
-    const indexOfFirstitem = indexOfLastitem - itemsPerPage;
+    // const indexOfLastitem = currentPage * itemsPerPage;
+    // const indexOfFirstitem = indexOfLastitem - itemsPerPage;
 
-    const listItems = featuredLists.slice(indexOfFirstitem, indexOfLastitem);
+    // const listItems = products.slice(indexOfFirstitem, indexOfLastitem);
 
 
     const RenderItem = ({ list }) => {
@@ -135,49 +136,25 @@ export default function Content() {
         return (
             list.map((item, i) => {
 
-                return (<div key={i} className="col-md-4 col-sm-8" style={{justifyContent:'center'}}>
+                return (<div key={i} className="col-md-4 col-sm-8" style={{ justifyContent: 'center' }}>
                     <div className="listing">
                         {console.log("TTitle= ", item.title)}
                         <div className="listing-thumbnail">
-                            <Link to="/listing-details-v1"><img src={item.picture} alt="listing" style={{ width: 400, height: 200 }} /></Link>
-                            <div className="listing-badges">
-                            {
-                                            item.subscribed === "featured" ? <span className="listing-badge featured"> <i className="fas fa-star" /> </span> : ''
-                                        }
-                                        {
-                                            item.type === "Sale" ? <span className="listing-badge sale">On Sale</span> : ''
-                                        }
-                                        {
-                                            item.status === "pending" ? <span className="listing-badge pending"> Pending</span> : ''
-                                        }
-                                        {
-                                            item.type === "Rent" ? <span className="listing-badge rent"> Rental</span> : ''
-                                        }
-                            </div>
+                            <Link to="/listing-details-v1"><img src={item.picture} alt="listing" style={{ width: 300, height: 300 }} /></Link>
+                            
                             <div className="listing-controls">
-                                <Link className="favorite"><i className="far fa-heart" onClick={(e) => onFav(item,e)} /></Link>
-                               
+                                <Link className="favorite"><i className="far fa-heart" onClick={(e) => onFav(item, e)} /></Link>
+
                             </div>
                         </div>
                         <div className="listing-body">
 
                             <h5 className="listing-title"> <Link to="/listing-details-v1" title={item.title}>{item.title}</Link> </h5>
-                            <p className="listing-text">{item.location}</p>
-                            <span className="listing-price">{new Intl.NumberFormat().format((item.price).toFixed(2))}$ <span></span> </span>
+                            
+                            <span className="listing-price">{new Intl.NumberFormat().format((item.price).toFixed(2))} /-<span></span> </span>
                             <p className="listing-text">{item.description}</p>
-
-                            <div className="acr-listing-icons">
-
-                                <OverlayTrigger overlay={areatip}>
-                                    <div className="acr-listing-icon">
-                                        <i className="flaticon-ruler" />
-                                        <span className="acr-listing-icon-value">{item.area}</span>
-                                        <span>&nbsp;{item.unit}</span>
-                                    </div>
-                                </OverlayTrigger>
-                            </div>
                             <div className="listing-gallery-wrapper">
-                            <button onClick={()=>showDetails(item)} className="btn-custom btn-sm secondary">View Details</button>
+                                <button onClick={() => showDetails(item)} className="btn-custom btn-sm secondary">View Details</button>
                                 {/* <OverlayTrigger overlay={gallerytip}>
                                     <Link to="#" className="listing-gallery"> <i className="fas fa-camera" /> </Link>
                                 </OverlayTrigger> */}
@@ -213,7 +190,7 @@ export default function Content() {
     const EmptySearch = () => {
         return (
             <div className="container" style={{ textAlign: 'center' }}>
-                <h4>No List found</h4>
+                <h4>No Products found</h4>
             </div>
         );
     }
@@ -223,14 +200,12 @@ export default function Content() {
             <div className="container">
                 <div className="row">
                     <div className="col-lg-12">
-                        <h3 style={{ textAlign: 'center', marginBottom: 30 }}>Searched Results</h3>
+                        <h3 style={{ textAlign: 'center', marginBottom: 30, marginTop:50 }}>Searched Results</h3>
                         <div className="row">
                             {/* Listing Start */}
-                            {setsearchedList.length != 0 ?
-                                <>
-                                    {featuredLists.length != 0 && <RenderItem list={featuredLists} />}
-                                    {nonfeaturedLists.length != 0 && <RenderItem list={nonfeaturedLists} />}
-                                </> : <EmptySearch />}
+                            
+                            {products.length !== 0 ? (<RenderItem list={products} />) : (<EmptySearch />)}
+
                             {/* Listing End */}
                         </div>
                         {/* Pagination Start */}

@@ -15,10 +15,6 @@ API.interceptors.request.use(req => {
 
 export const fetchadmin =()=> API.get(`user/`);
 export const fetchProducts = () => API.get(`admin/getproducts`);
-export const fetchLocations = () => API.get(`location/`);
-export const fetchCategory = () => API.get(`categories/`);
-export const fetchuserlistings = userdata => API.post(`listings/getuserlistings`, userdata);
-export const createListing = userdata => API.post(`listings/createlist`, userdata);
 export const login = userdata => API.post(`user/login`, userdata);
 export const searchLists = userdata => API.post(`listings/search`, userdata);
 export const loginuser = userdata => API.post(`user/loginuser`, userdata);
@@ -28,15 +24,12 @@ export const fetchMeasurements = userdata => API.post(`user/getMeassurements`, u
 export const editMeasurements = userdata => API.patch(`user/editMeasurements`, userdata)
 export const deleteMeasurements = userdata => API.post(`user/deleteMeassurements`, userdata)
 export const featureList = userdata => API.post(`listings/featurelist`, userdata);
-export const categoryList = userdata => API.post(`listings/categorylist`, userdata);
-export const addsubuser = userdata => API.post(`user/subusersdata`, userdata);
-export const fetchsubuser = userdata => API.post(`user/fetchsubuser`, userdata);
-export const deletesubuser = userdata => API.patch(`user/deletesubuser`, userdata);
-export const subuserCount = userdata => API.post(`user/subusersCount`, userdata);
+export const searchCategory = userdata => API.post(`user/category-search`, userdata);
+export const search = userdata => API.post(`user/search`, userdata);
+export const filter = userdata => API.post(`user/filter`, userdata);
 export const savedListings = userdata => API.post(`user/saved-lists`, userdata);
 export const unsaveList = userdata => API.patch(`user/unfavlisting`, userdata);
 export const deleteListing = userdata => API.patch(`listings/deleteListing`, userdata);
-export const decLimit = userdata => API.patch(`user/dec-limit`, userdata);
 export const favourite = userdata => API.patch(`user/favorite`, userdata);
 export const updateProfile = (data)=>API.patch(`user/updateProfile`,data);
 export const updatepassword = (data)=>API.patch(`user/changePassword`,data);

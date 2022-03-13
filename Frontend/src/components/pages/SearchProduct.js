@@ -3,21 +3,17 @@ import MetaTags from "react-meta-tags";
 import Header from '../layouts/Header';
 import Breadcrumb from '../layouts/Userbreadcrumb';
 import Footer from '../layouts/Footer';
-import Content from '../sections/profile-listings/Content';
+import Content from '../sections/searchproducts/Content';
 
-class Profilelistings extends Component {
+class Profile extends Component {
     render() {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Re Marketing | My Listings</title>
-                    <meta
-                        name="description"
-                        content="#"
-                    />
+                    <title>Re Marketing | Search</title>
                 </MetaTags>
                 <Header/>
-                <Breadcrumb/>
+                {/* <Breadcrumb/> */}
                 <Content/>
                 <Footer/>
             </Fragment>
@@ -25,4 +21,4 @@ class Profilelistings extends Component {
     }
 }
 
-export default Profilelistings;
+export default Profile;

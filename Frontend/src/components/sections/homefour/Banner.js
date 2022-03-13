@@ -32,40 +32,6 @@ function Banner() {
 
 
 
-    const searchListing = () => {
-        const temp = price.split("-");
-        const price1 = parseInt(temp[0]);
-        const price2 = parseInt(temp[1]);
-
-
-
-       searchLists({
-            loc, area, categ, price1, price2, unit
-        })
-            .then(function (response) {
-                console.log("response = ", response.data.featuredList);
-                const featured = response.data.featuredList;
-
-                const nonfeatured = response.data.nonfeaturedList;
-
-                //const nonFeaturedList = response.data.nonfeaturedList;
-                // console.log("featured= ", featured);
-                // console.log("nonfeatured= ", nonfeatured);
-
-                routerHistory.push({
-                    pathname: "/filterList",
-                    state: { featured: featured, nonFeature: nonfeatured }
-                });
-
-
-
-            })
-            .catch(function (error) {
-
-            });
-
-
-    }
 
 
     return (

@@ -13,7 +13,6 @@ const Home = React.lazy(() => import("./components/pages/Homefour"));
 // Pages
 const About = React.lazy(() => import("./components/pages/About"));
 const Faq = React.lazy(() => import("./components/pages/Faq"));
-const Contact = React.lazy(() => import("./components/pages/Contact"));
 const Comingsoon = React.lazy(() => import("./components/pages/Comingsoon"));
 const Error = React.lazy(() => import("./components/pages/Error"));
 const Login = React.lazy(() => import("./components/pages/Login"));
@@ -22,12 +21,10 @@ const resetPass = React.lazy(() => import("./components/pages/Resetpassword"));
 const Register = React.lazy(() => import("./components/pages/Register"));
 const ProductsList = React.lazy(() => import("./components/pages/ProductsList"));
 const Listingdetailsone = React.lazy(() => import("./components/pages/Listingdetailsone"));
-const Submitlisting = React.lazy(() => import("./components/pages/Submitlisting"));
 const Profile = React.lazy(() => import("./components/pages/Profile"));
 const Measuremenets = React.lazy(() => import("./components/pages/Measurements"));
-const FilterList = React.lazy(() => import("./components/pages/Searchlist"));
+const SearchProduct = React.lazy(() => import("./components/pages/SearchProduct"));
 const SavedFavourites = React.lazy(() => import("./components/pages/Profilesavedlistings"));
-const Fetchcategories = React.lazy(() => import("./components/pages/Fetchcategory"));
 
 function App() {
   const [user,setuser]=useState({});
@@ -73,6 +70,7 @@ function App() {
           <Route path="/profile" component= {Profile} />
           <Route path="/measuremenets" component= {Measuremenets} />
           <Route path="/favourites" component={SavedFavourites} />
+          <Route path="/searchProducts" component={SearchProduct} />
           
           {/* Coming Soon Pages */}
           {!comingsoon? <Redirect to="/coming-soon" />
@@ -82,9 +80,8 @@ function App() {
           <Route path="/faq" component={Faq} />
           <Route path="/error-404" component={Error} />
           <Route path="/listing-details-v1" component={Listingdetailsone} />
-          <Route path="/submit-listing" component={Submitlisting} />
-          <Route path="/filterList" component={FilterList} />
-          <Route path="/categories/:category" component={Fetchcategories} />
+         
+      
           </>
         }
           

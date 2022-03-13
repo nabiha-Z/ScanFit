@@ -59,7 +59,7 @@ function Content() {
     
 
 
-    async function place() {
+    async function fetch() {
         setloading(true);
         console.log("here");
         await fetchProducts()
@@ -83,7 +83,7 @@ function Content() {
     }
 
     useEffect(() => {
-        place();
+        fetch();
     }, []);
 
 
@@ -98,7 +98,7 @@ function Content() {
     };
 
     // this.state = {
-    //     products: places,
+    //     products: fetchs,
     //     currentPage: 1,
     //     productsPerPage: 6,
     //     loading: false
@@ -185,24 +185,11 @@ function Content() {
                 return (<div key={i} className="col-md-6 col-sm-8" style={{ justifyContent: 'center' }}>
                     <div className="listing">
                         <div className="listing-thumbnail">
-                            <Link to="/listing-details-v1"><img src={item.picture} alt="listing" style={{ width: 300, height: 250 }} /></Link>
-                            <div className="listing-badges">
-                                {
-                                    item.subscribed === "featured" ? <span className="listing-badge featured"> <i className="fas fa-star" style={{ backgroundColor: "#F3C13C" }} /> </span> : ''
-                                }
-                                {
-                                    item.type === "Sale" ? <span className="listing-badge sale">On Sale</span> : ''
-                                }
-                                {
-                                    item.pending === true ? <span className="listing-badge pending"> Pending</span> : ''
-                                }
-                                {
-                                    item.type === "Rent" ? <span className="listing-badge rent"> Rental</span> : ''
-                                }
-                            </div>
+                            <Link to="/listing-details-v1"><img src={item.picture} alt="listing" style={{ width: 300, height: 300 }} /></Link>
+
                             <div className="listing-controls">
                                 <Link to="#" className="favorite"><i className="far fa-heart" onClick={(e) => onFav(item, e)} /></Link>
-                                <Link to="#" className="compare"><i className="fas fa-sync-alt" /></Link>
+                                <Link to="#" className="compare"><i className="fas fa-camera" /></Link>
                             </div>
                         </div>
                         <div className="listing-body">
@@ -296,13 +283,13 @@ function Content() {
                                 </Link>
                             </div>
                             <div className="acr-toggle-views">
-                                <OverlayTrigger placement="top" overlay={gridtip}>
+                                <OverlayTrigger fetchment="top" overlay={gridtip}>
                                     <Link to="/listing-grid" className="active"><i className="fas fa-th-large" /></Link>
                                 </OverlayTrigger>
-                                <OverlayTrigger placement="top" overlay={listtip}>
+                                <OverlayTrigger fetchment="top" overlay={listtip}>
                                         <Link to="/listing-list"><i className="fas fa-th-list" /></Link>
                                     </OverlayTrigger>
-                                    <OverlayTrigger placement="top" overlay={maptip}>
+                                    <OverlayTrigger fetchment="top" overlay={maptip}>
                                         <Link to="/listing-map"><i className="fas fa-map" /></Link>
                                     </OverlayTrigger> 
                             </div>

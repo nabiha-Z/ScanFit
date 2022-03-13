@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import dropDown from './drop-down.css';
-import { fetchCategory, fetchLocations, searchLists } from '../../api';
+import { filter } from '../../api';
 import { Collapse } from 'react-bootstrap';
 
 
@@ -12,38 +12,21 @@ const categories = ["women", "men", "shirts", "jeans", "kurti", "dress"]
 function Shopsidebar() {
 
     const [open, setopen] = useState(true);
-    const routerHistory = useHistory();
+    const history = useHistory();
     const [color, setcolor] = useState([]);
     const [categ, setcateg] = useState();
-    const [price, setprice] = useState("60-90");
+    const [price, setprice] = useState();
 
-    const searchListing = () => {
-        const temp = price.split("-");
-        const price1 = parseInt(temp[0]);
-        const price2 = parseInt(temp[1]);
-
-
-
-        searchLists({
+    const searchProduct = () => {
+        filter({
             color, categ, price
         })
             .then(function (response) {
-                console.log("response = ", response.data.featuredList);
-                const featured = response.data.featuredList;
-
-                const nonfeatured = response.data.nonfeaturedList;
-
-                //const nonFeaturedList = response.data.nonfeaturedList;
-                // console.log("featured= ", featured);
-                // console.log("nonfeatured= ", nonfeatured);
-
-                routerHistory.push({
-                    pathname: "/filterList",
-                    state: { featured: featured, nonFeature: nonfeatured }
-                });
-
-
-
+             
+                if(response.data.message === true ){
+                    history.push({pathname:'/searchProducts', state:{products:response.data.products}})
+                }
+               
             })
             .catch(function (error) {
 
@@ -81,30 +64,21 @@ function Shopsidebar() {
 
                                 <div className="drop-down">
                                     <label>Color: </label>
-                                    <select className="form-control" name="location" value={color} onChange={(e) => setcolor(e.target.value)} required>
+                                    <input type="text" className="form-control form-control-light" placeholder="Color" name="color" style={{margin:5, marginTop:-7}} value={color} onChange={(e) => setcolor(e.target.value)} required />
+                                    {/* <select className="form-control" name="location" value={color} onChange={(e) => setcolor(e.target.value)} required>
 
                                         {colors.map((item, i) => {
 
                                             return <option key={i} value={item}>{item}</option>
                                         })}
 
-                                    </select>
+                                    </select> */}
                                 </div>
                                 <div className="drop-down">
                                     <label>Price: </label>
-                                    <select className="form-control" name="location" value={price} onChange={(e) => setprice(e.target.value)} required>
-
-                                        {pricelist.map((item, i) => {
-
-                                            return <option key={i} value={item}>{item}</option>
-                                        })}
-
-                                    </select>
+                                    <input type="text" className="form-control form-control-light" placeholder="Price" name="price" style={{margin:5, marginTop:-7}} value={price} onChange={(e) => setprice(e.target.value)} required />
                                 </div>
-
-
-                                
-                                <button className="btn-custom secondary btn-block" name="button" onClick={() => searchListing()}>Search listings</button>
+                                <button className="btn-custom secondary btn-block" name="button" onClick={() => searchProduct()}>Search Products</button>
                             </form>
                         </div>
                     </div>

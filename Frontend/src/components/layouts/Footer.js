@@ -8,7 +8,7 @@ class Footer extends Component {
         return (
             <footer className="acr-footer footer-2">
                 {/* Footer Top Start */}
-                <App/>
+            
                 {/* Footer Top End */}
                 {/* Footer Middle Start */}
                 <div className="footer-middle">
