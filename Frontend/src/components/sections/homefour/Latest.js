@@ -1,8 +1,11 @@
 import React , {useState, useEffect} from 'react';
-import { fetchProducts, favourite } from '../../../api';
+import { latestProducts, favourite, addCart} from '../../../api';
+import 'antd/dist/antd.css';
+import { message } from 'antd';
 import { Link, } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import jwt_decode from "jwt-decode";
+
 import { FaHeart } from 'react-icons/fa';
 
 
@@ -11,7 +14,7 @@ export default function LatestProducts() {
     const [loading, setLoading] = useState(false);
     const [products, setProducts] = useState([]);
     useEffect(async () => {
-        await fetchProducts()
+        await latestProducts()
         .then((response)=>{
             if(response.data.message === true){
                 setProducts(response.data.products)
@@ -49,67 +52,51 @@ export default function LatestProducts() {
             alert("You need to login first!");
         }
     }
+
+    const addtocart = async(product) => {
+        await addCart({uid:Cookies.get('id'), product})
+        .then((response)=>{
+            console.log("res:", response.data)
+            if(response.data.message === true){
+                message.success("Added to Cart")
+            }
+        }).catch((err)=>{
+            console.log("err: ", err.message)
+            message.error(err.message)
+        })
+    }
     return (
         <div className="container" style={{ padding: '20px' }}>
             <h2 className='heading'> LATEST  PRODUCTS </h2>
+            <div className="row" style={{flexWrap:'wrap'}}>
             {products.map((item,key)=>(
         
                <div key={key} className="col-md-4 col-sm-8" style={{ justifyContent: 'center' }}>
                     <div className="listing">
                         <div className="listing-thumbnail">
-                            <Link to="/listing-details-v1"><img src={item.picture} alt="listing" style={{ width: 300, height: 250 }} /></Link>
-                            {/* <div className="listing-badges">
-                                {
-                                    item.subscribed === "featured" ? <span className="listing-badge featured"> <i className="fas fa-star" style={{ backgroundColor: "#F3C13C" }} /> </span> : ''
-                                }
-                                {
-                                    item.type === "Sale" ? <span className="listing-badge sale">On Sale</span> : ''
-                                }
-                                {
-                                    item.pending === true ? <span className="listing-badge pending"> Pending</span> : ''
-                                }
-                                {
-                                    item.type === "Rent" ? <span className="listing-badge rent"> Rental</span> : ''
-                                }
-                            </div> */}
+                            <Link to="/listing-details-v1"><img src={item.picture} alt="listing" style={{ width: 300, height:300 }} /></Link>
+                            
                             <div className="listing-controls">
-                                <Link to="#" className="favorite"><FaHeart onClick={(e) => onFav(item, e)} /></Link>
+                                <Link to="#" className="favorite"><FaHeart /></Link>
                             </div>
                         </div>
                         <div className="listing-body">
-                            {/* <div className="listing-author">
-                            <img src={process.env.PUBLIC_URL + "/" + item.authorimg} alt="author" />
-                            <div className="listing-author-body">
-                                <p> <Link to="#">{item.authorname}</Link> </p>
-                                <span className="listing-date">{item.postdate}</span>
-                            </div>
-                            <Dropdown className="options-dropdown">
-                                <Dropdown.Toggle as={NavLink}><i className="fas fa-ellipsis-v" /></Dropdown.Toggle>
-                                <Dropdown.Menu className="dropdown-menu-right">
-                                    <ul>
-                                        <li> <Link to="tel:+123456789"> <i className="fas fa-phone" /> Call Agent</Link> </li>
-                                        <li> <Link to="mailto:+123456789"> <i className="fas fa-envelope" /> Send Message</Link> </li>
-                                        <li> <Link to="/listing-details-v1"> <i className="fas fa-bookmark" /> Book Tour</Link> </li>
-                                    </ul>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </div> */}
+                           
                             <h5 className="listing-title"> <Link to="/listing-details-v1" title={item.title}>{item.title}</Link> </h5>
                            
                             <span className="listing-price">{item.price} RS/-</span>
                             {/* <p className="listing-text">{item.description}</p> */}
-                            <div className="listing-gallery-wrapper">
+                            <div className="listing-gallery-wrapper" style={{justifyContent:'flex-end', marginTop:20}}>
 
-                                <button className="btn-custom btn-sm secondary">View Details</button>
-                                {/* <OverlayTrigger overlay={gallerytip}>
-                            <Link to="#" className="listing-gallery"> <i className="fas fa-camera" /> </Link>
-                        </OverlayTrigger> */}
+                                <button className="btn-custom btn-sm secondary" style={{marginRight:10}}>View Details</button>
+                                <button onClick={() => addtocart(item)} className="btn-custom btn-sm primary">Add to Cart</button>
                             </div>
                         </div>
                     </div>
                     </div>
       
             ))}
+            </div>
             </div>
             
          

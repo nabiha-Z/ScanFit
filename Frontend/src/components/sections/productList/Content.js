@@ -6,7 +6,6 @@ import Sidebar from '../../layouts/Shopsidebar';
 import Bounce from "react-activity/dist/Bounce";
 import "react-activity/dist/Bounce.css";
 import classNames from 'classnames';
-import axios from 'axios';
 import Cookies from 'js-cookie';
 import jwt_decode from "jwt-decode";
 import 'antd/dist/antd.css';
@@ -201,7 +200,7 @@ function Content() {
                 return (<div key={i} className="col-md-6 col-sm-8" style={{ justifyContent: 'center' }}>
                     <div className="listing">
                         <div className="listing-thumbnail">
-                            <Link to="/listing-details-v1"><img src={item.picture} alt="listing" style={{ width: 300, height: 300 }} /></Link>
+                            <Link to="/listing-details-v1"><img src={item.picture} alt="listing" style={{ width: 280, height: 320 }} /></Link>
 
                             <div className="listing-controls">
                                 <Link to="#" className="favorite"><i className="far fa-heart" onClick={(e) => onFav(item, e)} /></Link>

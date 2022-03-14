@@ -23,11 +23,12 @@ const Content = (props) => {
     const [img, setImg] = useState("");
     const [shoulders, setShoulders] = useState("");
     const [fullLength, setFullLength] = useState("");
-    const [kneeL, setkneeL] = useState("");
+    const [KneeL, setKneeL] = useState("");
     const [armsL, setArmsL] = useState("");
-    const [waistL, setWaistL] = useState(24);
-    const [shirtL, setShirtL] = useState(23);
-    const [bottomL, setBottomL] = useState(30);
+    const [waistL, setWaistL] = useState("");
+    const [shirtL, setShirtL] = useState("");
+    const [bottomL, setBottomL] = useState("");
+    const [check, setCheck] = useState(false);
 
 
     const item = {
@@ -41,24 +42,30 @@ const Content = (props) => {
     useEffect(async () => {
         await fetchMeasurements({ uid: Cookies.get('id') })
             .then((response) => {
-                console.log("response: ", response.data)
+                console.log("response: ", response.data.measurement[0].bottom)
                 if (response.data.message === true) {
-                    console.log("mes: ", response.data.measurement)
+                    console.log("mes: ", response.data.measurement[0].tshirt)
                     setUserMeasurements(response.data.measurement)
                     setShoulders(response.data.measurement[0].shoulders)
                     setArmsL(response.data.measurement[0].arms)
                     setFullLength(response.data.measurement[0].fullLength)
-                    setkneeL(response.data.measurement[0].knee)
+                    setKneeL(response.data.measurement[0].knee)
+                    setShirtL(response.data.measurement[0].tshirt)
+                    setWaistL(response.data.measurement[0].waist)
+                    setBottomL(response.data.measurement[0].bottom)
+                    setCheck(!check)
                 } else {
                     console.log(response.data.error)
+                    
                 }
 
             }).catch((err) => {
                 console.log("error:", err.message)
             })
 
-    }, [])
+    }, [check])
 
+    console.log("bottom:", bottomL)
 
 
     const List = (props) => {
@@ -88,8 +95,11 @@ const Content = (props) => {
        
         await takeMeasurements({ user: Cookies.get('id') })
             .then((res) => {
-
-                console.log(res.data)
+                if(res.data === "false"){
+                    message.error("Body not detected")
+                }
+                console.log("server res: ",res.data)
+                setCheck(!check)
             }).catch((err) => {
                 console.log(err)
             })
@@ -97,7 +107,7 @@ const Content = (props) => {
 
     const edit = async () => {
     
-        await editMeasurements({ mid: userMeasurements[0]._id, shoulders, arms: armsL, fullLength, knee: kneeL })
+        await editMeasurements({ mid: userMeasurements[0]._id, shoulders, arms: armsL, fullLength, knee: KneeL })
             .then((response) => {
                 if (response.data.message === true) {
                     setFormModal(false)
@@ -114,8 +124,10 @@ const Content = (props) => {
         await deleteMeasurements({ mid: userMeasurements[0]._id })
             .then((response) => {
                 if (response.data.message === true) {
+                    setCheck(!check)
                     message.success("Deleted")
-                    window.location.reload()
+                    //window.location.reload()
+                    
                 } else {
                     message.error(response.data.error)
                 }
@@ -164,7 +176,10 @@ const Content = (props) => {
                                         <List title="Shoulders Length" img={item.img} desc={item.desc} inch={shoulders} />
                                         <List title="Arm Length" img={item.img} desc={item.desc} inch={armsL} />
                                         <List title="Full Length" img={item.img} desc={item.desc} inch={fullLength} />
-                                        <List title="Knee Length" img={item.img} desc={item.desc} inch={kneeL} />
+                                        <List title="Tshirt Length" img={item.img} desc={item.desc} inch={shirtL} />
+                                        <List title="Knee Length" img={item.img} desc={item.desc} inch={KneeL} />
+                                        <List title="Bottom Length" img={item.img} desc={item.desc} inch={bottomL} />
+                                        <List title="Waist Length" img={item.img} desc={item.desc} inch={waistL} />
 
                                     </div>
 
@@ -215,7 +230,7 @@ const Content = (props) => {
                                             </div>
                                             <div className="form-group">
                                                 <label>Knee Length</label>
-                                                <input type="text" className="form-control form-control-light" placeholder="Knee length in inches" name="kneeL" value={kneeL} onChange={(e) => setkneeL(e.target.value)} required />
+                                                <input type="text" className="form-control form-control-light" placeholder="Knee length in inches" name="KneeL" value={KneeL} onChange={(e) => setKneeL(e.target.value)} required />
                                             </div>
                                             <div className="form-group">
                                                 <label>Waist Length</label>
@@ -223,11 +238,11 @@ const Content = (props) => {
                                             </div>
                                             <div className="form-group">
                                                 <label>Knee Length</label>
-                                                <input type="text" className="form-control form-control-light" placeholder="Tshirt length in inches" name="kneeL" value={shirtL} onChange={(e) => setShirtL(e.target.value)}  required />
+                                                <input type="text" className="form-control form-control-light" placeholder="Tshirt length in inches" name="TshirtL" value={shirtL} onChange={(e) => setShirtL(e.target.value)}  required />
                                             </div>
                                             <div className="form-group">
                                                 <label>Bottom Length</label>
-                                                <input type="text" className="form-control form-control-light" placeholder="Bottom length in inches" name="kneeL" value={bottomL} onChange={(e) => setBottomL(e.target.value)} required />
+                                                <input type="text" className="form-control form-control-light" placeholder="Bottom length in inches" name="bottomL" value={bottomL} onChange={(e) => setBottomL(e.target.value)} required />
                                             </div>
                                             
                                         </div>

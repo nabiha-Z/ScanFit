@@ -52,7 +52,7 @@ function Shopsidebar() {
 
                                 <div className="drop-down">
                                     <label>Category: </label>
-                                    <select className="form-control" name="location" value={categ} onChange={(e) => setcateg(e.target.value)} required>
+                                    <select className="form-control" name="location" value={categ} onChange={(e) => setcateg(e.target.value)}>
 
                                         {categories.map((item, i) => {
 
@@ -64,7 +64,7 @@ function Shopsidebar() {
 
                                 <div className="drop-down">
                                     <label>Color: </label>
-                                    <input type="text" className="form-control form-control-light" placeholder="Color" name="color" style={{margin:5, marginTop:-7}} value={color} onChange={(e) => setcolor(e.target.value)} required />
+                                    <input type="text" className="form-control form-control-light" placeholder="Color" name="color" style={{margin:5, marginTop:-7}} value={color} onChange={(e) => setcolor(e.target.value)} />
                                     {/* <select className="form-control" name="location" value={color} onChange={(e) => setcolor(e.target.value)} required>
 
                                         {colors.map((item, i) => {
@@ -76,7 +76,7 @@ function Shopsidebar() {
                                 </div>
                                 <div className="drop-down">
                                     <label>Price: </label>
-                                    <input type="text" className="form-control form-control-light" placeholder="Price" name="price" style={{margin:5, marginTop:-7}} value={price} onChange={(e) => setprice(e.target.value)} required />
+                                    <input type="text" className="form-control form-control-light" placeholder="Price" name="price" style={{margin:5, marginTop:-7}} value={price} onChange={(e) => setprice(e.target.value)} />
                                 </div>
                                 <button className="btn-custom secondary btn-block" name="button" onClick={() => searchProduct()}>Search Products</button>
                             </form>

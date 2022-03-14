@@ -103,32 +103,16 @@ export default function Content() {
                 });
         }
     }
-    const showDetails = (item) => {
+    // const showDetails = (item) => {
 
-        console.log("listing item: ", item.title);
-        // routerHistory.push({
-        //     pathname: "/listing-details-v1",
-        //     state: { listing: item }
-        // });
-
-    }
-
-
-
-    // if (location.state != undefined) {
-    //     console.log("state= ", location.state.products);
-    //     // products = location.state.featured;
-    //     setProducts(location.state.products)
+    //     console.log("listing item: ", item.title);
+    //     // routerHistory.push({
+    //     //     pathname: "/listing-details-v1",
+    //     //     state: { listing: item }
+    //     // });
 
     // }
 
-
-    //setsearchedList(featuredLists);
-    // setsearchedList(...searchedList, nonfeaturedLists);
-    // const indexOfLastitem = currentPage * itemsPerPage;
-    // const indexOfFirstitem = indexOfLastitem - itemsPerPage;
-
-    // const listItems = products.slice(indexOfFirstitem, indexOfLastitem);
 
 
     const RenderItem = ({ list }) => {
@@ -144,7 +128,7 @@ export default function Content() {
                             
                             <div className="listing-controls">
                                 <Link className="favorite"><i className="far fa-heart" onClick={(e) => onFav(item, e)} /></Link>
-
+                                <Link to="#" className="compare"><i className="fas fa-camera" /></Link>
                             </div>
                         </div>
                         <div className="listing-body">
@@ -154,7 +138,7 @@ export default function Content() {
                             <span className="listing-price">{new Intl.NumberFormat().format((item.price).toFixed(2))} /-<span></span> </span>
                             <p className="listing-text">{item.description}</p>
                             <div className="listing-gallery-wrapper">
-                                <button onClick={() => showDetails(item)} className="btn-custom btn-sm secondary">View Details</button>
+                                <button className="btn-custom btn-sm secondary">View Details</button>
                                 {/* <OverlayTrigger overlay={gallerytip}>
                                     <Link to="#" className="listing-gallery"> <i className="fas fa-camera" /> </Link>
                                 </OverlayTrigger> */}

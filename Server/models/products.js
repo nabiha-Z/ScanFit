@@ -12,5 +12,5 @@ const productsSchema = mongoose.Schema({
   sizes: { type: Array }
 
 
-});
+},{timestamp:true});
 export default mongoose.model("products", productsSchema, 'products');

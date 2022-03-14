@@ -48,18 +48,18 @@ export default function Categories({ setShow, image, collapsed, rtl, toggled, ha
 
     useEffect(() => {
 
-        axios.get('https://api-kearekisa.herokuapp.com/admin/category')
-            .then(res => {
-                const cat = res.data;
-                console.log(cat.categories)
-                // console.log(typeof(cat))
+        // axios.get('https://api-kearekisa.herokuapp.com/admin/category')
+        //     .then(res => {
+        //         const cat = res.data;
+        //         console.log(cat.categories)
+        //         // console.log(typeof(cat))
 
-                setCategories(cat.categories)
-                console.log("categories", categories)
-            })
-            .catch(err => {
-                alert(err);
-            })
+        //         setCategories(cat.categories)
+        //         console.log("categories", categories)
+        //     })
+        //     .catch(err => {
+        //         alert(err);
+        //     })
     }, []);
     const [imagePath, setImagePath] = useState([]);
     const { innerWidth: width, innerHeight: height } = window;
@@ -91,7 +91,7 @@ export default function Categories({ setShow, image, collapsed, rtl, toggled, ha
                     onClick={() => handleToggleSidebar(true)}>
                     <FaBars />
                 </div>
-                <h1 className="userTitle">Categories</h1>
+                <h1 className="userTitle">Products</h1>
                 <Link to="/newCate">
                     <button className="userAddButton">Add</button>
                 </Link>
@@ -99,7 +99,7 @@ export default function Categories({ setShow, image, collapsed, rtl, toggled, ha
             <div className="userContainer">
                 <div className="userShow" style={{ height: height*0.7, overflowY: 'scroll', width:'100%'}}>
                     <div className="userShowTop" >
-                        <h3>All Categories</h3>
+                        <h3>All Products</h3>
                         {categories.map((item, key) => (
 
                             <div className="category-container" >

@@ -38,7 +38,7 @@ class Footer extends Component {
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-7">
-                                <p className="m-0">© Copyright 2020 - <Link to="#">Outfit Adobe</Link> All Rights Reserved.</p>
+                                <p className="m-0">© Copyright 2022 - <Link to="#">Outfit Adobe</Link> All Rights Reserved.</p>
                             </div>
                            
                         </div>

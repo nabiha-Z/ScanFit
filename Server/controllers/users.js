@@ -486,6 +486,16 @@ export const editMeasurements = async (req, res) => {
 //     }
 // }
 
+export const latestProducts = async (req, res) => {
+
+    await products.find({}).sort('-date').limit(9)
+    .then((data) => {
+        res.status(201).json({ message: true, products: data })
+    }).catch((err) => {
+        res.status(201).json({ message: false, error: err.message })
+    })
+}
+
 export const categorySearch = async (req, res) => {
 
     console.log("req.body.category", req.body.category)
@@ -512,10 +522,12 @@ export const filterProducts = async (req, res) => {
 
 export const searchProducts = async (req, res) => {
 
-    const txt = req.body.searchtxt;
-    await products.find({ $or: [{ title: txt }, { category: txt }, { color: txt }, { price: txt }, { main_category: txt }] })
+    const txt = req.body.searchField;
+    console.log("txt:", txt)
+    await products.find({ $or: [{ title: txt }, { category: txt },{color:txt},{ main_category: txt}] })
         .then((data) => {
 
+            console.log("data:", data)
             res.status(201).json({ message: true, products: data })
         }).catch((err) => {
             res.status(201).json({ message: false, error: err.message })
@@ -662,20 +674,6 @@ export const deleteCartItem = async (req, res) => {
         console.log(index);
         var temp = itemsArr.slice(index+1,itemsArr.length)
         console.log("temp: ", temp)
-        // cartData[0].items.map((item) => {
-
-        //     console.log("pid: ", item.pid)
-        //     var id = JSON.stringify(item.pid)
-        //     console.log("product : ", pid)
-            
-        //     if (id.includes(pid)) {
-        //         console.log("before: ", item.quantity)
-                
-
-                
-        //     }
-        //     console.log("after update: ", item.quantity)
-        // })
         await cart.findOneAndDelete({ _id: cid })
             .then((data) => {
                 cobsole.log("data: ", data)

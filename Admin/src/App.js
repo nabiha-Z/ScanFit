@@ -8,12 +8,11 @@ import Home from "./pages/Products/index";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import UserList from "./pages/userList/UserList";
 import User from "./pages/user/User";
-import NewCategory from "./pages/newCategory/NewProduct";
+import NewProduct from "./pages/newProduct/NewProduct";
 import Product from "./pages/product/Product";
 import Login from "./pages/Login/Login";
 import Payment from "./pages/Payment/payment";
 import Contact from "./pages/ContactMsgs/messages";
-import NewProduct from "./pages/newProduct/NewProduct";
 import './styles/app.scss';
 
 function App() {
@@ -113,7 +112,7 @@ function App() {
             </Route>
 
             <Route exact path="/newCate">
-              <NewCategory
+              <NewProduct
                 toggled={toggled}
                 collapsed={collapsed}
                 rtl={rtl}

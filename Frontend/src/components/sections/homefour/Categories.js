@@ -10,52 +10,14 @@ function Categories() {
 
     const [categories, setCategories] = useState([]);
     const [searchField, setSeacrhField] = useState();
-    const [isFetchingData, setFetchingData] = useState(false);
 
     const CategoryConatiner = (props) => {
         var path = "/images/" + props.img + ".png";
 
-        const history = useHistory();
-
-
-        const searchText = async() =>{
-            await search({
-                searchField
-            })
-                .then(function (response) {
-                 
-                    if(response.data.message === true ){
-                        history.push({pathname:'/searchProducts', state:{products:response.data.products}})
-                    }
-                   
-                })
-                .catch(function (error) {
-    
-                });
-    
-    
-        }
-        
-        const searchCat = async(cate) =>{
-            var category = cate.toLowerCase()
-            await searchCategory({category})
-            .then((response)=>{
-                if(response.data.message === true ){
-                    history.push({pathname:'/searchProducts', state:{products:response.data.products}})
-                }
-                
-            }).catch((err)=>{
-                console.log("error:", err.message)
-            })
-        }
-
-
-       
-
         return (
             <>
                 <div className='category-block'>
-                    <Link onClick={()=> searchCat(props.title)}>
+                    <Link onClick={() => searchCat(props.title)}>
                         <div className='category-circle'>
                             <img src={path} className='image-icon' />
                         </div>
@@ -64,6 +26,38 @@ function Categories() {
                 </div></>
         )
     }
+
+    const history = useHistory();
+
+    const searchCat = async (cate) => {
+        var category = cate.toLowerCase()
+        await searchCategory({ category })
+            .then((response) => {
+                if (response.data.message === true) {
+                    history.push({ pathname: '/searchProducts', state: { products: response.data.products } })
+                }
+
+            }).catch((err) => {
+                console.log("error:", err.message)
+            })
+    }
+
+    const searchText = async () => {
+        await search({
+            searchField
+        })
+            .then(function (response) {
+
+                if (response.data.message === true) {
+                    history.push({ pathname: '/searchProducts', state: { products: response.data.products } })
+                }
+
+            })
+            .catch(function (error) {
+
+            });
+    }
+
 
 
 
@@ -81,15 +75,15 @@ function Categories() {
                         <div className='searchfield'>
                             <input type='text' className='searchinput' placeholder="Search a product" value={searchField} onChange={(e) => setSeacrhField(e.target.value)} />
                             {/* <img src="/images/search.png" className='searchicon'/> */}
-                            <FiSearch className='searchicon' />
+                            <FiSearch className='searchicon' onClick={() => searchText()} />
                         </div>
                     </div>
                     <div className='categories'>
 
                         <CategoryConatiner title="Dress" img="dress" />
-                        <CategoryConatiner title="Shirts" img="shirt" />
+                        <CategoryConatiner title="TShirt" img="shirt" />
                         <CategoryConatiner title="Jeans" img="jeans" />
-                        <CategoryConatiner title="Suits" img="suit" />
+                        <CategoryConatiner title="Suit" img="suit" />
                         {/* <CategoryConatiner title="Accessories" img="accessory" /> */}
 
                     </div>

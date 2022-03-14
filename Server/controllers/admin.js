@@ -285,12 +285,6 @@ export const addProducts = async (req, res) => {
     color
   } = req.body;
 
-  console.log(
-    title,
-    picture,
-    price,
-    category,
-    color);
   try {
 
 
