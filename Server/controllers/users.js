@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import Users from '../models/users.js'
 import measurements from "../models/measurements.js";
 import products from "../models/products.js";
+import cart from "../models/cart.js";
+import orders from "../models/order.js";
 import jwt from "jsonwebtoken";
 import config from "config";
 import nodemailer from 'nodemailer';
@@ -57,7 +59,7 @@ export const signup = async (req, res) => {
 
         if (await Users.findOne({ email: email }).exec()) {
             console.log("existed")
-            res.status(201).json({ "message": "false" });
+            res.status(201).json({ "message": false });
         }
         else {
             console.log("fdfs");
@@ -71,7 +73,7 @@ export const signup = async (req, res) => {
                     (err, token) => {
                         try {
                             console.log("token:", token)
-                            res.status(201).json({ "message": "true", "token": token });
+                            res.status(201).json({ "message": true, "token": token, user: docs[0] });
 
                         } catch (error) {
                             res.status(404).json({ message: error.message });
@@ -324,7 +326,7 @@ export const forgotPassword = async (req, res) => {
                 }
 
                 var transporter = nodemailer.createTransport({
-                   
+
                     host: 'smtp.gmail.com',
                     port: 587,
                     auth: {
@@ -487,35 +489,204 @@ export const editMeasurements = async (req, res) => {
 export const categorySearch = async (req, res) => {
 
     console.log("req.body.category", req.body.category)
-    await products.find({category: req.body.category})
-    .then((data) => {
-        res.status(201).json({message: true, products:data})
-    }).catch((err)=>{
-        res.status(201).json({message: false, error:err.message})
-    })
+    await products.find({ category: req.body.category })
+        .then((data) => {
+            res.status(201).json({ message: true, products: data })
+        }).catch((err) => {
+            res.status(201).json({ message: false, error: err.message })
+        })
 }
 
 
 export const filterProducts = async (req, res) => {
-    
-    const {color, categ, price} = req.body;
-    await products.find({ $or: [ { category: categ }, { price: price }, {color:color}, { main_category: categ }] })
-    .then((data) => {
-       
-        res.status(201).json({message: true, products:data})
-    }).catch((err)=>{
-        res.status(201).json({message: false, error:err.message})
-    })
+
+    const { color, categ, price } = req.body;
+    await products.find({ $or: [{ category: categ }, { price: price }, { color: color }, { main_category: categ }] })
+        .then((data) => {
+
+            res.status(201).json({ message: true, products: data })
+        }).catch((err) => {
+            res.status(201).json({ message: false, error: err.message })
+        })
 }
 
 export const searchProducts = async (req, res) => {
-    
-    const txt = req.body.searchtxt;
-    await products.find({ $or: [{ title: txt }, { category: txt }, { color: txt }, { price: txt }, {main_category: txt}] })
-    .then((data) => {
 
-        res.status(201).json({message: true, products:data})
-    }).catch((err)=>{
-        res.status(201).json({message: false, error:err.message})
-    })
+    const txt = req.body.searchtxt;
+    await products.find({ $or: [{ title: txt }, { category: txt }, { color: txt }, { price: txt }, { main_category: txt }] })
+        .then((data) => {
+
+            res.status(201).json({ message: true, products: data })
+        }).catch((err) => {
+            res.status(201).json({ message: false, error: err.message })
+        })
+}
+
+export const getProduct = async (req, res) => {
+
+    console.log("pid:", req.body.pid)
+    await cart.find({ user: req.body.pid })
+        .then((data) => {
+            console.log("cart: ", data)
+            res.status(201).json({ message: true, cart: data })
+        }).catch((err) => {
+            res.status(201).json({ message: false, error: err.message })
+        })
+}
+
+export const fetchCart = async (req, res) => {
+
+    console.log("id:", req.body.uid)
+    await cart.find({ user: req.body.uid }).populate('items.pid')
+        .then((data) => {
+            console.log("cart: ", data)
+            res.status(201).json({ message: true, cart: data })
+        }).catch((err) => {
+            res.status(201).json({ message: false, error: err.message })
+        })
+}
+
+
+export const addInCart = async (req, res) => {
+
+    const { uid, product } = req.body;
+    // console.log("prod:", product)
+
+    var quantity = 0, errors = "", count = 0;
+    const cartData = await cart.find({ user: uid })
+    try {
+        if (cartData.length !== 0) {
+            console.log("cart items: ", cartData[0].items)
+            cartData[0].items.map((item) => {
+                console.log("pid: ", item.pid)
+                var id = JSON.stringify(item.pid)
+                console.log("product : ", product._id)
+                if (id.includes(product._id)) {
+                    count = 1;
+                    console.log("before: ", item.quantity)
+                    quantity = item.quantity + 1;
+                    item.quantity = quantity
+                    console.log("after update: ", cartData[0]._id)
+                    cart.findByIdAndUpdate({ _id: cartData[0]._id }, { items: cartData[0].items }, { new: true })
+                        .then((data) => {
+                            console.log(data);
+
+                        }).catch((err) => {
+                            errors = err.message
+                            console.log("err found: ", err.message)
+                        })
+
+                }
+
+            })
+        }
+
+
+        if (count === 0) {
+
+            var productObj = {
+                pid: product._id,
+                quantity: 1
+            }
+            var items = [];
+            items.push(productObj)
+
+            console.log("items: ", items)
+            await cart.create({ items, user: uid })
+                .then((data) => {
+                    console.log(data);
+
+                }).catch((err) => {
+                    errors = err.message
+                    console.log("err: ", err.message)
+                })
+
+
+
+
+        }
+        if (errors.length === 0) {
+            res.status(201).json({ message: true })
+        } else {
+            res.status(201).json({ message: false, error: err.message })
+        }
+
+    }
+    catch (err) {
+        console.log("error: ", err.message)
+    }
+
+
+}
+
+export const updateQuantity = async (req, res) => {
+
+    const { cid, pid, quantity } = req.body;
+    const cartData = await cart.find({ _id: cid })
+    try {
+        cartData[0].items.map((item) => {
+
+            console.log("pid: ", item.pid)
+            var id = JSON.stringify(item.pid)
+            console.log("product : ", pid)
+            if (id.includes(pid)) {
+                console.log("before: ", item.quantity)
+                item.quantity = quantity
+            }
+            console.log("after update: ", item.quantity)
+        })
+        await cart.findByIdAndUpdate({ _id: cid }, { items: cartData[0].items }, { new: true })
+            .then((data) => {
+
+                res.status(201).json({ message: true, cart: data })
+            }).catch((err) => {
+                res.status(201).json({ message: false, error: err.message })
+            })
+
+    }
+    catch (err) {
+        console.log("error: ", err.message)
+    }
+
+}
+
+
+export const deleteCartItem = async (req, res) => {
+
+    const { cid, pid } = req.body;
+    const cartData = await cart.find({ _id: cid })
+    const itemsArr = cartData[0].items;
+    try {
+
+        const index = itemsArr.findIndex(item => JSON.stringify(item.pid).includes(pid));
+        console.log(index);
+        var temp = itemsArr.slice(index+1,itemsArr.length)
+        console.log("temp: ", temp)
+        // cartData[0].items.map((item) => {
+
+        //     console.log("pid: ", item.pid)
+        //     var id = JSON.stringify(item.pid)
+        //     console.log("product : ", pid)
+            
+        //     if (id.includes(pid)) {
+        //         console.log("before: ", item.quantity)
+                
+
+                
+        //     }
+        //     console.log("after update: ", item.quantity)
+        // })
+        await cart.findOneAndDelete({ _id: cid })
+            .then((data) => {
+                cobsole.log("data: ", data)
+                res.status(201).json({ message: true })
+            }).catch((err) => {
+                res.status(201).json({ message: false, error: err.message })
+            })
+      
+    }
+    catch (err) {
+        console.log("error: ", err.message)
+    }
+
 }

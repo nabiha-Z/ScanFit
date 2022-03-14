@@ -10,7 +10,7 @@ class Profile extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Re Marketing | Search</title>
+                    <title>Outfit Adobe | Search</title>
                 </MetaTags>
                 <Header/>
                 {/* <Breadcrumb/> */}

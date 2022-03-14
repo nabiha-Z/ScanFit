@@ -10,7 +10,7 @@ class Faq extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Re Marketing | FAQ's</title>
+                    <title>Outfit Adobe | FAQ's</title>
                     <meta
                         name="description"
                         content="#"

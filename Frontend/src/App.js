@@ -19,6 +19,7 @@ const Login = React.lazy(() => import("./components/pages/Login"));
 const forgotPass = React.lazy(() => import("./components/pages/Forgotpassword"));
 const resetPass = React.lazy(() => import("./components/pages/Resetpassword"));
 const Register = React.lazy(() => import("./components/pages/Register"));
+const Cart = React.lazy(() => import("./components/pages/Cart"));
 const ProductsList = React.lazy(() => import("./components/pages/ProductsList"));
 const Listingdetailsone = React.lazy(() => import("./components/pages/Listingdetailsone"));
 const Profile = React.lazy(() => import("./components/pages/Profile"));
@@ -71,6 +72,7 @@ function App() {
           <Route path="/measuremenets" component= {Measuremenets} />
           <Route path="/favourites" component={SavedFavourites} />
           <Route path="/searchProducts" component={SearchProduct} />
+          <Route path="/cart" component={Cart} />
           
           {/* Coming Soon Pages */}
           {!comingsoon? <Redirect to="/coming-soon" />

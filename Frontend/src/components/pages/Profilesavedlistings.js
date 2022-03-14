@@ -10,7 +10,7 @@ class Profilesavedlistings extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Re Marketing | My Products</title>
+                    <title>Outfit Adobe | My Products</title>
                     <meta
                         name="description"
                         content="#"

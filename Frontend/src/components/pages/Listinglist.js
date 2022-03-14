@@ -10,7 +10,7 @@ class Listinglist extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Acres - Real Estate React Template | Listing List</title>
+                    <title>t</title>
                     <meta
                         name="description"
                         content="#"

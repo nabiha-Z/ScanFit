@@ -9,7 +9,10 @@ import classNames from 'classnames';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import jwt_decode from "jwt-decode";
-import { fetchProducts, favourite } from '../../../api/index';
+import 'antd/dist/antd.css';
+import { message } from 'antd';
+import { fetchProducts, favourite, addCart } from '../../../api/index';
+
 
 
 const gallerytip = (
@@ -96,6 +99,19 @@ function Content() {
             </>
         );
     };
+
+    const addtocart = async(product) => {
+        await addCart({uid:Cookies.get('id'), product})
+        .then((response)=>{
+            console.log("res:", response.data)
+            if(response.data.message === true){
+                message.success("Added to Cart")
+            }
+        }).catch((err)=>{
+            console.log("err: ", err.message)
+            message.error(err.message)
+        })
+    }
 
     // this.state = {
     //     products: fetchs,
@@ -210,13 +226,14 @@ function Content() {
                                 </Dropdown.Menu>
                             </Dropdown>
                         </div> */}
-                            <h5 className="listing-title"> <Link to="/listing-details-v1" title={item.title}>{item.title}</Link> </h5>
+                            <h5 className="listing-title"> <Link to="#" title={item.title}>{item.title}</Link> </h5>
                             <p className="listing-text">{item.location}</p>
                             <span className="listing-price">{item.price} RS/-</span>
                             <p className="listing-text">{item.description}</p>
-                            <div className="listing-gallery-wrapper">
+                            <div className="listing-gallery-wrapper" style={{justifyContent:'flex-end', marginTop:20}}>
 
-                                <button onClick={() => showDetails(item)} className="btn-custom btn-sm secondary">View Details</button>
+                                <button onClick={() => showDetails(item)} className="btn-custom btn-sm secondary" style={{marginRight:10}}>View Details</button>
+                                <button onClick={() => addtocart(item)} className="btn-custom btn-sm primary">Add to Cart</button>
                                 {/* <OverlayTrigger overlay={gallerytip}>
                             <Link to="#" className="listing-gallery"> <i className="fas fa-camera" /> </Link>
                         </OverlayTrigger> */}

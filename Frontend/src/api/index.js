@@ -27,6 +27,11 @@ export const featureList = userdata => API.post(`listings/featurelist`, userdata
 export const searchCategory = userdata => API.post(`user/category-search`, userdata);
 export const search = userdata => API.post(`user/search`, userdata);
 export const filter = userdata => API.post(`user/filter`, userdata);
+export const fetchCart = userdata => API.post(`user/fetchCart`, userdata);
+export const addCart = userdata => API.post(`user/addCart`, userdata);
+export const deleteItem = userdata => API.post(`user/deleteCartItem`, userdata);
+export const updateQuantity = userdata => API.post(`user/updateQuantity`, userdata);
+export const getProduct = userdata => API.post(`user/getProduct`, userdata);
 export const savedListings = userdata => API.post(`user/saved-lists`, userdata);
 export const unsaveList = userdata => API.patch(`user/unfavlisting`, userdata);
 export const deleteListing = userdata => API.patch(`listings/deleteListing`, userdata);

@@ -10,7 +10,7 @@ class About extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Re Marketing | About Us</title>
+                    <title>Outfit Adobe | About Us</title>
                 </MetaTags>
                 <Header/>
                 <Breadcrumb breadcrumb={{pagename:'About Us'}} />

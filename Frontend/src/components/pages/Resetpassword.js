@@ -8,7 +8,7 @@ class Forgotpassword extends Component {
         return (
             <Fragment>
                 <MetaTags>
-                    <title>Reset Password</title>
+                    <title>Outfit Adobe | Reset Password</title>
                     <meta
                         name="description"
                         content="#"

@@ -48,12 +48,13 @@ function Content() {
 
         })
             .then(function (response) {
-                if (response.data.message == "true") {
+                if (response.data.message == true) {
                     console.log("llldfs")
                     console.log("token: ", response.data.token);
                     try {
                         Cookies.set('token', response.data.token);
                         Cookies.set('mail', email);
+                        Cookies.set('id', response.data.user._id);
                         routerHistory.push('./profile');
                     } catch (e) {
                         return null;

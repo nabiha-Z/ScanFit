@@ -93,7 +93,7 @@ const Headerfour = () => {
                                     <li className="menu-item menu-item-has-children" > <Link to="/login" id="loginBtn">Login</Link> </li>
                                     <li>or</li>
                                     <li className="menu-item menu-item-has-children" > <Link to="/register" id="loginBtn"> Signup</Link> </li></> : <li>
-                                    <Link>
+                                    <Link to="/cart">
                                         <Badge badgeContent={totalItems} color="secondary">
                                             <HiShoppingCart style={{ color:'#3E3F40',width: 30, height: 'auto' }} />
                                         </Badge>
