@@ -1,8 +1,9 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-// const API = axios.create({ baseURL: 'https://localhost:5000/' });
 const API = axios.create({ baseURL: 'http://localhost:8000/' });
+// const API = axios.create({ baseURL: 'https://outfit-adobe-server.herokuapp.com/' });
+
 const flaskAPI = axios.create({ baseURL: 'http://127.0.0.1:5000' });
 
 API.interceptors.request.use(req => {

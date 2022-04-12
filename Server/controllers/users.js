@@ -92,11 +92,15 @@ export const signup = async (req, res) => {
 }
 export const login = async (req, res) => {
 
-    const { email, password } = req.body;
-    console.log("email:", email);
+    var { email, password } = req.body;
+    console.log("email user :",  req.body.email);
+    // email = 'nabihazubair100@gmail.com';
+    // console.log("email :", email);
+    
 
     try {
         const existingUser = await Users.findOne({ email, password });
+        console.log("exi: ", existingUser)
         if (!existingUser) {
             // res.send("none")
             console.log("Not found")
@@ -110,7 +114,7 @@ export const login = async (req, res) => {
                 (err, token) => {
                     try {
                         // res.send({ "message": true, "token": token, "user": existingUser })
-                        return res.status(201).json({ "message": true, "token": token, "user": existingUser });
+                        return res.status(201).json({ message: true, "token": token, "user": existingUser });
 
                     } catch (error) {
                         // res.send(error.message)
@@ -316,7 +320,7 @@ export const forgotPassword = async (req, res) => {
 
 
     const { email } = req.body;
-    console.log("email rest pass= ", email);
+    
     try {
         await Users.findOne({ email: email })
             .then(users => {
@@ -336,7 +340,6 @@ export const forgotPassword = async (req, res) => {
 
                 });
 
-                console.log("mail= ", users.email);
                 var currentDateTime = new Date();
                 var mailOptions = {
                     from: 'no-reply@gmail.com',
@@ -562,7 +565,7 @@ export const fetchCart = async (req, res) => {
 export const addInCart = async (req, res) => {
 
     const { uid, product } = req.body;
-    // console.log("prod:", product)
+    console.log("prod:", product.size)
 
     var quantity = 0, errors = "", count = 0;
     const cartData = await cart.find({ user: uid })
