@@ -59,7 +59,7 @@ export const signup = async (req, res) => {
 
         if (await Users.findOne({ email: email }).exec()) {
             console.log("existed")
-            res.status(201).json({ "message": false });
+            res.status(201).json({ "message": false, error:'Already Exists' });
         }
         else {
             console.log("fdfs");
@@ -564,7 +564,7 @@ export const fetchCart = async (req, res) => {
 
 export const addInCart = async (req, res) => {
 
-    const { uid, product } = req.body;
+    const { uid, product, size, color } = req.body;
     console.log("prod:", product.size)
 
     var quantity = 0, errors = "", count = 0;
@@ -601,8 +601,11 @@ export const addInCart = async (req, res) => {
 
             var productObj = {
                 pid: product._id,
-                quantity: 1
+                quantity: 1,
+                size:size,
+                color:color
             }
+           
             var items = [];
             items.push(productObj)
 
