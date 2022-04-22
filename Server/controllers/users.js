@@ -59,7 +59,7 @@ export const signup = async (req, res) => {
 
         if (await Users.findOne({ email: email }).exec()) {
             console.log("existed")
-            res.status(201).json({ "message": false, error:'Already Exists' });
+            res.status(201).json({ "message": false, error: 'Already Exists' });
         }
         else {
             console.log("fdfs");
@@ -93,10 +93,10 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
 
     var { email, password } = req.body;
-    console.log("email user :",  req.body.email);
+    console.log("email user :", req.body.email);
     // email = 'nabihazubair100@gmail.com';
     // console.log("email :", email);
-    
+
 
     try {
         const existingUser = await Users.findOne({ email, password });
@@ -320,7 +320,7 @@ export const forgotPassword = async (req, res) => {
 
 
     const { email } = req.body;
-    
+
     try {
         await Users.findOne({ email: email })
             .then(users => {
@@ -341,15 +341,16 @@ export const forgotPassword = async (req, res) => {
                 });
 
                 var currentDateTime = new Date();
+                const resetCode = 1 + Math.floor(Math.random() * 10000);
                 var mailOptions = {
                     from: 'no-reply@gmail.com',
                     to: users.email,
                     subject: "Reset password link",
 
                     html: `<h1>You requested for password reset </h1><p>\
-              If You are requested to reset your password then click on below link<br/>\
-             <a href="http://localhost:3000/resetpassword/${users.email}">Click On This Link to reset</a><br/>\
-             This link will expire within 1 hour.<br/>\
+              If you have requested to reset your password then use the code below to reset password for your account<br/>\
+             <h1>${resetCode}</h1><br/>\
+             This code will expire within 1 hour.<br/>\
               </p>`
                 };
 
@@ -366,10 +367,11 @@ export const forgotPassword = async (req, res) => {
 
                         const expire = Date.now() + 3600000;
                         const { _id, firstName, lastName, email, password, resetToken, expires } = users;
-                        const a = await Users.findByIdAndUpdate(_id, { _id, firstName, lastName, email, password, resetToken: token, expires: expire }, { new: true });
+
+                        const a = await Users.findByIdAndUpdate(_id, { _id, firstName, lastName, email, password, resetToken: resetCode, expires: expire }, { new: true });
 
                         console.log("a= ", a.expires);
-                        return res.status(200).json({ 'message': true, success: "Check your email" })
+                        return res.status(200).json({ 'message': true, success: "Check your email", resetCode: resetCode })
 
                     }
                 });
@@ -385,18 +387,17 @@ export const forgotPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
     console.log("reset");
     console.log("email= ", req.body);
-    const { pass, user_email } = req.body;
-    console.log("email= ", user_email);
+    const { email, pass } = req.body;
     try {
 
-        let users = await Users.findOne({ email: user_email, expires: { $gt: Date.now() } })
+        let users = await Users.findOne({ email: email, expires: { $gt: Date.now() } })
 
         if (!users) {
             return res.status(200).json({ "message": false, error: "Try again sesssion expired!" });
         } else {
 
 
-            console.log("user= ", users.user_email);
+            console.log("user= ", users.email);
 
             console.log("before:", users.password);
 
@@ -408,7 +409,7 @@ export const resetPassword = async (req, res) => {
             console.log("expires= ", expires);
             const a = await Users.findByIdAndUpdate(_id, { _id, firstName, lastName, email, password: pass, resetToken: null, expires: null }, { new: true });
             console.log("a= ", a.password);
-            console.log("a= ", a.token);
+            console.log("a= ", a.resetToken);
 
             return res.status(200).json({ "message": true, success: "Password Chanegd!\n Sign in to Continue." });
         }
@@ -492,11 +493,11 @@ export const editMeasurements = async (req, res) => {
 export const latestProducts = async (req, res) => {
 
     await products.find({}).sort('-date').limit(9)
-    .then((data) => {
-        res.status(201).json({ message: true, products: data })
-    }).catch((err) => {
-        res.status(201).json({ message: false, error: err.message })
-    })
+        .then((data) => {
+            res.status(201).json({ message: true, products: data })
+        }).catch((err) => {
+            res.status(201).json({ message: false, error: err.message })
+        })
 }
 
 export const categorySearch = async (req, res) => {
@@ -527,7 +528,7 @@ export const searchProducts = async (req, res) => {
 
     const txt = req.body.searchField;
     console.log("txt:", txt)
-    await products.find({ $or: [{ title: txt }, { category: txt },{color:txt},{ main_category: txt}] })
+    await products.find({ $or: [{ title: txt }, { category: txt }, { color: txt }, { main_category: txt }] })
         .then((data) => {
 
             console.log("data:", data)
@@ -565,64 +566,66 @@ export const fetchCart = async (req, res) => {
 export const addInCart = async (req, res) => {
 
     const { uid, product, size, color } = req.body;
-    console.log("prod:", product.size)
-
     var quantity = 0, errors = "", count = 0;
     const cartData = await cart.find({ user: uid })
+    var productObj = {
+        pid: product._id,
+        quantity: 1,
+        size: size,
+        color: color
+    }
     try {
         if (cartData.length !== 0) {
-            console.log("cart items: ", cartData[0].items)
+            //console.log("cart items: ", cartData[0].items)
             cartData[0].items.map((item) => {
-                console.log("pid: ", item.pid)
+                //console.log("pid: ", item.pid)
                 var id = JSON.stringify(item.pid)
-                console.log("product : ", product._id)
+                console.log("product : ", product.size)
                 if (id.includes(product._id)) {
-                    count = 1;
-                    console.log("before: ", item.quantity)
-                    quantity = item.quantity + 1;
-                    item.quantity = quantity
-                    console.log("after update: ", cartData[0]._id)
-                    cart.findByIdAndUpdate({ _id: cartData[0]._id }, { items: cartData[0].items }, { new: true })
-                        .then((data) => {
-                            console.log(data);
+                    if (product.size === size) {
+                        count = 1;
+                        console.log("before: ", item.quantity)
+                        quantity = item.quantity + 1;
+                        item.quantity = quantity
+                        //console.log("after update: ", cartData[0]._id)
+                        cart.findByIdAndUpdate({ _id: cartData[0]._id }, { items: cartData[0].items }, { new: true })
+                            .then((data) => {
+                                console.log(data);
 
-                        }).catch((err) => {
-                            errors = err.message
-                            console.log("err found: ", err.message)
-                        })
+                            }).catch((err) => {
+                                errors = err.message
+                                console.log("err found: ", err.message)
+                            })
+                    }
 
                 }
-
             })
-        }
+            if (count === 0) {
+                var items = cartData[0].items;
+                items.push(productObj)
+                cart.findByIdAndUpdate({ _id: cartData[0]._id }, { items: items }, { new: true })
+                    .then((data) => {
+                        console.log("appended: ",data);
 
+                    }).catch((err) => {
+                        errors = err.message
+                        console.log("err found: ", err.message)
+                    })
 
-        if (count === 0) {
-
-            var productObj = {
-                pid: product._id,
-                quantity: 1,
-                size:size,
-                color:color
             }
-           
+        } else {
             var items = [];
             items.push(productObj)
-
-            console.log("items: ", items)
             await cart.create({ items, user: uid })
                 .then((data) => {
-                    console.log(data);
+                    console.log("new item: ", data);
 
                 }).catch((err) => {
                     errors = err.message
                     console.log("err: ", err.message)
                 })
-
-
-
-
         }
+
         if (errors.length === 0) {
             res.status(201).json({ message: true })
         } else {
@@ -644,14 +647,11 @@ export const updateQuantity = async (req, res) => {
     try {
         cartData[0].items.map((item) => {
 
-            console.log("pid: ", item.pid)
+            console.log("pid: ", item)
             var id = JSON.stringify(item.pid)
-            console.log("product : ", pid)
             if (id.includes(pid)) {
-                console.log("before: ", item.quantity)
                 item.quantity = quantity
             }
-            console.log("after update: ", item.quantity)
         })
         await cart.findByIdAndUpdate({ _id: cid }, { items: cartData[0].items }, { new: true })
             .then((data) => {
@@ -672,22 +672,24 @@ export const updateQuantity = async (req, res) => {
 export const deleteCartItem = async (req, res) => {
 
     const { cid, pid } = req.body;
+    console.log("pid: ", pid)
     const cartData = await cart.find({ _id: cid })
     const itemsArr = cartData[0].items;
+    console.log("items", itemsArr)
     try {
 
-        const index = itemsArr.findIndex(item => JSON.stringify(item.pid).includes(pid));
-        console.log(index);
-        var temp = itemsArr.slice(index+1,itemsArr.length)
-        console.log("temp: ", temp)
-        await cart.findOneAndDelete({ _id: cid })
+        const items = itemsArr.filter(item => !(JSON.stringify(item.pid).includes(pid)));
+        console.log("arr:", items);
+        //var temp = itemsArr.slice(index + 1, itemsArr.length)
+        
+        await cart.findOneAndUpdate({ _id: cid },{ items: items }, { new: true })
             .then((data) => {
-                cobsole.log("data: ", data)
-                res.status(201).json({ message: true })
+                console.log("data: ", data)
+                res.status(201).json({ message: true, cart:data })
             }).catch((err) => {
                 res.status(201).json({ message: false, error: err.message })
             })
-      
+
     }
     catch (err) {
         console.log("error: ", err.message)
