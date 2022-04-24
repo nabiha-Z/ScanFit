@@ -10,8 +10,8 @@ import nodemailer from 'nodemailer';
 
 export const getusers = async (req, res) => {
     try {
-        const listings = await Users.find();
-        res.status(200).json(listings);
+        const users = await Users.find();
+        res.status(200).json(users);
     }
     catch (error) {
         res.status(404).json({ message: error.message });
@@ -19,11 +19,10 @@ export const getusers = async (req, res) => {
     }
 }
 
-
-
 export const loginuser = async (req, res) => {
-    const id = req.body.id;
-    //console.log("id ",id);
+    const {user} = req.body;
+    console.log("id ",user);
+    const id = JSON.parse(user);
 
     // console.log("token server ",user _id.id);
     try {
@@ -62,8 +61,6 @@ export const signup = async (req, res) => {
             res.status(201).json({ "message": false, error: 'Already Exists' });
         }
         else {
-            console.log("fdfs");
-
             await Users.create({ name, email, phonenumber, password, address, favorites: [] });
             Users.find({ email: email }, function (err, docs) {
                 jwt.sign(
@@ -694,5 +691,29 @@ export const deleteCartItem = async (req, res) => {
     catch (err) {
         console.log("error: ", err.message)
     }
+
+}
+
+
+export const changePicture = async (req, res) => {
+
+    const {user, picture} = req.body;
+    var userId = JSON.parse(user);
+    console.log("objectId: ", typeof(userId))
+
+    try {
+        await Users.findByIdAndUpdate({ _id: userId },{picture: picture},{new:true})
+            .then((data) => {
+                console.log("Changed ")
+                res.status(201).json({ "message": true });
+            }).catch((err) => {
+                res.status(201).json({ "message": false, "error": err.message });
+
+            })
+        }
+        catch(err){
+            res.status(201).json({ "message": false, "error": err.message });
+        }
+
 
 }

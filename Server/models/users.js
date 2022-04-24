@@ -5,7 +5,7 @@ const usersSchema = mongoose.Schema({
     email: { type: String, required: true },
     phonenumber: { type: String, required: true },
     password: { type: String, required: true },
-    picture :{type: Array},
+    picture :{type: String},
     favorites: { type: Array, required: true },
     resetToken: { type: String},
     expires: { type: Date },
