@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import Slider from 'react-slick';
+import { useLocation } from "react-router-dom";
 import { resetPassword } from '../../../api';
 import 'antd/dist/antd.css';
 import { message, Space } from 'antd';
@@ -18,6 +19,7 @@ function Content() {
 
 
     const routerHistory = useHistory();
+    const location = useLocation();
     const [pass, setpassword] = useState("");
     const [error, setError] = useState("");
     const [confirmpassword, setconfirmpassword] = useState("");
@@ -31,38 +33,7 @@ function Content() {
         dots: true,
         dotsClass: "d-flex slick-dots",
     }
-    console.log(useParams());
-    let email = useParams();
-    console.log("email", typeof (email.user));
-    const user_email = email.user;
-    // const API = async() => {
-    //     console.log(email)
-    //     await forgotPassword( {
-    //         email: email
-
-    //     })
-    //         .then(function (response) {
-    //             //   console.log(response);
-    //             if (response.data.message === true) {
-    //                console.log("token: ", response.data.token);
-    //                try {
-    //                 Cookies.set('token', response.data.token);
-    //                 const type= response.data.user.type;
-    //                 console.log("login= ", response.data.user.type);
-    //                 Cookies.set('mail',email);
-    //                 Cookies.set('type',type);
-    //                 routerHistory.push('./profile');
-    //               } catch (e) {
-    //                 return null;
-    //               }
-
-    //             } 
-
-    //         })
-    //         .catch(function (error) {
-
-    //         });
-    // }
+    const user_email = location.state.email
 
     const validate = () => {
         console.log("validation");
@@ -78,11 +49,9 @@ function Content() {
     }
 
     const reset = async () => {
-        console.log("confirm: ", confirmpassword);
         if(validate()){
-           console.log("password l",typeof(pass));
           await resetPassword({
-            pass, user_email
+            email: user_email, pass
       
           })
             .then(function (response) {

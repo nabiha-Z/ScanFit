@@ -18,6 +18,16 @@ function Content() {
 
     const routerHistory = useHistory();
     const [email, setEmail] = useState("");
+    const [isLoading, setLoading] = useState(false);
+    const [check, setCheck] = useState(false);
+    const [OTP, setOTP] = useState("");
+    const [data, setData] = useState({
+        digit1:"", 
+        digit2:"", 
+        digit3:"", 
+        digit4:"", 
+        isValidOTP:false
+    })
 
 
     const settings = {
@@ -28,47 +38,22 @@ function Content() {
         dots: true,
         dotsClass: "d-flex slick-dots",
     }
-    // const API = async() => {
-    //     console.log(email)
-    //     await forgotPassword( {
-    //         email: email
 
-    //     })
-    //         .then(function (response) {
-    //             //   console.log(response);
-    //             if (response.data.message === true) {
-    //                console.log("token: ", response.data.token);
-    //                try {
-    //                 Cookies.set('token', response.data.token);
-    //                 const type= response.data.user.type;
-    //                 console.log("login= ", response.data.user.type);
-    //                 Cookies.set('mail',email);
-    //                 Cookies.set('type',type);
-    //                 routerHistory.push('./profile');
-    //               } catch (e) {
-    //                 return null;
-    //               }
 
-    //             } 
-
-    //         })
-    //         .catch(function (error) {
-
-    //         });
-    // }
-
-    const resetPassword = async () => {
-        console.log("email: ", email)
+    const sendCode = async () => {
+        setLoading(true);
         await forgotPassword({
             email: email
 
         })
             .then(function (response) {
-                console.log(response.data.message);
+                console.log(response.data);
                 if (response.data.message === true) {
-                    setEmail("");
+                    setLoading(false);
                     message.success(response.data.success)
-                    routerHistory.push('/login');
+                    console.log("resetCode: ", response.data.resetCode)
+                    setOTP(response.data.resetCode)
+                    setCheck(true)
                 } else {
                     //alert("not found");
                     message.error(response.data.error)
@@ -80,10 +65,53 @@ function Content() {
             });
     }
 
+    const verifyOTP = () =>{
+        const userCode = data.digit1 + '' + data.digit2 + '' + data.digit3 + '' + data.digit4;
+        let code = OTP.toString();
+        if (code === userCode) {
+            setData({
+                ...data,
+                isValidOTP: true
+            })
+            routerHistory.push({pathname:'/resetpassword', state:{email:email}});
+        } else {
+            console.log("wrong");
+            message.error("Invalid OTP")
+            setData({
+                ...data,
+                isValidOTP: false
+            })
+        }
+    }
     return (
         <div className="acr-auth-container">
             <div className="acr-auth-content">
-                <form onSubmit={e => { e.preventDefault(); }} >
+                {check?(
+                    <>
+                    <form onSubmit={e => { e.preventDefault(); }} >
+                    <div className="auth-text">
+                        <h3>Enter OTP Code</h3>
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
+
+                    </div>
+                    <div className="form-group">
+                        <label>Code</label>
+                        <div style={{display:'flex',flexDirection:'row', margin:10,}}>
+                        <input type="text" className="form-control form-control-light" placeholder="" name="digit1" style={{width:50, margin:6, textAlign:'center'}} value={data.digit1} onChange={(e) => setData({...data, digit1:e.target.value})} required />
+                        <input type="text" className="form-control form-control-light" placeholder="" name="digit2" style={{width:50, margin:6, textAlign:'center'}} value={data.digit2} onChange={(e) => setData({...data, digit2:e.target.value})} required />
+                        <input type="text" className="form-control form-control-light" placeholder="" name="digit3" style={{width:50, margin:6, textAlign:'center'}} value={data.digit3} onChange={(e) => setData({...data, digit3:e.target.value})} required />
+                        <input type="text" className="form-control form-control-light" placeholder="" name="digit4" style={{width:50, margin:6, textAlign:'center'}} value={data.digit4} onChange={(e) => setData({...data, digit4:e.target.value})} required />
+                        </div>
+                        
+                    </div>
+
+
+                    <button className="btn-custom secondary btn-block" onClick={() => verifyOTP()}>Verify</button>
+                </form>
+                    </>
+                ):(
+                    <>
+                    <form onSubmit={e => { e.preventDefault(); }} >
                     <div className="auth-text">
                         <h3>Forgot Password?</h3>
                         <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</p>
@@ -92,14 +120,16 @@ function Content() {
                     </div>
                     <div className="form-group">
                         <label>Email</label>
-                        <input type="text" className="form-control form-control-light" placeholder="Username" name="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                        <input type="text" className="form-control form-control-light" placeholder="Your Email" name="username" value={email} onChange={(e) => setEmail(e.target.value)} required />
                     </div>
 
 
-                    <button className="btn-custom secondary btn-block" onClick={() => resetPassword()}>Send Reset Instructions</button>
+                    <button className="btn-custom secondary btn-block" onClick={() => sendCode()}>{isLoading?"... sending":"Send OTP Code"}</button>
 
-                    <p className="text-center mb-0">Don't have an account? <Link to="/register">Create One</Link> </p>
-                </form>
+                    <p className="text-center mb-0" style={{textAlign:"left"}}>Don't have an account? <Link to="/register">Create One</Link> </p>
+                </form></>
+                )}
+                
             </div>
             <div className="acr-auth-bg">
                 <Slider className="acr-auth-bg-slider acr-cs-bg-slider" {...settings}>

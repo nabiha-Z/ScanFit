@@ -66,7 +66,7 @@ function App() {
           <Route path="/products" component={ProductsList} />
           <Route path="/login" component={Login} />
           <Route path="/forgotpassword" component={forgotPass} />
-          <Route path="/resetpassword/:user" component={resetPass} />
+          <Route path="/resetpassword" component={resetPass} />
           <Route path="/register" component={Register} />
           <Route path="/profile" component= {Profile} />
           <Route path="/measuremenets" component= {Measuremenets} />

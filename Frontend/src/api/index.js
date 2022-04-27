@@ -6,14 +6,6 @@ const API = axios.create({ baseURL: 'http://localhost:8000/' });
 
 const flaskAPI = axios.create({ baseURL: 'http://127.0.0.1:5000' });
 
-API.interceptors.request.use(req => {
-    if (Cookies.get('token')) {
-      req.headers.authorization = `Bearer ${Cookies.get('token')}`;
-    }
-  
-  return req;
-  });
-
 export const fetchadmin =()=> API.get(`user/`);
 export const fetchProducts = () => API.get(`admin/getproducts`);
 export const login = userdata => API.post(`user/login`, userdata);

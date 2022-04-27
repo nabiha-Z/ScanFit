@@ -23,17 +23,6 @@ function Banner() {
     const [searched, setsearched] = useState([]);
 
 
-   
-
-    useEffect(() => {
-       
-       
-    }, [])
-
-
-
-
-
     return (
         <div className="banner banner-1 banner-3 light-overlay bg-cover bg-center" style={{ backgroundColor:'white' }}>
             <div className="container-fluid" style={{justifyContent:'center', alignContent:'center', alignItems:'center'}}>

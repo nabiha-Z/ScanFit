@@ -20,40 +20,31 @@ export const getusers = async (req, res) => {
 }
 
 export const loginuser = async (req, res) => {
-    const {user} = req.body;
-    console.log("id ",user);
-    const id = JSON.parse(user);
+    const { user } = req.body;
+    if (user !== undefined) {
+        const id = JSON.parse(user);
+        try {
+            await Users.find({ _id: id })
+                .then((data) => {
 
-    // console.log("token server ",user _id.id);
-    try {
-        await Users.find({ _id: id })
-            .then((data) => {
-                //console.log("data:", data)
-                res.status(201).json({ "message": true, "user": data[0] });
-            }).catch((err) => {
-                res.status(201).json({ "message": false, "error": err.message });
+                    res.status(201).json({ "message": true, "user": data[0] });
+                }).catch((err) => {
+                    res.status(201).json({ "message": false, "error": err.message });
 
-            })
+                })
 
 
-        // await Users.find({ _id: id })
-        // .then((data)=>{
-        //     console.log("data:", data)
-        //     res.status(201).json({ "message": true, "user": data });
-        // }).cathc((err)=>{
-        //     res.status(201).json({ "message": false, "error":err.message });
-        // })
-
-    } catch (error) {
-        console.log("err:", error.message)
-        res.status(201).json({ "message": false, 'error': error.message });
+        } catch (error) {
+            console.log("err:", error.message)
+            res.status(201).json({ "message": false, 'error': error.message });
+        }
     }
 }
 
 
 export const signup = async (req, res) => {
     const { name, email, phonenumber, password, address } = req.body;
-    console.log(name, email, phonenumber, password, address);
+    //console.log(name, email, phonenumber, password, address);
     try {
 
         if (await Users.findOne({ email: email }).exec()) {
@@ -69,7 +60,7 @@ export const signup = async (req, res) => {
                     { expiresIn: "1h" },
                     (err, token) => {
                         try {
-                            console.log("token:", token)
+
                             res.status(201).json({ "message": true, "token": token, user: docs[0] });
 
                         } catch (error) {
@@ -90,14 +81,13 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
 
     var { email, password } = req.body;
-    console.log("email user :", req.body.email);
     // email = 'nabihazubair100@gmail.com';
     // console.log("email :", email);
 
 
     try {
         const existingUser = await Users.findOne({ email, password });
-        console.log("exi: ", existingUser)
+        //console.log("exi: ", existingUser)
         if (!existingUser) {
             // res.send("none")
             console.log("Not found")
@@ -144,8 +134,6 @@ export const favList = async (req, res) => {
         //const check=true;
         for (let i = 0; i < favorites.length; i++) {
             if (favorites[i]._id === item._id) {
-
-                console.log("in loop")
                 res.status(200).json({ "message": false });
                 //check =!check;
             }
@@ -154,7 +142,6 @@ export const favList = async (req, res) => {
         }
         //console.log(check);
         //if (check=== true){
-        console.log("in fav");
         favorites.push(item);
         const updated = await Users.findByIdAndUpdate({ _id: user_id }, { _id, name, email, phonenumber, password, type, status, favorites, masterid, limit, access, message }, { new: true });
         res.status(200).json({ "message": true });
@@ -178,12 +165,11 @@ export const favList = async (req, res) => {
 
 export const unfavList = async (req, res) => {
 
-    console.log("unsaved");
     const { item, user_id } = req.body;
     const userdata = await Users.findOne({ _id: user_id });
 
     const { _id, favorites, name, email, phonenumber, password, type, status, masterid, access, limit, message } = userdata;
-    console.log("initial favlist" + favorites);
+
     try {
         console.log("length before = ", favorites.length);
         for (let i = 0; i < favorites.length; i++) {
@@ -197,7 +183,6 @@ export const unfavList = async (req, res) => {
             }
         }
         console.log("final favlist" + favorites);
-        console.log("length= ", favorites.length);
         const updated = await Users.findByIdAndUpdate(
             user_id, { _id, name, email, phonenumber, password, type, status, masterid, access, limit, favorites, message }, { new: true });
 
@@ -212,7 +197,6 @@ export const unfavList = async (req, res) => {
 }
 export const fetchSaved = async (req, res) => {
 
-    console.log("fetchsaved");
     const { id } = req.body;
     try {
 
@@ -222,11 +206,7 @@ export const fetchSaved = async (req, res) => {
 
         //console.log("userData" + userData);
         const { _id, name, email, phonenumber, password, type, Status, favorites, limit, access, message } = userData;
-        //console.log("userData" + userData.favorites[0].title);
-        console.log("destructuring");
         if (favorites.length === 0) {
-
-
             res.status(200).json({ 'message': false, favorites });
 
         }
@@ -274,16 +254,12 @@ export const getuserdetails = async (req, res) => {
 export const updateProfile = async (req, res) => {
 
     const { username, useremail, contact, image, id } = req.body;
-    console.log(username, contact);
     try {
         const userdata = await Users.findOne({ _id: id });
         const { _id, name, email, phonenumber, password, type, status, masterid, access, limit, message } = userdata;
         const updated = await Users.findByIdAndUpdate(_id, { _id, name: username, email, phonenumber: contact, password, type, status, masterid, access, limit, message }, {
             new: true
         });
-        console.log("updated= ", updated)
-
-
 
         res.status(200).json({ 'message': true });
     } catch (error) {
@@ -296,7 +272,6 @@ export const updateProfile = async (req, res) => {
 export const changePassword = async (req, res) => {
 
     const { newPassword, useremail } = req.body;
-    console.log(newPassword);
     try {
         const userdata = await Users.findOne({ email: useremail });
         const { _id, name, email, phonenumber, password, type, status, masterid, access, limit, message } = userdata;
@@ -314,18 +289,14 @@ export const changePassword = async (req, res) => {
 
 
 export const forgotPassword = async (req, res) => {
-
-
     const { email } = req.body;
-
     try {
         await Users.findOne({ email: email })
             .then(users => {
                 if (!users) {
-                    console.log("Error");
+                    console.log("Not Found");
                     return res.status(200).json({ 'message': false, error: "User dont exists with that email" })
                 }
-
                 var transporter = nodemailer.createTransport({
 
                     host: 'smtp.gmail.com',
@@ -382,8 +353,6 @@ export const forgotPassword = async (req, res) => {
 }
 
 export const resetPassword = async (req, res) => {
-    console.log("reset");
-    console.log("email= ", req.body);
     const { email, pass } = req.body;
     try {
 
@@ -392,20 +361,11 @@ export const resetPassword = async (req, res) => {
         if (!users) {
             return res.status(200).json({ "message": false, error: "Try again sesssion expired!" });
         } else {
-
-
-            console.log("user= ", users.email);
-
-            console.log("before:", users.password);
-
-
             // const salt = await bcrypt.genSalt(10);
 
             // const hashedPassword = await bcrypt.hash(pass, salt);
             const { _id, firstName, lastName, email, password, resetToken, expires } = users;
-            console.log("expires= ", expires);
             const a = await Users.findByIdAndUpdate(_id, { _id, firstName, lastName, email, password: pass, resetToken: null, expires: null }, { new: true });
-            console.log("a= ", a.password);
             console.log("a= ", a.resetToken);
 
             return res.status(200).json({ "message": true, success: "Password Chanegd!\n Sign in to Continue." });
@@ -421,12 +381,8 @@ export const resetPassword = async (req, res) => {
 
 export const fetchMeasurements = async (req, res) => {
 
-
-    console.log("req.body.uid: ", req.body.uid)
-
     await measurements.find({ user: req.body.uid })
         .then((data) => {
-            console.log("measuremenet: ", data)
             return res.status(200).json({ "message": true, "measurement": data });
         }).catch((err) => {
             return res.status(200).json({ "message": false, "error": err.message });
@@ -436,11 +392,8 @@ export const fetchMeasurements = async (req, res) => {
 
 export const deleteMeasurements = async (req, res) => {
 
-    console.log("req.body.mid: ", req.body.mid)
-
     await measurements.findOneAndDelete({ _id: req.body.mid })
         .then((data) => {
-            console.log("Deleted")
             return res.status(200).json({ "message": true });
         }).catch((err) => {
             return res.status(200).json({ "message": false });
@@ -453,39 +406,14 @@ export const editMeasurements = async (req, res) => {
     // const { shoulders, arms, fullLength, knee, waist, shirt, bottom } = req.body;
     const { shoulders, arms, fullLength, knee } = req.body;
     const mid = req.body.mid;
-    console.log("mid:", mid)
-
     await measurements.findByIdAndUpdate({ _id: mid }, { shoulders, fullLength, arms, knee }, { new: true })
         .then((data) => {
-            console.log("data:", data)
             res.status(201).json({ "message": true })
         }).catch((err) => {
             res.status(201).json({ "message": false, "error": err.message })
         })
 }
 
-// export const sendMessage = async (req, res) => {
-
-//     console.log(req.body);
-//     const { email: em, phonenumber: ph, msg: msg1 } = req.body;
-
-//     try {
-
-//         const userdata = await Users.findOne({ email: em });
-//         console.log("in msg userdata", userdata);
-//         const { _id, name, email, phonenumber, password, type, status, masterid, access, limit, message } = userdata;
-
-//         const updated = await Users.findByIdAndUpdate(_id, { _id, name, email, phonenumber: ph, password, type, status, masterid, access, limit, message: msg1 }, {
-//             new: true
-//         });
-//         //console.log("in msg updated",updated);
-//         res.status(200).json({ 'message': true });
-
-
-//     } catch (error) {
-//         return res.status(200).json({ message: error.message });
-//     }
-// }
 
 export const latestProducts = async (req, res) => {
 
@@ -499,7 +427,6 @@ export const latestProducts = async (req, res) => {
 
 export const categorySearch = async (req, res) => {
 
-    console.log("req.body.category", req.body.category)
     await products.find({ category: req.body.category })
         .then((data) => {
             res.status(201).json({ message: true, products: data })
@@ -524,11 +451,8 @@ export const filterProducts = async (req, res) => {
 export const searchProducts = async (req, res) => {
 
     const txt = req.body.searchField;
-    console.log("txt:", txt)
     await products.find({ $or: [{ title: txt }, { category: txt }, { color: txt }, { main_category: txt }] })
         .then((data) => {
-
-            console.log("data:", data)
             res.status(201).json({ message: true, products: data })
         }).catch((err) => {
             res.status(201).json({ message: false, error: err.message })
@@ -537,10 +461,8 @@ export const searchProducts = async (req, res) => {
 
 export const getProduct = async (req, res) => {
 
-    console.log("pid:", req.body.pid)
     await cart.find({ user: req.body.pid })
         .then((data) => {
-            console.log("cart: ", data)
             res.status(201).json({ message: true, cart: data })
         }).catch((err) => {
             res.status(201).json({ message: false, error: err.message })
@@ -549,10 +471,8 @@ export const getProduct = async (req, res) => {
 
 export const fetchCart = async (req, res) => {
 
-    console.log("id:", req.body.uid)
     await cart.find({ user: req.body.uid }).populate('items.pid')
         .then((data) => {
-            console.log("cart: ", data)
             res.status(201).json({ message: true, cart: data })
         }).catch((err) => {
             res.status(201).json({ message: false, error: err.message })
@@ -573,11 +493,11 @@ export const addInCart = async (req, res) => {
     }
     try {
         if (cartData.length !== 0) {
-            //console.log("cart items: ", cartData[0].items)
+
             cartData[0].items.map((item) => {
-                //console.log("pid: ", item.pid)
+
                 var id = JSON.stringify(item.pid)
-                console.log("product : ", product.size)
+
                 if (id.includes(product._id)) {
                     if (product.size === size) {
                         count = 1;
@@ -602,7 +522,6 @@ export const addInCart = async (req, res) => {
                 items.push(productObj)
                 cart.findByIdAndUpdate({ _id: cartData[0]._id }, { items: items }, { new: true })
                     .then((data) => {
-                        console.log("appended: ",data);
 
                     }).catch((err) => {
                         errors = err.message
@@ -615,7 +534,6 @@ export const addInCart = async (req, res) => {
             items.push(productObj)
             await cart.create({ items, user: uid })
                 .then((data) => {
-                    console.log("new item: ", data);
 
                 }).catch((err) => {
                     errors = err.message
@@ -643,8 +561,6 @@ export const updateQuantity = async (req, res) => {
     const cartData = await cart.find({ _id: cid })
     try {
         cartData[0].items.map((item) => {
-
-            console.log("pid: ", item)
             var id = JSON.stringify(item.pid)
             if (id.includes(pid)) {
                 item.quantity = quantity
@@ -669,20 +585,16 @@ export const updateQuantity = async (req, res) => {
 export const deleteCartItem = async (req, res) => {
 
     const { cid, pid } = req.body;
-    console.log("pid: ", pid)
     const cartData = await cart.find({ _id: cid })
     const itemsArr = cartData[0].items;
-    console.log("items", itemsArr)
     try {
 
         const items = itemsArr.filter(item => !(JSON.stringify(item.pid).includes(pid)));
-        console.log("arr:", items);
         //var temp = itemsArr.slice(index + 1, itemsArr.length)
-        
-        await cart.findOneAndUpdate({ _id: cid },{ items: items }, { new: true })
+
+        await cart.findOneAndUpdate({ _id: cid }, { items: items }, { new: true })
             .then((data) => {
-                console.log("data: ", data)
-                res.status(201).json({ message: true, cart:data })
+                res.status(201).json({ message: true, cart: data })
             }).catch((err) => {
                 res.status(201).json({ message: false, error: err.message })
             })
@@ -697,23 +609,21 @@ export const deleteCartItem = async (req, res) => {
 
 export const changePicture = async (req, res) => {
 
-    const {user, picture} = req.body;
+    const { user, picture } = req.body;
     var userId = JSON.parse(user);
-    console.log("objectId: ", typeof(userId))
 
     try {
-        await Users.findByIdAndUpdate({ _id: userId },{picture: picture},{new:true})
+        await Users.findByIdAndUpdate({ _id: userId }, { picture: picture }, { new: true })
             .then((data) => {
-                console.log("Changed ")
                 res.status(201).json({ "message": true });
             }).catch((err) => {
                 res.status(201).json({ "message": false, "error": err.message });
 
             })
-        }
-        catch(err){
-            res.status(201).json({ "message": false, "error": err.message });
-        }
+    }
+    catch (err) {
+        res.status(201).json({ "message": false, "error": err.message });
+    }
 
 
 }
