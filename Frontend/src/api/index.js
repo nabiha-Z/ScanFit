@@ -26,16 +26,16 @@ export const addCart = userdata => API.post(`user/addCart`, userdata);
 export const deleteItem = userdata => API.post(`user/deleteCartItem`, userdata);
 export const updateQuantity = userdata => API.post(`user/updateQuantity`, userdata);
 export const getProduct = userdata => API.post(`user/getProduct`, userdata);
-export const savedListings = userdata => API.post(`user/saved-lists`, userdata);
-export const unsaveList = userdata => API.patch(`user/unfavlisting`, userdata);
+export const viewFavourites = userdata => API.post(`user/viewFavourites`, userdata);
+export const unFavProduct = userdata => API.post(`user/unfavorite`, userdata);
 export const deleteListing = userdata => API.patch(`listings/deleteListing`, userdata);
 export const favourite = userdata => API.patch(`user/favorite`, userdata);
 export const updateProfile = (data)=>API.patch(`user/updateProfile`,data);
+export const updatePicture = (data)=>API.post(`user/updatePicture`,data);
 export const updatepassword = (data)=>API.patch(`user/changePassword`,data);
 export const forgotPassword = userdata => API.post(`user/forgotpassword`, userdata);
 export const resetPassword = userdata => API.post(`user/resetpassword`, userdata);
-export const similarListings = userdata => API.post(`listings//similar`, userdata);
-export const requestListing = userdata =>  API.patch(`user/requestlisting`, userdata);
+export const smartAdvisor = userdata => API.post(`user/smartAdvisor`, userdata);
 export const messageSend = userdata => API.post(`user/send-message`, userdata);
 
 

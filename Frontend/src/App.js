@@ -21,11 +21,12 @@ const resetPass = React.lazy(() => import("./components/pages/Resetpassword"));
 const Register = React.lazy(() => import("./components/pages/Register"));
 const Cart = React.lazy(() => import("./components/pages/Cart"));
 const ProductsList = React.lazy(() => import("./components/pages/ProductsList"));
+const ProductDetails = React.lazy(() => import("./components/pages/ProductDetails"));
 const Listingdetailsone = React.lazy(() => import("./components/pages/Listingdetailsone"));
 const Profile = React.lazy(() => import("./components/pages/Profile"));
 const Measuremenets = React.lazy(() => import("./components/pages/Measurements"));
 const SearchProduct = React.lazy(() => import("./components/pages/SearchProduct"));
-const SavedFavourites = React.lazy(() => import("./components/pages/Profilesavedlistings"));
+const ViewFavourites = React.lazy(() => import("./components/pages/ViewFavourites"));
 
 function App() {
   const [user,setuser]=useState({});
@@ -64,13 +65,14 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route path="/coming-soon" component={Comingsoon} />
           <Route path="/products" component={ProductsList} />
+          <Route path="/details" component={ProductDetails} />
           <Route path="/login" component={Login} />
           <Route path="/forgotpassword" component={forgotPass} />
           <Route path="/resetpassword" component={resetPass} />
           <Route path="/register" component={Register} />
           <Route path="/profile" component= {Profile} />
           <Route path="/measuremenets" component= {Measuremenets} />
-          <Route path="/favourites" component={SavedFavourites} />
+          <Route path="/favourites" component={ViewFavourites} />
           <Route path="/searchProducts" component={SearchProduct} />
           <Route path="/cart" component={Cart} />
           

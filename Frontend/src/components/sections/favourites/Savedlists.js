@@ -9,7 +9,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 //import jwt from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
-import { unsaveList } from '../../../api';
+import { unFavProduct, addCart } from '../../../api';
 import { message, Space } from 'antd';
 import 'antd/dist/antd.css';
 
@@ -39,30 +39,6 @@ function Savedlists(props) {
     const [currentPage, setcurrentPage] = useState(1);
     const [itemsPerPage, setitemsPerPage] = useState(6);
     const [loading, setloading] = useState(false);
-
-    //         async function place(){
-    //             console.log("here");
-    //          const places =  await axios.get("http://localhost:5000/listings");
-    //          setitems(places.data);
-    //          console.log("in",places.data)
-    //         }
-
-    // useEffect(() => {
-    //     //setitems(props.list);
-
-    //   },[]); 
-
-
-    // this.state = {
-    //     items: places,
-    //     currentPage: 1,
-    //     itemsPerPage: 6,
-    //     loading: false
-    // };
-
-    // this.handleClick = this.handleClick.bind(this);
-
-
 
     const handleClick = (number) => {
         // var paginationContent = event.target.closest('.pagination-content');
@@ -98,30 +74,41 @@ function Savedlists(props) {
         console.log("currentuser", user_id);
         console.log(user_id);
 
-       unsaveList({ item, user_id })
+        unFavProduct({ item, user_id })
 
             .then(function (response) {
-                console.log("response.data",response.data);
-                if(response.data.message === true){
-                    console.log(response.data.message);
-                    message.success('List unsaved');
+                console.log("response.data", response.data);
+                if (response.data.message === true) {
+                    message.success('Product unsaved');
+                    props.setCheck(!props.check)
                     //window.location.reload(false);
+                } else {
+                    message.error(response.data.error);
                 }
-                
+
             })
             .catch(function (error) {
 
             });
     }
 
+    const addtocart = async (product) => {
+        await addCart({ uid: Cookies.get('id'), product, size:'M', color:'grey' })
+            .then((response) => {
+                console.log("res:", response.data)
+                if (response.data.message === true) {
+                    message.success("Added to Cart")
+                }
+            }).catch((err) => {
+                console.log("err: ", err.message)
+                message.error(err.message)
+            })
+    }
 
-    // const { items, currentPage, itemsPerPage } = this.state;
-
-    // Logic for displaying items
     const indexOfLastitem = currentPage * itemsPerPage;
     const indexOfFirstitem = indexOfLastitem - itemsPerPage;
     console.log("items", items[0].title);
-     const currentitems = items.slice(indexOfFirstitem, indexOfLastitem);
+    const currentitems = items.slice(indexOfFirstitem, indexOfLastitem);
 
     const pageNumbers = [];
     for (let i = 1; i <= Math.ceil(items.length / itemsPerPage); i++) {
@@ -139,36 +126,18 @@ function Savedlists(props) {
     });
 
 
-
-
     return (
-
-
-
         <div>
             <div className="row">
                 {currentitems.map((item, i) => {
-                    return <div className="col-md-6 col-sm-9" key={i}>
+                    return <div className="col-md-5 col-sm-10" key={i}>
                         {/* <h1>item= {item.title}</h1> */}
-                        <div className="listing">
+                        <div className="listing" style={{ width: '80%' }}>
                             <div className="listing-thumbnail">
-                                <Link to="/listing-details-v1"><img src={item.picture} alt="listing" style={{ width: 400, height: 200 }} /></Link>
-                                <div className="listing-badges">
-                                    {
-                                        item.star === true ? <span className="listing-badge featured"> <i className="fas fa-star" /> </span> : ''
-                                    }
-                                    {
-                                        item.sale === true ? <span className="listing-badge sale">On Sale</span> : ''
-                                    }
-                                    {
-                                        item.pending === true ? <span className="listing-badge pending"> Pending</span> : ''
-                                    }
-                                    {
-                                        item.rental === true ? <span className="listing-badge rent"> Rental</span> : ''
-                                    }
-                                </div>
+                                <Link to="/listing-details-v1"><img src={item.picture} alt="listing" style={{ width: 200, height: 200 }} /></Link>
+
                                 <div className="listing-controls">
-                                    <Link className="favorite" style= {{backgroundColor:'#E52E2E'}}><i className="far fa-heart" style= {{color:'white'}} onClick={() => onunFav(item)} /></Link>
+                                    <Link className="favorite" style={{ backgroundColor: '#E52E2E' }}><i className="far fa-heart" style={{ color: 'white' }} onClick={() => onunFav(item)} /></Link>
                                     {/* <Link to="#" className="compare"><i className="fas fa-sync-alt" /></Link> */}
                                 </div>
                             </div>
@@ -193,28 +162,10 @@ function Savedlists(props) {
                                 <h5 className="listing-title"> <Link to="/listing-details-v1" title={item.title}>{item.title}</Link> </h5>
                                 <span className="listing-price">{new Intl.NumberFormat().format((item.price).toFixed(2))}$ <span></span> </span>
                                 <p className="listing-text">{item.description}</p>
-                                <div className="acr-listing-icons">
-                                    {/* <OverlayTrigger overlay={bedstip}>
-                  <div className="acr-listing-icon">
-                      <i className="flaticon-bedroom" />
-                      <span className="acr-listing-icon-value">{item.beds}</span>
-                  </div>
-              </OverlayTrigger>
-              <OverlayTrigger overlay={bathstip}>
-                  <div className="acr-listing-icon">
-                      <i className="flaticon-bathroom" />
-                      <span className="acr-listing-icon-value">{item.bathrooms}</span>
-                  </div>
-              </OverlayTrigger> */}
-                                    <OverlayTrigger overlay={areatip}>
-                                        <div className="acr-listing-icon">
-                                            <i className="flaticon-ruler" />
-                                            <span className="acr-listing-icon-value">{item.area}</span>
-                                        </div>
-                                    </OverlayTrigger>
-                                </div>
+
+
                                 <div className="listing-gallery-wrapper">
-                                    <Link to="/listing-details-v1" className="btn-custom btn-sm secondary">View Details</Link>
+                                    <button onClick={() => addtocart(item)} className="btn-custom btn-sm primary">Add to Cart</button>
                                     {/* <OverlayTrigger overlay={gallerytip}>
                                         <Link to="#" className="listing-gallery"> <i className="fas fa-camera" /> </Link>
                                     </OverlayTrigger> */}

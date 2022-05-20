@@ -5,7 +5,7 @@ import Breadcrumb from '../layouts/Userbreadcrumb';
 import Footer from '../layouts/Footer';
 import Content from '../sections/favourites/Content';
 
-class Profilesavedlistings extends Component {
+class ViewFavourites extends Component {
     render() {
         return (
             <Fragment>
@@ -21,4 +21,4 @@ class Profilesavedlistings extends Component {
     }
 }
 
-export default Profilesavedlistings;
+export default ViewFavourites;

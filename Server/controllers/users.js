@@ -9,12 +9,13 @@ import config from "config";
 import nodemailer from 'nodemailer';
 
 export const getusers = async (req, res) => {
+    console.log('get users')
     try {
         const users = await Users.find();
-        res.status(200).json(users);
+        res.status(200).json({ "message": true, "users": users });
     }
     catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(200).json({ message: false, error: error.message });
 
     }
 }
@@ -22,7 +23,32 @@ export const getusers = async (req, res) => {
 export const loginuser = async (req, res) => {
     const { user } = req.body;
     if (user !== undefined) {
+        //const id = JSON.parse(user);
+        try {
+            await Users.find({ _id: user })
+                .then((data) => {
+
+                    res.status(201).json({ "message": true, "user": data[0] });
+                }).catch((err) => {
+                    res.status(201).json({ "message": false, "error": err.message });
+
+                })
+
+
+        } catch (error) {
+            console.log("err:", error.message)
+            res.status(201).json({ "message": false, 'error': error.message });
+        }
+    }
+}
+
+export const currentuser = async (req, res) => {
+    const { user } = req.body;
+    console.log("user: ", user)
+
+    if (user !== undefined) {
         const id = JSON.parse(user);
+        console.log("type: ", typeof (user))
         try {
             await Users.find({ _id: id })
                 .then((data) => {
@@ -122,39 +148,20 @@ export const login = async (req, res) => {
 export const favList = async (req, res) => {
 
     const { item, user_id } = req.body;
-    //console.log("listid"+id);
-    //console.log("user_id"+id);
-
+    console.log("favourites")
     try {
 
         const userData = await Users.findOne({ _id: user_id });
-        const { _id, name, email, phonenumber, password, type, status, favorites, masterid, access, limit, message } = userData;
-        //console.log("patch= ",userData);
-        // favorites= 
-        //const check=true;
-        for (let i = 0; i < favorites.length; i++) {
-            if (favorites[i]._id === item._id) {
-                res.status(200).json({ "message": false });
-                //check =!check;
+        var favourites = userData.favorites;
+        for (let i = 0; i < favourites.length; i++) {
+            if (favourites[i]._id === item._id) {
+                return res.status(200).json({ "message": false });
             }
-            // if(i === favorites.length) {
-            //     return}
         }
-        //console.log(check);
-        //if (check=== true){
-        favorites.push(item);
-        const updated = await Users.findByIdAndUpdate({ _id: user_id }, { _id, name, email, phonenumber, password, type, status, favorites, masterid, limit, access, message }, { new: true });
-        res.status(200).json({ "message": true });
-        //}
-        // else{
-        //      //console.log("false")
-        //      res.status(200).json({"message":false});
-        //  }
+        favourites.push(item);
 
-
-
-        //console.log("updated"+updated);
-
+        const updated = await Users.findByIdAndUpdate({ _id: user_id }, { favorites: favourites }, { new: true });
+        return res.status(200).json({ "message": true });
 
     } catch (error) {
 
@@ -163,35 +170,50 @@ export const favList = async (req, res) => {
 
 }
 
+export const viewFavourites = async (req, res) => {
+
+    const { id } = req.body;
+    try {
+
+        const userData = await Users.findOne({ _id: id });
+        var favourites = userData.favorites;
+        res.status(200).json({ "message": true, favourites: favourites });
+
+    } catch (error) {
+
+        res.status(404).json({ "message": false, error: error.message });
+    }
+}
+
+
 export const unfavList = async (req, res) => {
 
     const { item, user_id } = req.body;
     const userdata = await Users.findOne({ _id: user_id });
 
-    const { _id, favorites, name, email, phonenumber, password, type, status, masterid, access, limit, message } = userdata;
+    var favourites = userdata.favorites;
 
     try {
-        console.log("length before = ", favorites.length);
-        for (let i = 0; i < favorites.length; i++) {
-            if (favorites[i]._id === item._id) {
+        console.log("length before = ", favourites.length);
+        for (let i = 0; i < favourites.length; i++) {
+            if (favourites[i]._id === item._id) {
                 console.log("in fav loop", i);
-                favorites.splice(i, i + 1);
+                favourites.splice(i, i + 1);
                 break;
                 // console.log("in loop")
                 // res.status(200).json({"message":false});
                 //check =!check;
             }
         }
-        console.log("final favlist" + favorites);
-        const updated = await Users.findByIdAndUpdate(
-            user_id, { _id, name, email, phonenumber, password, type, status, masterid, access, limit, favorites, message }, { new: true });
+        console.log("final favlist" + favourites);
+        const updated = await Users.findByIdAndUpdate({ _id: user_id }, { favorites: favourites }, { new: true });
 
         //console.log("updated user fav"+updated);
         res.status(200).json({ "message": true });
 
     } catch (error) {
 
-        res.status(404).json({ message: error.message });
+        res.status(404).json({ message: false, error: error.message });
 
     }
 }
@@ -253,18 +275,15 @@ export const getuserdetails = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
 
-    const { username, useremail, contact, image, id } = req.body;
+    const { username, contact, address, id } = req.body;
     try {
-        const userdata = await Users.findOne({ _id: id });
-        const { _id, name, email, phonenumber, password, type, status, masterid, access, limit, message } = userdata;
-        const updated = await Users.findByIdAndUpdate(_id, { _id, name: username, email, phonenumber: contact, password, type, status, masterid, access, limit, message }, {
+        const userdata = await Users.findByIdAndUpdate({ _id: id }, { name: username, phonenumber: contact, address: address }, {
             new: true
         });
-
         res.status(200).json({ 'message': true });
     } catch (error) {
         console.log(error)
-            ;
+
     }
 
 }
@@ -610,7 +629,9 @@ export const deleteCartItem = async (req, res) => {
 export const changePicture = async (req, res) => {
 
     const { user, picture } = req.body;
+    console.log("id: ", user)
     var userId = JSON.parse(user);
+    console.log("id json: ", userId)
 
     try {
         await Users.findByIdAndUpdate({ _id: userId }, { picture: picture }, { new: true })
@@ -624,6 +645,67 @@ export const changePicture = async (req, res) => {
     catch (err) {
         res.status(201).json({ "message": false, "error": err.message });
     }
+}
+
+export const updatePicture = async (req, res) => {
+
+    const { user, picture } = req.body;
+    console.log("id: ", user)
+    try {
+        await Users.findByIdAndUpdate({ _id: user }, { picture: picture }, { new: true })
+            .then((data) => {
+                res.status(201).json({ "message": true });
+            }).catch((err) => {
+                res.status(201).json({ "message": false, "error": err.message });
+
+            })
+    }
+    catch (err) {
+        res.status(201).json({ "message": false, "error": err.message });
+    }
+}
+
+export const smartAdvisor = async (req, res) => {
+    const { category, main_category, product_color } = req.body;
+    var select_Category = "";
+    var items=[];
+    if (category === 'tshirt') {
+        select_Category = "jeans";
+    } else if (category === 'jeans') {
+        select_Category = "tshirt";
+    } else if (category === 'dress') {
+        select_Category = "trouser";
+    }else if (category === 'suit') {
+        select_Category = "dresspant";
+    }
+    if (product_color == 'white') {
+        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'skin' }, { color: 'brown' },{ color: 'green' }, { color: 'light blue' }] }, { main_category: main_category }, { category: select_Category }] })   
+    }   
+    else if (product_color == 'black') {
+        if(select_Category === 'tshirt'){
+            items = await products.find({ $and: [{ $or: [{ color: 'white' }, { color: 'blue' }, { color: 'black' }, { color: 'brown' }, { color: 'red' }, { color: 'maroon' }] }, { main_category: main_category }, { category: select_Category }] })
+        }else{
+            items = await products.find({ $and: [{ $or: [{ color: 'white' }, { color: 'blue' }, { color: 'black' }, { color: 'skin' }] }, { main_category: main_category }, { category: select_Category }] })
+        }
+   
+    } else if (product_color == 'blue') {
+        if(select_Category === 'tshirt'){
+            items = await products.find({ $and: [{ $or: [ { color: 'blue' }, { color: 'black' }, { color: 'grey' }, {color:'green'}, {color:'brown'},{color:'maroon'}, {color:'red'},{color:'white'}] }, { main_category: main_category }, { category: select_Category }] })
+        }else{
+            items = await products.find({ $and: [{ $or: [{ color: 'white' }, { color: 'blue' }, { color: 'black' }, { color: 'grey' }] }, { main_category: main_category }, { category: select_Category }] })
+        }
+        
+    } else if (product_color == 'orange') {
+        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })     
+    } 
+    else if (product_color == 'grey') {
+        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })     
+    }    
+    else if (product_color == 'red') {
+        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })     
+    }  
+    return res.status(201).json({ "message":true, "products": items });
 
 
 }
+

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import axios from 'axios';
 import dropDown from './drop-down.css';
+import UpArrow from '@material-ui/icons/ExpandLessTwoTone';
 import { fetchCategory, fetchLocations, searchLists } from '../../../api';
 import './home.css'
 
@@ -13,6 +14,7 @@ function Banner() {
     const routerHistory = useHistory();
     const [locations, setlocations] = useState([]);
     const [categories, setcategories] = useState([]);
+    const [showButton, setShowButton] = useState(false);
     const [categ, setcateg] = useState();
     const [price, setprice] = useState("60-90");
 
@@ -23,6 +25,21 @@ function Banner() {
     const [searched, setsearched] = useState([]);
 
 
+    useEffect(() => {
+
+
+        window.addEventListener("scroll", () => {
+            if (window.pageYOffset > 300) {
+                setShowButton(true);
+            } else {
+                setShowButton(false);
+            }
+        });
+    }, [])
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    };
     return (
         <div className="banner banner-1 banner-3 light-overlay bg-cover bg-center" style={{ backgroundColor:'white' }}>
             <div className="container-fluid" style={{justifyContent:'center', alignContent:'center', alignItems:'center'}}>
@@ -47,6 +64,11 @@ function Banner() {
                 
                 </div>
             </div>
+            {showButton && (
+                <button onClick={() => scrollToTop()} className="back-to-top" >
+                    <UpArrow />
+                </button>
+            )}
         </div>
     );
 

@@ -1,6 +1,6 @@
 import express from "express";
 
-import { login, signup, userProfile,getadmin,updateProfile,getcurrentuser, forgotPassword, resetPassword, getProducts, addProducts } from "../controllers/admin.js";
+import { login, signup, getadmin,updateProfile,getcurrentuser, forgotPassword, resetPassword, getProducts, addProducts } from "../controllers/admin.js";
 
 
 const router = express.Router();

@@ -64,29 +64,7 @@ function Listingwrapper(props) {
     //const img = images[0];
     const similar = async() => {
         const category = listing.category;
-        const unit = listing.unit;
-        
-       await similarListings({
-            category, unit
-        })
-            .then(function (response) {
-                // console.log("response= ", response.data);
-                if (response.data.message === true) {
-                   
-                    setsimilarLists(response.data.listing);
-                    //console.log("response= ", response.data.listing)
-                    
-                }
-
-
-                //console.log("items= ", items); 
-
-
-
-            })
-            .catch(function (error) {
-
-            });
+        const unit = listing.unit;  
     }
 
     const userdata = ()=>{

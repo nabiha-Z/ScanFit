@@ -8,7 +8,7 @@ import { message, Space } from 'antd';
 import UpArrow from '@material-ui/icons/ExpandLessTwoTone';
 import jwt_decode from "jwt-decode";
 import { useHistory } from 'react-router';
-import { loginuser, subuserCount, updateProfile, updatepassword } from '../../../api';
+import { loginuser, updateProfile, updatepassword, updatePicture } from '../../../api';
 
 
 
@@ -18,11 +18,46 @@ const Content = (props) => {
     const routerHistory = useHistory();
     const [useremail, setuseremail] = useState("");
     const [contact, setcontact] = useState("");
+    const [address, setAddress] = useState("");
     const [username, setusername] = useState("");
     const [user, setuser] = useState({});
     const [error, seterror] = useState("");
     const [password, setpassword] = useState("");
+    const [file, setFile] = useState("");
+    const [picture, setPicture] = useState("");
     const [newPassword, setnewPassword] = useState("");
+
+    const currentuser = async () => {
+
+        await loginuser({
+            user: Cookies.get('id')
+        })
+            .then(function (response) {
+                console.log(response);
+                if (response.data.message === true) {
+                    console.log("response:", response.data)
+                    try {
+                        setuser(response.data.user);
+                        setusername(response.data.user.name);
+                        setuseremail(response.data.user.email);
+                        setcontact(response.data.user.phonenumber);
+
+
+                        console.log("user: ", user)
+
+                    } catch (e) {
+                        return null;
+                    }
+                } else if (response.data.message === false) {
+                    console.log("falsee")
+                }
+
+            })
+            .catch(function (error) {
+
+            });
+    }
+
     useEffect(() => {
 
 
@@ -33,35 +68,46 @@ const Content = (props) => {
                 setShowButton(false);
             }
         });
+        currentuser()
 
-        loginuser({
-            id: Cookies.get('id')
-        })
-            .then(function (response) {
-                  console.log(response);
-                if (response.data.message === true) {
-                    console.log("response:", response.data)
-                    try {
-                        setuser(response.data.user);
-                        setusername(response.data.user.name);
-                        setuseremail(response.data.user.email);
-                        setcontact(response.data.user.phonenumber);
-
-
-
-                    } catch (e) {
-                        return null;
-                    }
-                } else if (response.data.message === "false") {
-
-                }
-
-            })
-            .catch(function (error) {
-
-            });
     }, [])
 
+    const getBase64 = (file) => {
+        return new Promise(resolve => {
+            let baseURL = "";
+            // Make new FileReader
+            let reader = new FileReader();
+            // Convert the file to base64 text
+            reader.readAsDataURL(file);
+
+            // on reader load somthing...
+            reader.onload = () => {
+                // Make a fileInfo Object
+
+                baseURL = reader.result;
+                resolve(baseURL);
+            };
+        });
+    };
+
+    const handleImgChange = (e) => {
+
+        var file = e.target.files[0];
+
+        console.log("file: ", file)
+        setFile(file.name)
+        getBase64(file)
+            .then(result => {
+                file["base64"] = result;
+                //console.log("res: ", result)
+                setPicture(result)
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+
+    };
 
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -69,8 +115,8 @@ const Content = (props) => {
 
     const changeProfile = async () => {
 
-        console.log("username, email, contact= ", username, useremail, contact)
-        await updateProfile({ username, useremail, contact })
+        console.log("username, contact= ", username, contact)
+        await updateProfile({ username, contact, address, id:Cookies.get('id') })
             .then(function (response) {
                 console.log(response.data);
                 if (response.data.message === true) {
@@ -101,14 +147,33 @@ const Content = (props) => {
                         setnewPassword("");
                         message.success('Password Changed.');
                     }
-
-
-
                 }).catch(function (error) {
 
                 });
         }
+    }
 
+    const uploadImage = async () => {
+        console.log("converted img: ", picture)
+        await updatePicture({ user: Cookies.get('id'), picture })
+
+            .then(function (response) {
+                console.log(response.data);
+                try {
+                    if (response.data.message === true) {
+                      
+                        message.success("Picture Changed");
+                    } else {
+                        message.error(response.data.error)
+                    }
+
+                } catch (err) {
+                    console.log(err);
+                };
+            })
+            .catch(err => {
+                console.log("error: ", err.message);
+            });
     }
 
     return (
@@ -120,8 +185,8 @@ const Content = (props) => {
                             <ul>
 
                                 <li> <Link className="active" to="/profile"> Edit Profile</Link> </li>
-                                <li> <Link  to="/profile"> Favourites </Link> </li>
-                                <li> <Link  to="/measuremenets"> Body Measurements </Link> </li>
+                                <li> <Link to="/favourites"> Favourites </Link> </li>
+                                <li> <Link to="/measuremenets"> Body Measurements </Link> </li>
                                 <li> <Link className="logout" to="/" onClick={() => {
                                     Cookies.remove('token');
                                     Cookies.remove('mail');
@@ -131,7 +196,7 @@ const Content = (props) => {
                     </div>
                     <div className="col-lg-8">
                         <div className="acr-welcome-message">
-                            <h3>Welcome Back,{user.name}</h3>
+                            <h3>Welcome Back,{username}</h3>
                             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
                         </div>
                         <form onSubmit={(e) => e.preventDefault()}>
@@ -144,33 +209,21 @@ const Content = (props) => {
                                     <label>Username</label>
                                     <input type="text" className="form-control" placeholder={user.name} defaultValue={user.name} value={username} onChange={(e) => setusername(e.target.value)} />
                                 </div>
-                                {/* <div className="col-lg-6 form-group">
-                                    <label>Email Address</label>
-                                    <input type="email" className="form-control" placeholder={user.email} defaultValue={user.email} value={useremail} onChange={(e) => setuseremail(e.target.value)} />
-                                </div> */}
                                 <div className="col-lg-6 form-group">
                                     <label>Phone Number</label>
                                     <input type="text" className="form-control" placeholder={user.contact} defaultValue={user.phonenumber} value={contact} onChange={(e) => setcontact(e.target.value)} />
                                 </div>
-                                {/* <div className="col-lg-6 form-group">
-                                        <label>Address One</label>
-                                        <input type="text" className="form-control" placeholder="Address" />
-                                    </div> */}
-                                {/* <div className="col-lg-6 form-group">
-                                        <label>Address Two</label>
-                                        <input type="text" className="form-control" placeholder="Address" />
-                                    </div> */}
-                                {/* <div className="col-lg-12 form-group">
-                                        <label>About Me</label>
-                                        <textarea name="about" rows={4} className="form-control" placeholder="About Me" />
-                                    </div> */}
+                                <div className="col-lg-6 form-group">
+                                    <label>Address</label>
+                                    <input type="text" className="form-control" placeholder={user.address} defaultValue={user.address} value={address} onChange={(e) => setAddress(e.target.value)} />
+                                </div>
                             </div>
                             <button type="submit" name="submit" className="btn-custom" onClick={() => changeProfile()}>Save Changes</button>
                         </form>
                         <hr />
                         <div className="acr-welcome-message">
                             <h3>Change Password</h3>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+                            <p>You can change your password by verifying your current password for security purposes</p>
                         </div>
                         <form onSubmit={(e) => e.preventDefault()}>
                             <div className="row">
@@ -194,6 +247,17 @@ const Content = (props) => {
                             <button type="submit" className="btn-custom" onClick={() => changePassword()}>Save Changes</button>
 
                         </form>
+                        <hr />
+                        <div className="acr-welcome-message">
+                            <h3>Upload Picture</h3>
+                            <p>Select your display picture from ypur gallery</p>
+
+                        </div>
+                        <form onSubmit={(e) => e.preventDefault()}>
+                            <input type="file" class="form-control-file" id="exampleFormControlFile1" onChange={(e) => handleImgChange(e)} />
+                        </form>
+                        <br />
+                        <button type="submit" className="btn-custom" onClick={() => uploadImage()}>Upload Picture</button>
                     </div>
                 </div>
             </div>

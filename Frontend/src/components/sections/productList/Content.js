@@ -9,6 +9,7 @@ import classNames from 'classnames';
 import Cookies from 'js-cookie';
 import jwt_decode from "jwt-decode";
 import 'antd/dist/antd.css';
+import './style.css';
 import { message } from 'antd';
 import { fetchProducts, favourite, addCart } from '../../../api/index';
 
@@ -156,26 +157,24 @@ function Content() {
                 .then(function (response) {
                     console.log("onFav= ", response.data)
                     if (response.data.message === true) {
-                        alert("Saved");
+                        message.success("Saved")
                     } else {
-                        alert("Already in saved products");
+                        message.error("Already in saved products");
                     }
-
-
                 })
                 .catch(function (error) {
 
                 });
         } else {
-            alert("You need to login first!");
+            message.error("You need to login first!");
         }
     }
     const showDetails = (item) => {
 
-        console.log("listing item: ", item.title);
+        console.log("product item: ", item.title);
         routerHistory.push({
-            pathname: "/listing-details-v1",
-            state: { listing: item }
+            pathname: "/details",
+            state: { product: item }
         });
 
     }
@@ -200,31 +199,14 @@ function Content() {
                 return (<div key={i} className="col-md-6 col-sm-8" style={{ justifyContent: 'center' }}>
                     <div className="listing">
                         <div className="listing-thumbnail">
-                            <Link to="/listing-details-v1"><img src={item.picture} alt="listing" style={{ width: 280, height: 320 }} /></Link>
+                            <button onClick={() => showDetails(item)} className="image-container"><img src={item.picture} alt="product" style={{ width: 280, height: 320 }} /></button>
 
                             <div className="listing-controls">
                                 <Link to="#" className="favorite"><i className="far fa-heart" onClick={(e) => onFav(item, e)} /></Link>
                                 <Link to="#" className="compare"><i className="fas fa-camera" /></Link>
                             </div>
                         </div>
-                        <div className="listing-body">
-                            {/* <div className="listing-author">
-                            <img src={process.env.PUBLIC_URL + "/" + item.authorimg} alt="author" />
-                            <div className="listing-author-body">
-                                <p> <Link to="#">{item.authorname}</Link> </p>
-                                <span className="listing-date">{item.postdate}</span>
-                            </div>
-                            <Dropdown className="options-dropdown">
-                                <Dropdown.Toggle as={NavLink}><i className="fas fa-ellipsis-v" /></Dropdown.Toggle>
-                                <Dropdown.Menu className="dropdown-menu-right">
-                                    <ul>
-                                        <li> <Link to="tel:+123456789"> <i className="fas fa-phone" /> Call Agent</Link> </li>
-                                        <li> <Link to="mailto:+123456789"> <i className="fas fa-envelope" /> Send Message</Link> </li>
-                                        <li> <Link to="/listing-details-v1"> <i className="fas fa-bookmark" /> Book Tour</Link> </li>
-                                    </ul>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </div> */}
+                        <div className="listing-body">   
                             <h5 className="listing-title"> <Link to="#" title={item.title}>{item.title}</Link> </h5>
                             <p className="listing-text">{item.location}</p>
                             <span className="listing-price">{item.price} RS/-</span>

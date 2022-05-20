@@ -10,6 +10,7 @@ const usersSchema = mongoose.Schema({
     resetToken: { type: String},
     expires: { type: Date },
     address: {type:String, required:true},
+    tempVideo : {type:String}
 
 });
 export default mongoose.model("users", usersSchema,'users');

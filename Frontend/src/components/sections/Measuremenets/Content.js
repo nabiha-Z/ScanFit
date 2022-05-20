@@ -72,7 +72,6 @@ const Content = (props) => {
         return (
             <>
                 <div className='list-container' onClick={() => {
-
                     setModalOpen(true)
                     setTitle(props.title)
                     setImg(props.img)

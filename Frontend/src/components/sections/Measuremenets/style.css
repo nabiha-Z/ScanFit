@@ -91,8 +91,7 @@
     padding: 10px;
     margin: 10px;
     color:rgb(238, 235, 235);
-    font-weight: bold;
-    
+    font-weight: bold;  
 }
 
 .deleteBtn{
@@ -174,8 +173,7 @@
       height: 60%;
   }
 
-  .editForm{
-      
+  .editForm{  
       padding:30px;
       justify-content: center;
       align-items: center;

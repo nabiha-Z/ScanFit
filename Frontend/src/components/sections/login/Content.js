@@ -76,8 +76,8 @@ function Content(){
                         {/* <h4 style={{ color: '#C72C2C', fontWeight: 20, fontSize: 20 }}>{error}</h4> */}
                     </div>
                     <div className="form-group">
-                        <label>Username</label>
-                        <input type="text" className="form-control form-control-light" placeholder="Username" name="username" value={email} onChange={(e) => setemail(e.target.value)} required />
+                        <label>Email</label>
+                        <input type="text" className="form-control form-control-light" placeholder="Email" name="Email" value={email} onChange={(e) => setemail(e.target.value)} required />
                     </div>
                     <div className="form-group">
                         <label>Password</label>
