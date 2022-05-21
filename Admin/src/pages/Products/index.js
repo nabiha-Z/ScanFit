@@ -92,7 +92,7 @@ export default function Categories({ setShow, image, collapsed, rtl, toggled, ha
                     <FaBars />
                 </div>
                 <h1 className="userTitle">Products</h1>
-                <Link to="/newCate">
+                <Link to="/newProduct">
                     <button className="userAddButton">Add</button>
                 </Link>
             </div>

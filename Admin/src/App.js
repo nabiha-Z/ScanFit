@@ -111,7 +111,7 @@ function App() {
                 handleImageChange={handleImageChange} />
             </Route>
 
-            <Route exact path="/newCate">
+            <Route exact path="/newProduct">
               <NewProduct
                 toggled={toggled}
                 collapsed={collapsed}
