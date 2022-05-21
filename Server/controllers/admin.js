@@ -278,24 +278,33 @@ export const addProducts = async (req, res) => {
   console.log("hello");
   const {
     title,
+    description,
     picture,
     price,
     main_category,
     category,
-    color
+    color,
+    colorCode,
+    arImage,
+    sizes
   } = req.body;
+
+  //console.log("re: ", req.body)
 
   try {
 
 
     const g = await products.create({
       title,
+      description,
       picture,
       price,
       main_category,
       category,
       color,
-      sizes: ['s', 'm', 'l']
+      colorCode,
+      arImage,
+      sizes
     });
 
     res.status(201).json({
@@ -312,6 +321,61 @@ export const addProducts = async (req, res) => {
 }
 
 
+export const getProduct = async (req, res) => {
+  const pid = req.body;
+  await products.findOne({ _id: pid })
+    .then((data) => {
+      res.status(201).json({ 'message': true, "products": data });
+    }).catch((err) => {
+      res.status(201).json({ 'message': false, 'error': err.message });
+    })
+}
+export const editProduct = async (req, res) => {
+  const {
+    pid,
+    title,
+    description,
+    picture,
+    price,
+    main_category,
+    category,
+    color,
+    colorCode,
+    arImage,
+    sizes
+  } = req.body;
+
+  await products.findByIdAndUpdate({ _id: pid },
+    {title,
+    description,
+    picture,
+    price,
+    main_category,
+    category,
+    color,
+    colorCode,
+    arImage,
+    sizes}, {new:true})
+    .then((data) => {
+      res.status(201).json({ 'message': true, "product": data });
+    }).catch((err) => {
+      res.status(201).json({ 'message': false, 'error': err.message });
+    })
+}
+
+export const deleteProduct = async (req, res) => {
+
+  const pid = req.body.pid;
+
+  console.log("pid: ", typeof(pid))
+  await products.findByIdAndDelete({ _id: pid })
+    .then((data) => {
+      console.log("delleted")
+      res.status(201).json({ "message": true })
+    }).catch((err) => {
+      res.status(201).json({ 'message': false, 'error': err.message });
+    })
+}
 
 // export const deleteProduct = async (req, res) => {
 

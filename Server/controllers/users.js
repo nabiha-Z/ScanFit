@@ -704,8 +704,29 @@ export const smartAdvisor = async (req, res) => {
     else if (product_color == 'red') {
         items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })     
     }  
+    else if (product_color == 'pink') {
+        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })     
+    } 
+    else if (product_color == 'purple') {
+        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })     
+    }   
     return res.status(201).json({ "message":true, "products": items });
-
-
 }
 
+export const placeorder = async (req, res) => {
+    var {data} = req.body;
+    print("data: ", data)
+    const orderNo = 1 + Math.floor(Math.random() * 10000000);
+    data.orderNo = orderNo;
+    print("data: ", data)
+
+    await orders.create({data})
+    .then((res) => {
+        return res.status(201).json({ "message":true });
+    }).catch((err) => {
+        errors = err.message
+        console.log("err: ", err.message)
+        return res.status(201).json({ "message":false, "error": err.message });
+    })
+
+}

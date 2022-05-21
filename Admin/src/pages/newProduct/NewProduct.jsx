@@ -17,15 +17,17 @@ export default function NewCategory({ handleToggleSidebar }) {
   const [file, setFile] = useState("");
   const [colorCode, setColorCode] = useState("");
   const [selectedCategory, setSelected] = useState("");
-  const [mainCategory, setMainCategory] = useState("");
+  const [main_category, setmain_category] = useState("");
   const colors = ['black', 'white', 'blue', 'red', 'orange', 'green', 'grey', 'yellow', 'pink', 'purple'];
   const categories = ['Shirts', "Jeans", "Suits", "Dress", "Trousers","Dress Pants"];
   const main_categories = ['Men', "Women"];
+  const sizes =['S', 'M', 'L'];
   let history = useHistory();
 
   const addProduct = async () => {
 
-    await addProducts({ title, description, picture, price, mainCategory, selectedCategory, color, colorCode, ARImage })
+    console.log("selectedCategory: ", selectedCategory, main_category)
+    await addProducts({ title, description, picture, price, main_category, category:selectedCategory, color, colorCode, arImage:ARImage, sizes })
       .then(res => {
         if (res.data.message === true) {
           message.success('Product Added!');
@@ -119,6 +121,10 @@ export default function NewCategory({ handleToggleSidebar }) {
           <input type="text" className="form-control" value={title} onChange={(e) => settitle(e.target.value)} placeholder="Product Title" />
         </div>
         <div className="form-group">
+          <label for="exampleFormControlInput1">Title</label>
+          <input type="text" className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" />
+        </div>
+        <div className="form-group">
           <label for="exampleFormControlInput1">Price</label>
           <input type="text" className="form-control" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="e.g: 1500 " />
         </div>
@@ -136,8 +142,8 @@ export default function NewCategory({ handleToggleSidebar }) {
           </select>
         </div>
         <div className="form-group">
-          <label for="exampleFormControlInput1">Color Family</label>
-          <select name="categories" className="form-control" id="categories" value={selectedCategory} onChange={(e) => setSelected(e.target.value)}>
+          <label for="exampleFormControlInput1">Category</label>
+          <select name="selectedCategory" className="form-control" id="category" value={selectedCategory} onChange={(e) => setSelected(e.target.value)}>
             {categories.map((item, i) => {
 
               return <option key={i} value={item}>{item}</option>
@@ -145,23 +151,15 @@ export default function NewCategory({ handleToggleSidebar }) {
           </select>
         </div>
         <div className="form-group">
-          <label for="exampleFormControlInput1">Color Family</label>
-          <select name="main_category" className="form-control" id="category" value={mainCategory} onChange={(e) => setMainCategory(e.target.value)}>
+          <label for="exampleFormControlInput1">Main Category</label>
+          <select name="main_category" className="form-control" id="main" value={main_category} onChange={(e) => setmain_category(e.target.value)}>
             {main_categories.map((item, i) => {
 
               return <option key={i} value={item}>{item}</option>
             })}
           </select>
         </div>
-        <div className="form-group">
-          <label for="exampleFormControlInput1">Color Family</label>
-          <select name="category" className="form-control" id="category" value={color} onChange={(e) => setColor(e.target.value)}>
-            {colors.map((item, i) => {
-
-              return <option key={i} value={item}>{item}</option>
-            })}
-          </select>
-        </div>
+  
         <div class="form-group">
           <label for="exampleFormControlFile1">Select Display Image</label>
           <input type="file" class="form-control-file" id="exampleFormControlFile1" onChange={(e) => handleImgChange(e)} />

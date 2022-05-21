@@ -10,3 +10,6 @@ const API = axios.create({ baseURL: 'http://localhost:8000/' });
   export const updateProfile = (data)=>API.patch(`admin/edit`,data)
   export const getProfile = () => API.get('admin/admin-profile');
   export const addProducts = admindata => API.post(`admin/addproducts`, admindata);
+  export const getProducts = admindata => API.get(`admin/getProducts`, admindata);
+  export const deleteProduct = admindata => API.post(`admin/deleteProduct`, admindata);
+  export const editProduct = admindata => API.post(`admin/editProducts`, admindata);

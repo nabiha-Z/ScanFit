@@ -12,57 +12,55 @@ import { Link } from "react-router-dom";
 import "./style.css";
 import { FaBars } from 'react-icons/fa'
 import { BsListTask } from 'react-icons/bs'
+import 'antd/dist/antd.css';
+import { message } from 'antd';
 import { TiDeleteOutline } from 'react-icons/ti';
 import MultiImageInput from 'react-multiple-image-input';
 import image1 from '../../assests/illustration1.png';
-import axios from 'axios';
+import { getProducts, deleteProduct, editProduct } from "../../API/api";
 
 export default function Categories({ setShow, image, collapsed, rtl, toggled, handleToggleSidebar }) {
     setShow(true);
     const [selected, setSelected] = useState(null);
     const [visible, setVisible] = useState(false);
-    // const [categories, setCategories] = useState([
-    //     {
-    //         id: 1,
-    //         title: "Cat1",
-    //         img: image1
-    //     },
-    //     {
-    //         id: 2,
-    //         title: "Cat2",
-    //         img: image1
-    //     },
-    //     {
-    //         id: 3,
-    //         title: "Cat3",
-    //         img: image1
-    //     },
-    //     {
-    //         id: 4,
-    //         title: 'Cat4',
-    //         img: image1
-    //     }
-    // ]);
-
-    const [categories, setCategories] = useState([]);
-
+    const [check, setCheck] = useState(false);
+    const [imagePath, setImagePath] = useState([]);
+    const [products, setProducts] = useState([]);
+    const { innerWidth: width, innerHeight: height } = window;
+ 
+    async function fetch(){
+        await getProducts()
+        .then(res => {
+            console.log("es.data.products: ", res.data.products)
+            setProducts(res.data.products)
+            
+        })
+        .catch(err => {
+            alert(err);
+        })
+    }
     useEffect(() => {
 
-        // axios.get('https://api-kearekisa.herokuapp.com/admin/category')
-        //     .then(res => {
-        //         const cat = res.data;
-        //         console.log(cat.categories)
-        //         // console.log(typeof(cat))
+        fetch();
+        console.log("Products", products)
+        
+    }, [check]);
 
-        //         setCategories(cat.categories)
-        //         console.log("categories", categories)
-        //     })
-        //     .catch(err => {
-        //         alert(err);
-        //     })
-    }, []);
-    const [imagePath, setImagePath] = useState([]);
-    const { innerWidth: width, innerHeight: height } = window;
+    const deleteFunc = async (id) => {
+        console.log("id: ", typeof(id))
+        await deleteProduct({pid:id})
+        .then(res => {
+            if(res.data.message === true){
+                setCheck(!check)
+                message.success("deleted")
+            }
+            
+        })
+        .catch(err => {
+            alert(err);
+        })
+    }
+
 
     const crop = {
         unit: '%',
@@ -96,18 +94,18 @@ export default function Categories({ setShow, image, collapsed, rtl, toggled, ha
                     <button className="userAddButton">Add</button>
                 </Link>
             </div>
-            <div className="userContainer">
-                <div className="userShow" style={{ height: height*0.7, overflowY: 'scroll', width:'100%'}}>
+            <div className="userContainer" >
+                <div className="userShow" style={{ height: height * 0.9, overflowY: 'scroll', width: width*0.7 }}>
                     <div className="userShowTop" >
                         <h3>All Products</h3>
-                        {categories.map((item, key) => (
+                        {products.map((item, key) => (
 
                             <div className="category-container" >
                                 <div className="category" >
                                     <div className="icon-container">
                                         <BsListTask />
                                     </div>
-                                    <p className="text" >{item.name}</p>
+                                    <p className="text" >{item.title}</p>
                                 </div>
                                 <div
                                     className="EditBtn"
@@ -115,11 +113,11 @@ export default function Categories({ setShow, image, collapsed, rtl, toggled, ha
                                         setSelected(item)
                                         setVisible(true)
                                     }}
-                                    
-                                    style={{justifyContent:'flex-end'}}>
+
+                                    style={{ justifyContent: 'flex-end' }}>
                                     <p>Edit</p>
                                 </div>
-                                <div onClick={() => alert("Hi")}>
+                                <div onClick={() => deleteFunc(item._id)}>
                                     <TiDeleteOutline className="deleteIcon" />
                                 </div>
 
@@ -145,15 +143,6 @@ export default function Categories({ setShow, image, collapsed, rtl, toggled, ha
                                                 value={selected.name}
                                             />
                                         </div>
-                                        {/* <div className="userUpdateItem">
-                                            <label>Full Name</label>
-                                            <input
-                                                type="text"
-                                                placeholder="Anna Becker"
-                                                className="userUpdateInput"
-                                            />
-                                        </div> */}
-
 
                                     </div>
                                     <div className="userUpdateRight">
@@ -173,7 +162,7 @@ export default function Categories({ setShow, image, collapsed, rtl, toggled, ha
                                 <div style={{ justifyContent: 'center', alignItems: 'center' }}>
                                     <img src={image1} style={{ width: 300, height: 300 }} />
                                     <label htmlFor="file">
-                                        <h3 style={{textAlign:'center'}}>Select a Category to edit</h3>
+                                        <h3 style={{ textAlign: 'center' }}>Select a Category to edit</h3>
                                     </label>
                                 </div>
                             )}

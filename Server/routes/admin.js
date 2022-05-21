@@ -1,6 +1,7 @@
 import express from "express";
 
-import { login, signup, getadmin,updateProfile,getcurrentuser, forgotPassword, resetPassword, getProducts, addProducts } from "../controllers/admin.js";
+import { login, signup, getadmin,updateProfile,getcurrentuser,forgotPassword, resetPassword, getProducts, getProduct, addProducts, deleteProduct } from "../controllers/admin.js";
+
 
 
 const router = express.Router();
@@ -12,6 +13,8 @@ router.patch('/edit',updateProfile);
 router.post('/forgotpassword',forgotPassword);
 router.post('/resetpassword',resetPassword);
 router.post('/getcurrentuser',getcurrentuser);
-router.get('/getproducts',getProducts);
+router.get('/getProducts',getProducts);
 router.post('/addproducts',addProducts);
+router.post('/getproduct', getProduct);
+router.post('/deleteProduct', deleteProduct);
 export default router;

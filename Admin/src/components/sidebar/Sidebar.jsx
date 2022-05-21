@@ -80,7 +80,7 @@ export default function Sidebar({ image, collapsed, toggled, handleToggleSidebar
                 <Link to="/home">
                     <Menu iconShape="circle">
 
-                        <MenuItem icon={<BsListTask style={{fontSize:20}}/>} style={{ color: '#BEBEC2', textDecoration: 'none' }}> {intl.formatMessage({ id: 'Categories' })}</MenuItem>
+                        <MenuItem icon={<BsListTask style={{fontSize:20}}/>} style={{ color: '#BEBEC2', textDecoration: 'none' }}> {intl.formatMessage({ id: 'Products' })}</MenuItem>
                     </Menu>
                 </Link>
                 <Link to="/users">
