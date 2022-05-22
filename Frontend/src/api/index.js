@@ -24,6 +24,8 @@ export const latestProducts = userdata => API.get(`user/latestProducts`, userdat
 export const fetchCart = userdata => API.post(`user/fetchCart`, userdata);
 export const addCart = userdata => API.post(`user/addCart`, userdata);
 export const deleteItem = userdata => API.post(`user/deleteCartItem`, userdata);
+export const deleteCart = userdata => API.post(`user/deleteCart`, userdata);
+export const orderhistory = userdata => API.post(`user/orderhistory`, userdata);
 export const updateQuantity = userdata => API.post(`user/updateQuantity`, userdata);
 export const getProduct = userdata => API.post(`user/getProduct`, userdata);
 export const viewFavourites = userdata => API.post(`user/viewFavourites`, userdata);
@@ -36,6 +38,7 @@ export const updatepassword = (data)=>API.patch(`user/changePassword`,data);
 export const forgotPassword = userdata => API.post(`user/forgotpassword`, userdata);
 export const resetPassword = userdata => API.post(`user/resetpassword`, userdata);
 export const smartAdvisor = userdata => API.post(`user/smartAdvisor`, userdata);
+export const placeOrder = userdata => API.post(`user/placeorder`, userdata);
 export const messageSend = userdata => API.post(`user/send-message`, userdata);
 
 

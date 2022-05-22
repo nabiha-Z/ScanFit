@@ -46,7 +46,7 @@ function Content(){
                     Cookies.set('token', response.data.token);
                 
                     Cookies.set('mail',email);
-                    Cookies.set('id',response.data.user._id);
+                    Cookies.set('id',response.data.user);
                     routerHistory.push('./profile');
                   } catch (e) {
                     return null;

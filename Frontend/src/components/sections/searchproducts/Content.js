@@ -113,6 +113,15 @@ export default function Content() {
 
     // }
 
+    const showDetails = (item) => {
+
+        console.log("product item: ", item.title);
+        routerHistory.push({
+            pathname: "/details",
+            state: { product: item }
+        });
+
+    }
 
 
     const RenderItem = ({ list }) => {
@@ -138,7 +147,7 @@ export default function Content() {
                             <span className="listing-price">{new Intl.NumberFormat().format((item.price).toFixed(2))} /-<span></span> </span>
                             <p className="listing-text">{item.description}</p>
                             <div className="listing-gallery-wrapper">
-                                <button className="btn-custom btn-sm secondary">View Details</button>
+                            <button onClick={() => showDetails(item)} className="btn-custom btn-sm secondary" style={{marginRight:10}}>View Details</button>
                                 {/* <OverlayTrigger overlay={gallerytip}>
                                     <Link to="#" className="listing-gallery"> <i className="fas fa-camera" /> </Link>
                                 </OverlayTrigger> */}

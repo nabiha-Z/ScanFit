@@ -1,10 +1,10 @@
-#loginBtn{
-    background-color: rgb(18, 54, 63);
+#loginBtn, #signupBtn{
+    background-color: white;
     padding: 5px;
     border-radius: 15px;
-    color:white;
+    color:rgb(18, 54, 63);
     text-align: center;
-    width: 80px;
+    width: 60px;
     justify-content: center;
     align-items: center;
     margin: 10px;
@@ -12,6 +12,16 @@
 }
 
 #loginBtn:hover{
+    color: rgb(10, 141, 173);
+}
+
+#signupBtn{
+    background-color: rgb(18, 54, 63);
+    color:white;
+   width: 80px;
+}
+
+#signupBtn:hover{
     background-color: rgb(226, 230, 231);
     color:black
 }

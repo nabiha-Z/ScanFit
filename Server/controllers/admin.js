@@ -3,8 +3,10 @@ import jwt from "jsonwebtoken";
 //import mongoose from "mongoose";
 import nodemailer from 'nodemailer';
 import Admin from "../models/admin.js";
+import orders from "../models/order.js";
 import products from "../models/products.js";
 import dotenv from 'dotenv';
+import { orderhistory } from "./users.js";
 
 dotenv.config();
 // const EMAIL = process.env.EMAIL;
@@ -24,14 +26,12 @@ export const getadmin = async (req, res) => {
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
-  console.log(email);
-  console.log("pass= ", password);
-
+  console.log("email: ", email, password)
   try {
     const existingUser = await Admin.findOne({ email });
 
     if (!existingUser)
-      return res.status(404).json({ message: "User doesn't exist." });
+      return res.status(201).json({ message: "User doesn't exist." });
 
     const isPasswordCorrect = await bcrypt.compare(
       password,
@@ -39,16 +39,17 @@ export const login = async (req, res) => {
     );
 
     if (!isPasswordCorrect)
-      return res.status(400).json({ message: "Invalid Password" });
+      return res.status(201).json({ message: false, error:"Invalid Password" });
 
+      console.log("dskdjskdj")
     const token = jwt.sign(
       { email: existingUser.email, id: existingUser._id },
       process.env.SECRET,
       { expiresIn: "6h" }
     );
-    res.status(200).json({ message: true, token });
+    res.status(200).json({ message: true, token, user:existingUser._id });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong." });
+    res.status(500).json({ message: false, "error":error.message });
   }
 };
 
@@ -59,9 +60,8 @@ export const signup = async (req, res) => {
 
 
   try {
-    console.log("before");
     if (await Admin.findOne({ email: email }).exec()) {
-      console.log("after");
+
       return res.status(200).json({ "message": false, error: "User already exists." });
     } else {
       const salt = await bcrypt.genSalt(10);
@@ -218,7 +218,6 @@ export const forgotPassword = async (req, res) => {
 }
 
 export const resetPassword = async (req, res) => {
-  console.log("reset");
   const { pass, user_email } = req.body;
   try {
 
@@ -227,12 +226,6 @@ export const resetPassword = async (req, res) => {
     if (!user) {
       return res.status(200).json({ "message": false, error: "Try again sesssion expired!" });
     } else {
-
-
-      console.log("user= ", user.user_email);
-
-      console.log("before:", user.password);
-
 
       const salt = await bcrypt.genSalt(10);
 
@@ -275,7 +268,6 @@ export const getProducts = async (req, res) => {
 
 
 export const addProducts = async (req, res) => {
-  console.log("hello");
   const {
     title,
     description,
@@ -366,69 +358,21 @@ export const editProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
 
   const pid = req.body.pid;
-
-  console.log("pid: ", typeof(pid))
   await products.findByIdAndDelete({ _id: pid })
     .then((data) => {
-      console.log("delleted")
+      
       res.status(201).json({ "message": true })
     }).catch((err) => {
       res.status(201).json({ 'message': false, 'error': err.message });
     })
 }
 
-// export const deleteProduct = async (req, res) => {
+export const gettOrders = async (req, res) => {
 
-//     const { id, user_id } = req.body;
-//     console.log("id,user_id ", id, user_id);
-
-//     try {
-
-//         // const listDetails = await products.findOne({ _id: id });
-//         // console.log(listDetails);
-
-//         const list = await products.findOne({ _id: id });
-//         // console.log("list = ", list.category)
-//         await products.findOneAndDelete({ _id: id });
-//         const userdata = await user.findOne({ _id: user_id });
-//         // console.log("user" + userdata);
-//         //console.log("initial limit" +userdata.limit);
-//         const limit = userdata.limit + 1;
-//         // console.log("increased limit" + limit);
-//         // console.log("brofre limit user= ", userdata.limit);
-//         userdata.limit = limit;
-//         // console.log("limit user= ", userdata.limit);
-//         const updated = await user.findByIdAndUpdate(user_id, {
-//             ...userdata,
-//             limit
-//         }, {
-//             new: true
-//         });
-
-//         // console.log("updated= ", updated);
-
-//         const fetchData = await ct.findOne({ name: list.category });
-
-//         const counter = await products.countDocuments({ category: list.category });
-//         // console.log("counter = ", counter);
-//         const { _id, name, img, count } = fetchData;
-//         // console.log("count after = ", fetchData.count);
-
-//         const s = await ct.findByIdAndUpdate(_id, { _id, name, img, count: counter }, { new: true });
-//         // console.log("count in table ", s.count);
-//         // console.log("")
-//         //console.log("updated user" +updated);
-
-//         res.status(200).json({ "message": true });
-
-//     } catch (error) {
-
-//         res.status(404).json({
-//             message: error.message
-//         });
-
-//     }
-
-// }
-
-
+  await orders.find({})
+  .then((data) => {
+    res.status(201).json({ "message": true, "orders": data })
+  }).catch((err) => {
+    res.status(201).json({ 'message': false, 'error': err.message });
+  })
+}

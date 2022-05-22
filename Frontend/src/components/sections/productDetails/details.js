@@ -21,44 +21,111 @@ export default function Details() {
     const [currentPage, setcurrentPage] = useState(1);
     const [productsPerPage, setproductsPerPage] = useState(6);
     const [loading, setloading] = useState(false);
+    const [selectedSize, setSlected] = useState(null);
 
     console.log("location: ", location.state.product.category)
-    const products = location.state.product;
+    const product = location.state.product;
+
+    const addtocart = async () => {
+        if( Cookies.get('id')!==undefined){
+
+        console.log("size: ", selectedSize)
+        if(selectedSize!==null){    
+            await addCart({ uid: Cookies.get('id'), product, size: selectedSize, color: product.color })
+            .then((response) => {
+                console.log("res:", response.data)
+                if (response.data.message === true) {
+                    message.success("Added to Cart")
+                }
+            }).catch((err) => {
+                console.log("err: ", err.message)
+                message.error(err.message)
+            })
+        }else{
+            message.error("Select Size")
+        }
+    }else{
+        message.error("You need to login first!")
+    }
+    
+       
+    }
+
     return (
-        // products.map((item, i) => {
-        //     return (<div key={i} className="col-md-6 col-sm-8" style={{ justifyContent: 'center' }}>
-        //         <div className="listing">
-        //             <div className="listing-thumbnail">
-        //                 <Link to="/listing-details-v1"><img src={item.picture} alt="listing" style={{ width: 280, height: 320 }} /></Link>
+        <>
+            <main class="container2">
+                <div className='row' style={{ flex: 1, flexWrap: 'wrap' }}>
+                    <div className='col-lg-6 col-md-6 col-sm-12'>
+                        <div class="left-column">
+                            <img data-image="black" src="images/black.png" alt="" />
+                            <img data-image="blue" src="images/blue.png" alt="" />
+                            <img data-image="green" class="active" src={product.picture} alt="" />
+                        </div>
+                    </div>
 
-        //                 <div className="listing-controls">
-        //                     <Link to="#" className="favorite"><i className="far fa-heart" onClick={(e) => onFav(item, e)} /></Link>
-        //                     <Link to="#" className="compare"><i className="fas fa-camera" /></Link>
-        //                 </div>
-        //             </div>
-        //             <div className="listing-body">
-        //                 <h5 className="listing-title"> <Link to="#" title={item.title}>{item.title}</Link> </h5>
-        //                 <p className="listing-text">{item.location}</p>
-        //                 <span className="listing-price">{item.price} RS/-</span>
-        //                 <p className="listing-text">{item.description}</p>
-        //                 <div className="listing-gallery-wrapper" style={{ justifyContent: 'flex-end', marginTop: 20 }}>
 
-        //                     <button onClick={() => showDetails(item)} className="btn-custom btn-sm secondary" style={{ marginRight: 10 }}>View Details</button>
-        //                     <button onClick={() => addtocart(item)} className="btn-custom btn-sm primary">Add to Cart</button>
-        //                     {/* <OverlayTrigger overlay={gallerytip}>
-        //                 <Link to="#" className="listing-gallery"> <i className="fas fa-camera" /> </Link>
-        //             </OverlayTrigger> */}
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     </div>
+                    <div className='col-lg-6 col-md-6 col-sm-12'>
+                        <div class="right-column">
+                            <div class="product-description">
+                                <span>{product.category}</span>
+                                <h1>{product.title}</h1>
 
-        //     )
+                                <p>{product.description}</p>
+                                <p>The preferred choice of a vast range of acclaimed DJs. Punchy, bass-focused sound and high isolation. Sturdy headband and on-ear cushions suitable for live performance</p>
+                            </div>
 
-        // })
-        <div>
-            <p>{products.category}</p>
-            <ProductSlider category={products.category} color={products.color} mainCategory={products.main_category}/>
-        </div>
+                            <div class="product-configuration">
+                                <div class="try-on" >
+                                    <span>Virtual Try-on</span>
+                                    <Link to="#" className="camera"><i className="fas fa-camera" /></Link>
+                                </div>
+                                <div class="product-color">
+                                    <span>Color</span>
+
+                                    <div class="color-choose">
+                                        <div >
+                                            <input data-image="red" type="radio" id="red" name="color" value="red" checked />
+                                            <label for="red"><span style={{ backgroundColor: product.colorCode }}></span></label>
+                                        </div>
+                                        {/* <div>
+                                            <input data-image="blue" type="radio" id="blue" name="color" value="blue" />
+                                            <label for="blue"><span></span></label>
+                                        </div>
+                                        <div>
+                                            <input data-image="black" type="radio" id="black" name="color" value="black" />
+                                            <label for="black"><span></span></label>
+                                        </div> */}
+                                    </div>
+
+                                </div>
+
+                                <div class="product-config">
+                                    <span>Sizes</span>
+
+                                    <div class="product-choose">
+                                        {product.sizes.map((item) => (
+                                            <button onClick={() => setSlected(item)}>{item}</button>
+                                        ))}
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="product-price">
+                                <span>{product.price}/-</span>
+                                <button class="cart-btn" onClick={(e) => addtocart()}>Add to cart</button>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </main>
+            <div>
+                <p>{product.category}</p>
+                <ProductSlider category={product.category} color={product.color} mainCategory={product.main_category} />
+            </div>
+        </>
     )
 }

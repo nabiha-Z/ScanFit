@@ -503,6 +503,7 @@ export const addInCart = async (req, res) => {
 
     const { uid, product, size, color } = req.body;
     var quantity = 0, errors = "", count = 0;
+    console.log("api")
     const cartData = await cart.find({ user: uid })
     var productObj = {
         pid: product._id,
@@ -518,7 +519,8 @@ export const addInCart = async (req, res) => {
                 var id = JSON.stringify(item.pid)
 
                 if (id.includes(product._id)) {
-                    if (product.size === size) {
+                    console.log("incraese quantity")
+                    if (item.size === size) {
                         count = 1;
                         console.log("before: ", item.quantity)
                         quantity = item.quantity + 1;
@@ -537,6 +539,7 @@ export const addInCart = async (req, res) => {
                 }
             })
             if (count === 0) {
+                console.log("new insertion into cart")
                 var items = cartData[0].items;
                 items.push(productObj)
                 cart.findByIdAndUpdate({ _id: cartData[0]._id }, { items: items }, { new: true })
@@ -549,6 +552,7 @@ export const addInCart = async (req, res) => {
 
             }
         } else {
+            console.log("new data", uid)
             var items = [];
             items.push(productObj)
             await cart.create({ items, user: uid })
@@ -576,14 +580,19 @@ export const addInCart = async (req, res) => {
 
 export const updateQuantity = async (req, res) => {
 
-    const { cid, pid, quantity } = req.body;
+    const { cid, itemId, quantity } = req.body;
+    console.log("itemId: ", itemId)
     const cartData = await cart.find({ _id: cid })
     try {
         cartData[0].items.map((item) => {
-            var id = JSON.stringify(item.pid)
-            if (id.includes(pid)) {
+            console.log("item: ", item)
+            var id = JSON.stringify(item._id)
+            console.log("id: ", id)
+            if (id.includes(itemId)) {
+                console.log("sdajdk")
                 item.quantity = quantity
             }
+            console.log("sdd")
         })
         await cart.findByIdAndUpdate({ _id: cid }, { items: cartData[0].items }, { new: true })
             .then((data) => {
@@ -600,16 +609,36 @@ export const updateQuantity = async (req, res) => {
 
 }
 
+export const deleteCart = async (req, res) => {
+    const { cid } = req.body;
+    console.log("deleting ...", cid)
+    try {
+
+        await cart.findByIdAndDelete({ _id: cid })
+            .then((data) => {
+                res.status(201).json({ "message": true })
+            }).catch((err) => {
+                res.status(201).json({ message: false, error: err.message })
+            })
+    }
+    catch (err) {
+        console.log("error: ", err.message)
+    }
+}
+
 
 export const deleteCartItem = async (req, res) => {
 
-    const { cid, pid } = req.body;
+    const { cid, itemId } = req.body;
     const cartData = await cart.find({ _id: cid })
     const itemsArr = cartData[0].items;
     try {
 
-        const items = itemsArr.filter(item => !(JSON.stringify(item.pid).includes(pid)));
+        // const items = itemsArr.filter(item => !(JSON.stringify(item._id).includes(itemId)));
+        const items = itemsArr.filter(item => (!JSON.stringify(item._id).includes(itemId)));
         //var temp = itemsArr.slice(index + 1, itemsArr.length)
+
+        console.log("items:", items)
 
         await cart.findOneAndUpdate({ _id: cid }, { items: items }, { new: true })
             .then((data) => {
@@ -667,66 +696,84 @@ export const updatePicture = async (req, res) => {
 
 export const smartAdvisor = async (req, res) => {
     const { category, main_category, product_color } = req.body;
+
     var select_Category = "";
-    var items=[];
+    console.log("product_color: ", product_color)
+    var items = [];
     if (category === 'tshirt') {
         select_Category = "jeans";
     } else if (category === 'jeans') {
         select_Category = "tshirt";
     } else if (category === 'dress') {
         select_Category = "trouser";
-    }else if (category === 'suit') {
+    } else if (category === 'suit') {
         select_Category = "dresspant";
     }
     if (product_color == 'white') {
-        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'skin' }, { color: 'brown' },{ color: 'green' }, { color: 'light blue' }] }, { main_category: main_category }, { category: select_Category }] })   
-    }   
+        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'skin' }, { color: 'brown' }, { color: 'green' }, { color: 'light blue' }] }, { main_category: main_category }, { category: select_Category }] })
+    }
     else if (product_color == 'black') {
-        if(select_Category === 'tshirt'){
+        if (select_Category === 'tshirt') {
             items = await products.find({ $and: [{ $or: [{ color: 'white' }, { color: 'blue' }, { color: 'black' }, { color: 'brown' }, { color: 'red' }, { color: 'maroon' }] }, { main_category: main_category }, { category: select_Category }] })
-        }else{
+        } else {
             items = await products.find({ $and: [{ $or: [{ color: 'white' }, { color: 'blue' }, { color: 'black' }, { color: 'skin' }] }, { main_category: main_category }, { category: select_Category }] })
         }
-   
+
     } else if (product_color == 'blue') {
-        if(select_Category === 'tshirt'){
-            items = await products.find({ $and: [{ $or: [ { color: 'blue' }, { color: 'black' }, { color: 'grey' }, {color:'green'}, {color:'brown'},{color:'maroon'}, {color:'red'},{color:'white'}] }, { main_category: main_category }, { category: select_Category }] })
-        }else{
+        if (select_Category === 'tshirt') {
+            items = await products.find({ $and: [{ $or: [{ color: 'blue' }, { color: 'black' }, { color: 'grey' }, { color: 'green' }, { color: 'brown' }, { color: 'maroon' }, { color: 'red' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })
+        } else {
             items = await products.find({ $and: [{ $or: [{ color: 'white' }, { color: 'blue' }, { color: 'black' }, { color: 'grey' }] }, { main_category: main_category }, { category: select_Category }] })
         }
-        
+
     } else if (product_color == 'orange') {
-        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })     
-    } 
+        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })
+    }
     else if (product_color == 'grey') {
-        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })     
-    }    
+        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })
+    }
     else if (product_color == 'red') {
-        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })     
-    }  
+        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })
+    }
     else if (product_color == 'pink') {
-        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })     
-    } 
+        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })
+    }
     else if (product_color == 'purple') {
-        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })     
-    }   
-    return res.status(201).json({ "message":true, "products": items });
+        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })
+    }
+    else if (product_color == 'green') {
+        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { category: select_Category }] })
+        console.log("items: ", items)
+    }
+
+    return res.status(201).json({ "message": true, "products": items });
 }
 
 export const placeorder = async (req, res) => {
-    var {data} = req.body;
-    print("data: ", data)
-    const orderNo = 1 + Math.floor(Math.random() * 10000000);
+    var data = req.body;
+    console.log("data: ", data)
+    var orderNo = (1 + Math.floor(Math.random() * 10000000));
+    console.log("orderNo:", orderNo)
     data.orderNo = orderNo;
-    print("data: ", data)
+    console.log("data: ", data)
 
-    await orders.create({data})
-    .then((res) => {
-        return res.status(201).json({ "message":true });
-    }).catch((err) => {
-        errors = err.message
-        console.log("err: ", err.message)
-        return res.status(201).json({ "message":false, "error": err.message });
-    })
+    await orders.create({ orderNo, items: data.items, totalamount: data.totalamount, paymentmethod: data.paymentmethod, status: data.status, user: data.user })
+        .then((data) => {
+            return res.status(201).json({ "message": true });
+        }).catch((err) => {
+            console.log("err: ", err.message)
+            return res.status(201).json({ "message": false, "error": err.message });
+         })
+}
 
+export const orderhistory = async (req, res) => {
+
+    const {uid} = req.body;
+
+    await orders.find({user: uid})
+    .then((data=>{
+        return res.status(201).json({ "message": true, "orders":data });
+    })).catch((err) => {
+        return res.status(201).json({ "message": false, "error": err.message });
+     })
 }

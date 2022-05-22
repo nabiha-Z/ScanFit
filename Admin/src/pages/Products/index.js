@@ -19,33 +19,14 @@ import MultiImageInput from 'react-multiple-image-input';
 import image1 from '../../assests/illustration1.png';
 import { getProducts, deleteProduct, editProduct } from "../../API/api";
 
-export default function Categories({ setShow, image, collapsed, rtl, toggled, handleToggleSidebar }) {
+export default function Products({ setShow, check, setCheck, handleToggleSidebar, products}) {
     setShow(true);
     const [selected, setSelected] = useState(null);
     const [visible, setVisible] = useState(false);
-    const [check, setCheck] = useState(false);
     const [imagePath, setImagePath] = useState([]);
-    const [products, setProducts] = useState([]);
+    
     const { innerWidth: width, innerHeight: height } = window;
  
-    async function fetch(){
-        await getProducts()
-        .then(res => {
-            console.log("es.data.products: ", res.data.products)
-            setProducts(res.data.products)
-            
-        })
-        .catch(err => {
-            alert(err);
-        })
-    }
-    useEffect(() => {
-
-        fetch();
-        console.log("Products", products)
-        
-    }, [check]);
-
     const deleteFunc = async (id) => {
         console.log("id: ", typeof(id))
         await deleteProduct({pid:id})
@@ -61,12 +42,6 @@ export default function Categories({ setShow, image, collapsed, rtl, toggled, ha
         })
     }
 
-
-    const crop = {
-        unit: '%',
-        aspect: 4 / 3,
-        width: '100'
-    };
 
     return (
         <main>
@@ -135,12 +110,43 @@ export default function Categories({ setShow, image, collapsed, rtl, toggled, ha
                                 <>
                                     <div className="userUpdateLeft">
                                         <div className="userUpdateItem">
-                                            <label>Category Name</label>
+                                            <label>Title</label>
                                             <input
                                                 type="text"
-                                                placeholder="annabeck99"
                                                 className="userUpdateInput"
-                                                value={selected.name}
+                                                value={selected.title}
+                                            />
+                                        </div>
+                                        <div className="userUpdateItem">
+                                            <label>Description</label>
+                                            <input
+                                                type="text"
+                                                className="userUpdateInput"
+                                                value={selected.description}
+                                            />
+                                        </div>
+                                        <div className="userUpdateItem">
+                                            <label>Price</label>
+                                            <input
+                                                type="text"
+                                                className="userUpdateInput"
+                                                value={selected.price}
+                                            />
+                                        </div>
+                                        <div className="userUpdateItem">
+                                            <label>Color</label>
+                                            <input
+                                                type="text"
+                                                className="userUpdateInput"
+                                                value={selected.color}
+                                            />
+                                        </div>
+                                        <div className="userUpdateItem">
+                                            <label>Color Code</label>
+                                            <input
+                                                type="text"
+                                                className="userUpdateInput"
+                                                value={selected.colorCode}
                                             />
                                         </div>
 

@@ -26,7 +26,7 @@ export default function LatestProducts() {
 
     }, [])
 
-    const onFav = async (item, e) => {
+    const onFav = async(item, e) => {
         e.preventDefault();
         console.log("onFav");
         if (Cookies.get("token") != undefined) {
@@ -53,6 +53,7 @@ export default function LatestProducts() {
             message.error("You need to login first!");
         }
     }
+
     const showDetails = (item) => {
 
         console.log("product item: ", item.title);
@@ -93,7 +94,7 @@ export default function LatestProducts() {
                                 <Link to="/listing-details-v1"><img src={item.picture} alt="listing" style={{ width: 300, height: 300 }} /></Link>
 
                                 <div className="listing-controls">
-                                    <Link to="#" className="favorite"><FaHeart /></Link>
+                                    <Link to="#" onClick={(e)=>onFav(item, e)}className="favorite"><FaHeart /></Link>
                                 </div>
                             </div>
                             <div className="listing-body">
@@ -105,7 +106,7 @@ export default function LatestProducts() {
                                 <div className="listing-gallery-wrapper" style={{ justifyContent: 'flex-end', marginTop: 20 }}>
 
                                     <button onClick={() => showDetails(item)} className="btn-custom btn-sm secondary" style={{ marginRight: 10 }}>View Details</button>
-                                    <button onClick={() => addtocart(item)} className="btn-custom btn-sm primary">Add to Cart</button>
+                                    {/* <button onClick={() => addtocart(item)} className="btn-custom btn-sm primary">Add to Cart</button> */}
                                 </div>
                             </div>
                         </div>

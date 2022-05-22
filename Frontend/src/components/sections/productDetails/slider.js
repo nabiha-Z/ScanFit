@@ -79,15 +79,14 @@ export default function ProductSlider(props) {
 
     async function fetch() {
         setloading(true);
-        console.log("here");
+        //console.log("here");
         await smartAdvisor({ category: props.category, main_category: props.mainCategory, product_color:  props.color })
             .then(function (response) {
                 if (response.data.message === true) {
                     setproducts(response.data.products)
                     setloading(false)
-                    console.log("products: ", response.data.products)
+                    //console.log("products: ", response.data.products)
                 } else {
-                    console.log("dffdkjfkdjfkdfjk")
                 }
             })
             .catch(function (error) {
@@ -111,11 +110,7 @@ export default function ProductSlider(props) {
         autoplay: true,
         cssEase: 'linear',
         swipeToSlide: true,
-        afterChange: function (index) {
-            console.log(
-                `Slider Changed to: ${index + 1}, background: #222; color: #bada55`
-            );
-        },
+        
         responsive: [
             {
                 breakpoint: 1024,
@@ -168,7 +163,7 @@ export default function ProductSlider(props) {
                         </button>
                     ))}
                 </Slider>
-            
+        
 
         </div>
     );

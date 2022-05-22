@@ -1,6 +1,6 @@
 import express from "express";
 
-import { login, signup, getadmin,updateProfile,getcurrentuser,forgotPassword, resetPassword, getProducts, getProduct, addProducts, deleteProduct } from "../controllers/admin.js";
+import { login, signup, getadmin,updateProfile,getcurrentuser,forgotPassword, resetPassword, getProducts, getProduct, addProducts, deleteProduct, gettOrders } from "../controllers/admin.js";
 
 
 
@@ -17,4 +17,5 @@ router.get('/getProducts',getProducts);
 router.post('/addproducts',addProducts);
 router.post('/getproduct', getProduct);
 router.post('/deleteProduct', deleteProduct);
+router.get('/getOrders',gettOrders);
 export default router;

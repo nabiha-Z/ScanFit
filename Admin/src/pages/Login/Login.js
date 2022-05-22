@@ -5,6 +5,7 @@ import './login.css';
 import { login } from '../../API/api';
 import 'antd/dist/antd.css';
 import { message } from 'antd';
+import Cookies from 'js-cookie';
 
 export default function Login({ show, setShow }) {
     setShow(false);
@@ -22,15 +23,17 @@ export default function Login({ show, setShow }) {
             .then(function (response) {
                 console.log("res: ", response.data)
                 if (response.data.message === true) {
-                    setShow(true);
-                    history.push("/home");
+                    Cookies.set('token', response.data.token);      
+                    Cookies.set('id',response.data.user._id);
+                    setShow(true);                  
+                    history.push("/allorders");
 
                 } else {
-                    message.error("Invalid User")
+                    message.error(response.dat.error)
                 }
             })
             .catch(function (error) {
-                message.error("Invalid User")
+                message.error(error.message)
             });
 
     }

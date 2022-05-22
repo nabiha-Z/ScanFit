@@ -1,5 +1,5 @@
 import React, { Component, Fragment, useEffect, useState } from 'react';
-import { Link, } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { OverlayTrigger, Tooltip, Dropdown, NavLink, Button } from 'react-bootstrap';
 import Sidebar from '../../layouts/Shopsidebar';
@@ -169,6 +169,7 @@ function Content() {
             message.error("You need to login first!");
         }
     }
+    
     const showDetails = (item) => {
 
         console.log("product item: ", item.title);
@@ -210,11 +211,11 @@ function Content() {
                             <h5 className="listing-title"> <Link to="#" title={item.title}>{item.title}</Link> </h5>
                             <p className="listing-text">{item.location}</p>
                             <span className="listing-price">{item.price} RS/-</span>
-                            <p className="listing-text">{item.description}</p>
+                          
                             <div className="listing-gallery-wrapper" style={{justifyContent:'flex-end', marginTop:20}}>
 
                                 <button onClick={() => showDetails(item)} className="btn-custom btn-sm secondary" style={{marginRight:10}}>View Details</button>
-                                <button onClick={() => addtocart(item)} className="btn-custom btn-sm primary">Add to Cart</button>
+                                {/* <button onClick={() => addtocart(item)} className="btn-custom btn-sm primary">Add to Cart</button> */}
                                 {/* <OverlayTrigger overlay={gallerytip}>
                             <Link to="#" className="listing-gallery"> <i className="fas fa-camera" /> </Link>
                         </OverlayTrigger> */}

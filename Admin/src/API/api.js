@@ -13,3 +13,4 @@ const API = axios.create({ baseURL: 'http://localhost:8000/' });
   export const getProducts = admindata => API.get(`admin/getProducts`, admindata);
   export const deleteProduct = admindata => API.post(`admin/deleteProduct`, admindata);
   export const editProduct = admindata => API.post(`admin/editProducts`, admindata);
+  export const getOrders = admindata => API.get(`admin/getOrders`, admindata);
