@@ -10,7 +10,7 @@ import jwt_decode from "jwt-decode";
 import { FaHeart } from 'react-icons/fa';
 
 
-export default function LatestProducts() {
+export default function LatestProducts(props) {
 
     const routerHistory = useHistory();
     const [loading, setLoading] = useState(false);
@@ -26,7 +26,7 @@ export default function LatestProducts() {
 
     }, [])
 
-    const onFav = async(item, e) => {
+    const onFav = async (item, e) => {
         e.preventDefault();
         console.log("onFav");
         if (Cookies.get("token") != undefined) {
@@ -56,30 +56,43 @@ export default function LatestProducts() {
 
     const showDetails = (item) => {
 
+        var itemObj = {};
+        var counts = Cookies.get('counts');
+        var tempArr = [];
+        const chars = counts.split(",");
+        if (item.category === 'Shirts') {
+            var temp = (parseInt(chars[0]) + 1).toString()
+            chars[0] = temp
+        }
+        else if (item.category === 'jeans') {
+            var temp = (parseInt(chars[1]) + 1).toString()
+            chars[1] = temp
+        }
+        else if (item.category === 'Suits') {
+            var temp = (parseInt(chars[2]) + 1).toString()
+            chars[2] = temp
+        }
+        else if (item.category === 'Dress') {
+            var temp = (parseInt(chars[3]) + 1).toString()
+            chars[3] = temp
+        }
+        else if (item.category === 'Trousers') {
+            var temp = (parseInt(chars[4]) + 1).toString()
+            chars[4] = temp
+        }
+        else if (item.category === 'Dress Pants') {
+            var temp = (parseInt(chars[5]) + 1).toString()
+            chars[5] = temp
+        }
+        
+        Cookies.set('counts', chars);
+        props.setCheck(!props.check)
         console.log("product item: ", item.title);
         routerHistory.push({
             pathname: "/details",
             state: { product: item }
         });
 
-    }
-
-    const addtocart = async (product) => {
-
-        if (Cookies.get("id") !== undefined) {
-            await addCart({ uid: Cookies.get('id'), product })
-                .then((response) => {
-                    console.log("res:", response.data)
-                    if (response.data.message === true) {
-                        message.success("Added to Cart")
-                    }
-                }).catch((err) => {
-                    console.log("err: ", err.message)
-                    message.error(err.message)
-                })
-        } else {
-            message.error("You need to login first!");
-        }
     }
 
     return (
@@ -94,13 +107,14 @@ export default function LatestProducts() {
                                 <Link to="/listing-details-v1"><img src={item.picture} alt="listing" style={{ width: 300, height: 300 }} /></Link>
 
                                 <div className="listing-controls">
-                                    <Link to="#" onClick={(e)=>onFav(item, e)}className="favorite"><FaHeart /></Link>
+                                    <Link to="#" onClick={(e) => onFav(item, e)} className="favorite"><FaHeart /></Link>
                                 </div>
                             </div>
+
                             <div className="listing-body">
 
                                 <h5 className="listing-title"> <Link to="/listing-details-v1" title={item.title}>{item.title}</Link> </h5>
-
+                                <span style={{fontSize:14, color:'#7CC3C6', marginBottom:50, textTransform:'capitalize'}}>{item.main_category} {item.category}</span>
                                 <span className="listing-price">{item.price} RS/-</span>
                                 {/* <p className="listing-text">{item.description}</p> */}
                                 <div className="listing-gallery-wrapper" style={{ justifyContent: 'flex-end', marginTop: 20 }}>

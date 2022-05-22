@@ -1,7 +1,7 @@
 import express from 'express';
 
 import {getusers, login,loginuser,signup,favList, updateProfile, changePassword, forgotPassword, resetPassword, 
-    fetchMeasurements, deleteMeasurements, editMeasurements, categorySearch, searchProducts,deleteCart, filterProducts, fetchCart, addInCart, updateQuantity, deleteCartItem, latestProducts, changePicture, viewFavourites, unfavList, currentuser, updatePicture, smartAdvisor, placeorder, orderhistory } from '../controllers/users.js';
+    fetchMeasurements, deleteMeasurements, editMeasurements, categorySearch, searchProducts,deleteCart, filterProducts, fetchCart, addInCart, updateQuantity, deleteCartItem, latestProducts, changePicture, viewFavourites, unfavList, currentuser, updatePicture, smartAdvisor, placeorder, orderhistory, recommendations } from '../controllers/users.js';
 
 
 const router = express.Router();
@@ -33,6 +33,7 @@ router.post('/getMeassurements', fetchMeasurements);
 router.patch('/updateProfile',updateProfile);
 router.patch('/changePassword',changePassword);
 router.post('/smartAdvisor', smartAdvisor);
+router.post('/recommendations', recommendations);
 router.post('/placeorder', placeorder);
 
 

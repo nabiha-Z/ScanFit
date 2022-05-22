@@ -6,7 +6,7 @@ import './login.css';
 import Cookies from 'js-cookie';
 import 'antd/dist/antd.css';
 import { message } from 'antd';
-import {login} from '../../../api/index';
+import { login } from '../../../api/index';
 
 
 const images = [
@@ -15,7 +15,7 @@ const images = [
     { img: 'images/img2.png', title: "Quote of the day", text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" },
 ];
 
-function Content(){
+function Content() {
 
 
     const routerHistory = useHistory();
@@ -32,31 +32,32 @@ function Content(){
         dots: true,
         dotsClass: "d-flex slick-dots",
     }
-    const API = async() => {
+    const API = async () => {
         console.log(email, password)
-        await login( {
+        await login({
             email: email, password: password
 
         })
             .then(function (response) {
                 //   console.log(response);
                 if (response.data.message === true) {
-                   console.log("token: ", response.data.token);
-                   try {
-                    Cookies.set('token', response.data.token);
-                
-                    Cookies.set('mail',email);
-                    Cookies.set('id',response.data.user);
-                    routerHistory.push('./profile');
-                  } catch (e) {
-                    return null;
-                  }
-                    
+                    console.log("token: ", response.data.token);
+                    try {
+                        Cookies.set('token', response.data.token);
+                        var newarray = ['s1', 's2', 's3', 's4', 's5', 's6', 's7'];
+                        Cookies.set('series', newarray);
+                        Cookies.set('mail', email);
+                        Cookies.set('id', response.data.user._id);
+                        routerHistory.push('./profile');
+                    } catch (e) {
+                        return null;
+                    }
+
                 } else if (response.data.message === false) {
                     // seterror("Login Failed");
                     console.log("err:", response.data.error)
                     message.error(response.data.error)
-                    
+
                 }
 
             })
@@ -86,7 +87,7 @@ function Content(){
                     <div className="form-group">
                         <Link to="/forgotpassword" className="forgot-password">Forgot Password?</Link>
                     </div>
-                    <button className="btn-custom secondary btn-block" style={{width:'100%', marginBottom:10}} onClick={() => API()}>Login</button>
+                    <button className="btn-custom secondary btn-block" style={{ width: '100%', marginBottom: 10 }} onClick={() => API()}>Login</button>
                     {/* <div className="auth-seperator">
                         <span>OR</span>
                     </div>

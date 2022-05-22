@@ -68,6 +68,7 @@ function Content() {
         await fetchProducts()
             .then(function (response) {
 
+                console.log("fet: ", response.data)
                 if (response.data.message === true) {
 
                     setproducts(response.data.products);
@@ -99,28 +100,6 @@ function Content() {
             </>
         );
     };
-
-    const addtocart = async(product) => {
-        await addCart({uid:Cookies.get('id'), product})
-        .then((response)=>{
-            console.log("res:", response.data)
-            if(response.data.message === true){
-                message.success("Added to Cart")
-            }
-        }).catch((err)=>{
-            console.log("err: ", err.message)
-            message.error(err.message)
-        })
-    }
-
-    // this.state = {
-    //     products: fetchs,
-    //     currentPage: 1,
-    //     productsPerPage: 6,
-    //     loading: false
-    // };
-
-    // this.handleClick = this.handleClick.bind(this);
 
 
 
@@ -256,43 +235,7 @@ function Content() {
                     {/* Sidebar End */}
                     {/* Posts Start */}
                     <div className="col-lg-8">
-                        {/* Controls Start */}
-                        {/* <div className="acr-global-listing-controls">
-                            <div className="acr-listing-active-filters">
-                                <Link to="#">
-                                    <div className="close-btn close-dark">
-                                        <span />
-                                        <span />
-                                    </div>
-                                    Any Status
-                                </Link>
-                                <Link to="#">
-                                    <div className="close-btn close-dark">
-                                        <span />
-                                        <span />
-                                    </div>
-                                    West Roxbury, MA
-                                </Link>
-                                <Link to="#">
-                                    <div className="close-btn close-dark">
-                                        <span />
-                                        <span />
-                                    </div>
-                                    House
-                                </Link>
-                            </div>
-                            <div className="acr-toggle-views">
-                                <OverlayTrigger fetchment="top" overlay={gridtip}>
-                                    <Link to="/listing-grid" className="active"><i className="fas fa-th-large" /></Link>
-                                </OverlayTrigger>
-                                <OverlayTrigger fetchment="top" overlay={listtip}>
-                                        <Link to="/listing-list"><i className="fas fa-th-list" /></Link>
-                                    </OverlayTrigger>
-                                    <OverlayTrigger fetchment="top" overlay={maptip}>
-                                        <Link to="/listing-map"><i className="fas fa-map" /></Link>
-                                    </OverlayTrigger> 
-                            </div>
-                        </div> */}
+                        
                         {/* Controls End */}
                         <div className="row" >
                             {/* Listing Start */}
@@ -303,9 +246,7 @@ function Content() {
                                     </> 
                                     
                              : <LoadingData />}
-                            
-
-                            {/* Listing End */}
+                        
                         </div>
                         {/* Pagination Start */}
                         {pageNumbers.length > 1 ?

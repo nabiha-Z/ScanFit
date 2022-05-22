@@ -29,8 +29,8 @@ function Categories() {
 
     const history = useHistory();
 
-    const searchCat = async (cate) => {
-        var category = cate.toLowerCase()
+    const searchCat = async (category) => {
+       
         await searchCategory({ category })
             .then((response) => {
                 if (response.data.message === true) {
@@ -58,10 +58,6 @@ function Categories() {
             });
     }
 
-
-
-
-
     return (
         <div className="section section-padding">
             <div className="container">
@@ -81,9 +77,9 @@ function Categories() {
                     <div className='categories'>
 
                         <CategoryConatiner title="Dress" img="dress" />
-                        <CategoryConatiner title="TShirt" img="shirt" />
+                        <CategoryConatiner title="Shirts" img="shirt" />
                         <CategoryConatiner title="Jeans" img="jeans" />
-                        <CategoryConatiner title="Suit" img="suit" />
+                        <CategoryConatiner title="Suits" img="suit" />
                         {/* <CategoryConatiner title="Accessories" img="accessory" /> */}
 
                     </div>

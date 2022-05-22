@@ -161,7 +161,7 @@ function Savedlists(props) {
           </div> */}
                                 <h5 className="listing-title"> <Link to="/listing-details-v1" title={item.title}>{item.title}</Link> </h5>
                                 <span className="listing-price">{new Intl.NumberFormat().format((item.price).toFixed(2))}$ <span></span> </span>
-                                <p className="listing-text">{item.description}</p>
+                               
 
 
                                 <div className="listing-gallery-wrapper">

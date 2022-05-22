@@ -30,7 +30,7 @@ class Menu extends Component {
          
         
           <li className="menu-item menu-item-has-children">
-            {Cookies.get("mail") === undefined ? (
+            {Cookies.get("id") === undefined ? (
               ""
             ) : (
               <Link to="/profile">My Account</Link>

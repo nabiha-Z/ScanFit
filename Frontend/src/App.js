@@ -1,7 +1,7 @@
-import React, { Suspense, useEffect,useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { loginuser } from './api';
+import { loginuser, recommendations } from './api';
 
 
 
@@ -29,34 +29,62 @@ const SearchProduct = React.lazy(() => import("./components/pages/SearchProduct"
 const ViewFavourites = React.lazy(() => import("./components/pages/ViewFavourites"));
 
 function App() {
-  const [user,setuser]=useState({});
+  const [user, setuser] = useState({});
+  const [check , setCheck] = useState(false);
   const [comingsoon, setcomingsoon] = useState(false);
 
-  useEffect(()=>{
-
-    loginuser({
-        token:Cookies.get('token')
+  const fetch = async () => {
+    await loginuser({
+      token: Cookies.get('token')
     })
-        .then(function (response) {
-            //console.log(response);
-            if (response.data.message == "true") {
-               try {
-               setuser(response.data.user);
-              //  console.log(user);
-              } catch (e) {
-                return null;
-              } 
-            } else if (response.data.message === "false") {
-              
-            }
+      .then(function (response) {
+        //console.log(response);
+        if (response.data.message == "true") {
+          try {
+            setuser(response.data.user);
+            //  console.log(user);
+          } catch (e) {
+            return null;
+          }
+        } else if (response.data.message === "false") {
 
-        })
-        .catch(function (error) {
+        }
 
-        });
+      })
+      .catch(function (error) {
+
+      });
+  }
+
+  const recommendation = async () => {
+    await recommendations({ counts: Cookies.get('counts') })
+      .then(function (response) {
+        //console.log(response);
+        if (response.data.message == "true") {
+          try {
+            setuser(response.data.user);
+            //  console.log(user);
+          } catch (e) {
+            return null;
+          }
+        } else if (response.data.message === "false") {
+
+        }
+      })
+      .catch(function (error) {
+
+      });
+  }
 
 
-  })
+
+  useEffect(() => {
+    var counts = [0, 0, 0, 0, 0, 0];
+    Cookies.set('counts', counts);
+    fetch();
+    recommendation();
+  },[check])
+
   return (
     <Router>
       <Suspense fallback={<div></div>}>
@@ -70,26 +98,26 @@ function App() {
           <Route path="/forgotpassword" component={forgotPass} />
           <Route path="/resetpassword" component={resetPass} />
           <Route path="/register" component={Register} />
-          <Route path="/profile" component= {Profile} />
-          <Route path="/measuremenets" component= {Measuremenets} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/measurements" component={Measuremenets} />
           <Route path="/favourites" component={ViewFavourites} />
           <Route path="/searchProducts" component={SearchProduct} />
           <Route path="/cart" component={Cart} />
-          
+
           {/* Coming Soon Pages */}
-          {!comingsoon? <Redirect to="/coming-soon" />
-          :
-          <>
-          <Route path="/about" component={About} />
-          <Route path="/faq" component={Faq} />
-          <Route path="/error-404" component={Error} />
-          <Route path="/listing-details-v1" component={Listingdetailsone} />
-         
-      
-          </>
-        }
-          
-         
+          {!comingsoon ? <Redirect to="/coming-soon" />
+            :
+            <>
+              <Route path="/about" component={About} />
+              <Route path="/faq" component={Faq} />
+              <Route path="/error-404" component={Error} />
+              <Route path="/listing-details-v1" component={Listingdetailsone} />
+
+
+            </>
+          }
+
+
         </Switch>
       </Suspense>
     </Router>

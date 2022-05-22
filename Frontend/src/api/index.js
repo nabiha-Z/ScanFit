@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 const API = axios.create({ baseURL: 'http://localhost:8000/' });
 // const API = axios.create({ baseURL: 'https://outfit-adobe-server.herokuapp.com/' });
 
-const flaskAPI = axios.create({ baseURL: 'http://127.0.0.1:5000' });
+const flaskAPI = axios.create({ baseURL: 'http://192.168.100.8:5000' });
 
 export const fetchadmin =()=> API.get(`user/`);
 export const fetchProducts = () => API.get(`admin/getproducts`);
@@ -12,7 +12,7 @@ export const login = userdata => API.post(`user/login`, userdata);
 export const searchLists = userdata => API.post(`listings/search`, userdata);
 export const loginuser = userdata => API.post(`user/loginuser`, userdata);
 export const signup = userdata => API.post(`user/signup`, userdata);
-export const takeMeasurements = userdata => flaskAPI.post(`/`, userdata);
+export const takeMeasurements = userdata => flaskAPI.post(`/measurements`, userdata);
 export const fetchMeasurements = userdata => API.post(`user/getMeassurements`, userdata)
 export const editMeasurements = userdata => API.patch(`user/editMeasurements`, userdata)
 export const deleteMeasurements = userdata => API.post(`user/deleteMeassurements`, userdata)
@@ -38,6 +38,7 @@ export const updatepassword = (data)=>API.patch(`user/changePassword`,data);
 export const forgotPassword = userdata => API.post(`user/forgotpassword`, userdata);
 export const resetPassword = userdata => API.post(`user/resetpassword`, userdata);
 export const smartAdvisor = userdata => API.post(`user/smartAdvisor`, userdata);
+export const recommendations = userdata => API.post(`user/recommendations`, userdata);
 export const placeOrder = userdata => API.post(`user/placeorder`, userdata);
 export const messageSend = userdata => API.post(`user/send-message`, userdata);
 

@@ -172,10 +172,14 @@ export const favList = async (req, res) => {
 
 export const viewFavourites = async (req, res) => {
 
-    const { id } = req.body;
+    var{ id } = req.body;
+    if (req.body.flag === "1" ) {
+        id = JSON.parse(id)
+    } 
     try {
 
         const userData = await Users.findOne({ _id: id });
+       
         var favourites = userData.favorites;
         res.status(200).json({ "message": true, favourites: favourites });
 
@@ -400,8 +404,17 @@ export const resetPassword = async (req, res) => {
 
 export const fetchMeasurements = async (req, res) => {
 
-    await measurements.find({ user: req.body.uid })
+    var id = req.body.uid;
+    console.log("type: ", req.body.id)
+    if (req.body.flag === "1" ) {
+        id = JSON.parse(id)
+    } else {
+        console.log("no need")
+    }
+
+    await measurements.find({ user: id })
         .then((data) => {
+            console.log("measurement: ", data)
             return res.status(200).json({ "message": true, "measurement": data });
         }).catch((err) => {
             return res.status(200).json({ "message": false, "error": err.message });
@@ -446,6 +459,7 @@ export const latestProducts = async (req, res) => {
 
 export const categorySearch = async (req, res) => {
 
+    console.log("cat: ", req.body.category)
     await products.find({ category: req.body.category })
         .then((data) => {
             res.status(201).json({ message: true, products: data })
@@ -470,7 +484,8 @@ export const filterProducts = async (req, res) => {
 export const searchProducts = async (req, res) => {
 
     const txt = req.body.searchField;
-    await products.find({ $or: [{ title: txt }, { category: txt }, { color: txt }, { main_category: txt }] })
+    var capitalize  = txt.charAt(0).toUpperCase() + txt.slice(1);
+    await products.find({ $or: [{ title: capitalize }, { category: capitalize }, { color: txt }, { main_category: capitalize }] })
         .then((data) => {
             res.status(201).json({ message: true, products: data })
         }).catch((err) => {
@@ -698,32 +713,36 @@ export const smartAdvisor = async (req, res) => {
     const { category, main_category, product_color } = req.body;
 
     var select_Category = "";
-    console.log("product_color: ", product_color)
+    console.log("product_color: ", product_color, main_category, category)
     var items = [];
-    if (category === 'tshirt') {
-        select_Category = "jeans";
-    } else if (category === 'jeans') {
-        select_Category = "tshirt";
-    } else if (category === 'dress') {
-        select_Category = "trouser";
-    } else if (category === 'suit') {
-        select_Category = "dresspant";
+    if (category === 'Shirts') {
+        select_Category = "Jeans";
+    } else if (category === 'Jeans') {
+        select_Category = "Shirts";
+    } else if (category === 'Dress') {
+        select_Category = "Trouser";
+    } else if (category === 'Suits') {
+        select_Category = "Dress pant";
     }
+
+    console.log("selected: ", select_Category)
     if (product_color == 'white') {
         items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'skin' }, { color: 'brown' }, { color: 'green' }, { color: 'light blue' }] }, { main_category: main_category }, { category: select_Category }] })
     }
     else if (product_color == 'black') {
-        if (select_Category === 'tshirt') {
+        if (select_Category === 'Shirts') {
             items = await products.find({ $and: [{ $or: [{ color: 'white' }, { color: 'blue' }, { color: 'black' }, { color: 'brown' }, { color: 'red' }, { color: 'maroon' }] }, { main_category: main_category }, { category: select_Category }] })
+            console.log("items:", items)
         } else {
             items = await products.find({ $and: [{ $or: [{ color: 'white' }, { color: 'blue' }, { color: 'black' }, { color: 'skin' }] }, { main_category: main_category }, { category: select_Category }] })
         }
 
     } else if (product_color == 'blue') {
-        if (select_Category === 'tshirt') {
+        if (select_Category === 'Shirts') {
             items = await products.find({ $and: [{ $or: [{ color: 'blue' }, { color: 'black' }, { color: 'grey' }, { color: 'green' }, { color: 'brown' }, { color: 'maroon' }, { color: 'red' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })
         } else {
-            items = await products.find({ $and: [{ $or: [{ color: 'white' }, { color: 'blue' }, { color: 'black' }, { color: 'grey' }] }, { main_category: main_category }, { category: select_Category }] })
+            items = await products.find({ $and: [{ $or: [{ color: 'white' }, { color: 'blue' }, { color: 'black' }, { color: 'grey' }] }, { category: select_Category }] })
+
         }
 
     } else if (product_color == 'orange') {
@@ -742,11 +761,42 @@ export const smartAdvisor = async (req, res) => {
         items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })
     }
     else if (product_color == 'green') {
-        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { category: select_Category }] })
+        items = await products.find({ $and: [{ $or: [{ color: 'black' }, { color: 'blue' }, { color: 'white' }] }, { main_category: main_category }, { category: select_Category }] })
         console.log("items: ", items)
     }
 
     return res.status(201).json({ "message": true, "products": items });
+}
+
+export const recommendations = async (req, res) => {
+    var counts = req.body.counts;
+    //console.log("chars:" , counts)
+    const chars = counts.split(",");
+    console.log("chars:", chars)
+    var max = parseInt(chars[0]);
+    var maxIndex = 0;
+    //console.log("max: ", max)
+    const categories = ['Shirts', "Jeans", "Suits", "Dress", "Trousers", "Dress Pants"];
+
+    for (let i = 1; i < chars.length; i++) {
+        if (chars[i] > max) {
+            max = chars[i];
+            maxIndex = i;
+        }
+    }
+    //console.log("max Index: ", maxIndex)
+
+    const category = categories[maxIndex];
+
+    await products.find({category: category})
+        .then((data) => {
+            console.log("data: ", data.length)
+            return res.status(201).json({ "message": true, "products": data });
+        }).catch((err) => {
+            return res.status(201).json({ "message": false, "error": err.message });
+
+        })
+
 }
 
 export const placeorder = async (req, res) => {
@@ -763,17 +813,17 @@ export const placeorder = async (req, res) => {
         }).catch((err) => {
             console.log("err: ", err.message)
             return res.status(201).json({ "message": false, "error": err.message });
-         })
+        })
 }
 
 export const orderhistory = async (req, res) => {
 
-    const {uid} = req.body;
+    const { uid } = req.body;
 
-    await orders.find({user: uid})
-    .then((data=>{
-        return res.status(201).json({ "message": true, "orders":data });
-    })).catch((err) => {
-        return res.status(201).json({ "message": false, "error": err.message });
-     })
+    await orders.find({ user: uid })
+        .then((data => {
+            return res.status(201).json({ "message": true, "orders": data });
+        })).catch((err) => {
+            return res.status(201).json({ "message": false, "error": err.message });
+        })
 }

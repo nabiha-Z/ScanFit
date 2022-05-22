@@ -34,15 +34,15 @@ const Content = (props) => {
     const item = {
         id: '5',
         title: 'Knee Length',
-        img: '/images/model1.png',
+        img: '/images/modal1.png',
         desc: "Linear distance between the shoulder point and knee point",
 
     }
 
     useEffect(async () => {
-        await fetchMeasurements({ uid: Cookies.get('id') })
+        await fetchMeasurements({ uid: Cookies.get('id'), flag:"0" })
             .then((response) => {
-                console.log("response: ", response.data.measurement[0].bottom)
+                console.log("response: ", response.data.measurement[0])
                 if (response.data.message === true) {
                     console.log("mes: ", response.data.measurement[0].tshirt)
                     setUserMeasurements(response.data.measurement)
@@ -53,7 +53,7 @@ const Content = (props) => {
                     setShirtL(response.data.measurement[0].tshirt)
                     setWaistL(response.data.measurement[0].waist)
                     setBottomL(response.data.measurement[0].bottom)
-                    setCheck(!check)
+                  
                 } else {
                     console.log(response.data.error)
                     
@@ -149,6 +149,7 @@ const Content = (props) => {
                                 <li> <Link className="logout" to="/" onClick={() => {
                                     Cookies.remove('token');
                                     Cookies.remove('mail');
+                                    Cookies.remove('id');
                                 }}><i className="flaticon-shut-down-button" /> Logout</Link> </li> </ul>
                         </div>
                     </div>

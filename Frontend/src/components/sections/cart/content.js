@@ -39,7 +39,7 @@ const Cart = () => {
 
     }, [check])
 
-    const updatequantity = (itemId, quant, val) => {
+    const updateItemQuantity = (itemId, quant, val) => {
         var quantity = quant + (val);
         if (quantity == 0) {
             deleteFunc(itemId)
@@ -126,7 +126,7 @@ const Cart = () => {
                                             <td><img class="cart-products-image" src={item.pid.picture} /></td>
                                             <td>{item.pid.title}</td>
                                             <td>{item.size}</td>
-                                            <td><span><i className='fa fa-minus' id="icon" onClick={() => updatequantity(item._id, item.quantity, -1)} /></span>{item.quantity}<span><i className='fa fa-plus' id="icon" style={{ color: '#2CAC5D' }} onClick={() => updatequantity(item._id, item.quantity, 1)} /></span></td>
+                                            <td><span><i className='fa fa-minus' id="icon" onClick={() => updateItemQuantity(item._id, item.quantity, -1)} /></span>{item.quantity}<span><i className='fa fa-plus' id="icon" style={{ color: '#2CAC5D' }} onClick={() => updateItemQuantity(item._id, item.quantity, 1)} /></span></td>
                                             <td>{item.pid.price}</td>
                                         </tr>
                                     ))}

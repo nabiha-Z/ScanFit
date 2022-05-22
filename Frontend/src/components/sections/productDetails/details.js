@@ -29,7 +29,7 @@ export default function Details() {
     const addtocart = async () => {
         if( Cookies.get('id')!==undefined){
 
-        console.log("size: ", selectedSize)
+        console.log("size: ", product)
         if(selectedSize!==null){    
             await addCart({ uid: Cookies.get('id'), product, size: selectedSize, color: product.color })
             .then((response) => {

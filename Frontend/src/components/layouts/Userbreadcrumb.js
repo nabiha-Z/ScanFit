@@ -27,16 +27,15 @@ const Userbreadcrumb =()=>  {
             user:Cookies.get('id')
         })
             .then(function (response) {
-                //   console.log(response);
+                  console.log("data:::   ",response);
                 if (response.data.message == true) {
                    try {
-                   setuser(response.data.user);
-                   console.log("user.picure: ", user.picture)
+                   setuser(response.data.user);                
                   } catch (e) {
                     return null;
                   } 
-                } else if (response.data.message === "false") {
-                  
+                } else if (response.data.message === false) {
+                    console.log("rror: ", response.data.error)
                 }
     
             })
