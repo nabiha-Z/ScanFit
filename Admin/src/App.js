@@ -20,6 +20,8 @@ import Pending from "./pages/orders/Pending";
 import './styles/app.scss';
 import { getOrders, getProducts } from './API/api';
 import PageNotFound from './404Page';
+import { message } from 'antd';
+
 
 function App() {
   const [locale, setLocale] = useState('en');
@@ -83,7 +85,7 @@ function App() {
 
       })
       .catch(err => {
-        alert(err);
+        message.error(err);
       })
   }
   useEffect(() => {

@@ -10,7 +10,7 @@ const productsSchema = mongoose.Schema({
   images: { type: Array },
   color: { type: String, required: true },
   colorCode:{ type: String, required: true },
-  arImage :{ type: String },
+  arImage :{ type: Buffer },
   sizes: { type: Array }
 
 

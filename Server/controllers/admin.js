@@ -334,8 +334,11 @@ export const editProduct = async (req, res) => {
     color,
     colorCode,
     arImage,
-    sizes
+    sizes,
+    ARImage
   } = req.body;
+
+  console.log("file: ", ARImage)
 
   await products.findByIdAndUpdate({ _id: pid },
     {title,
@@ -349,7 +352,7 @@ export const editProduct = async (req, res) => {
     arImage,
     sizes}, {new:true})
     .then((data) => {
-      res.status(201).json({ 'message': true, "product": data });
+      res.status(201).json({ 'message': true });
     }).catch((err) => {
       res.status(201).json({ 'message': false, 'error': err.message });
     })

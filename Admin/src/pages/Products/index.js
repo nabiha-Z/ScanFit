@@ -11,37 +11,120 @@ import {
 import { Link } from "react-router-dom";
 import "./style.css";
 import { FaBars } from 'react-icons/fa'
-import { BsListTask } from 'react-icons/bs'
+import { BsListTask } from 'react-icons/bs';
+import axios from "axios";
 import 'antd/dist/antd.css';
 import { message } from 'antd';
 import { TiDeleteOutline } from 'react-icons/ti';
 import MultiImageInput from 'react-multiple-image-input';
 import image1 from '../../assests/illustration1.png';
-import { getProducts, deleteProduct, editProduct } from "../../API/api";
+import { deleteProduct, editProduct } from "../../API/api";
 
-export default function Products({ setShow, check, setCheck, handleToggleSidebar, products}) {
+export default function Products({ setShow, check, setCheck, handleToggleSidebar, products }) {
     setShow(true);
     const [selected, setSelected] = useState(null);
     const [visible, setVisible] = useState(false);
     const [imagePath, setImagePath] = useState([]);
-    
+    const [picture, setPicture] = useState("");
+    const [ARImage, setARImage] = useState("");
+    const [title, settitle] = useState("");
+    const [color, setColor] = useState("");
+    const [price, setPrice] = useState();
+    const [description, setDescription] = useState("");
+    const [file, setFile] = useState("");
+    const [colorCode, setColorCode] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [main_category, setmain_category] = useState("");
+    const colors = ['black', 'white', 'blue', 'red', 'orange', 'green', 'grey', 'yellow', 'pink', 'purple'];
+    const categories = ['Shirts', "Jeans", "Suits", "Dress", "Trousers", "Dress Pants"];
+    const main_categories = ['Men', "Women"];
+    const sizes = ['S', 'M', 'L'];
+
     const { innerWidth: width, innerHeight: height } = window;
- 
+
     const deleteFunc = async (id) => {
-        console.log("id: ", typeof(id))
-        await deleteProduct({pid:id})
-        .then(res => {
-            if(res.data.message === true){
-                setCheck(!check)
-                message.success("deleted")
+        console.log("id: ", typeof (id))
+        await deleteProduct({ pid: id })
+            .then(res => {
+                if (res.data.message === true) {
+                    setCheck(!check)
+                    message.success("deleted")
+                }
+
+            })
+            .catch(err => {
+                alert(err);
+            })
+    }
+    const getBase64 = (file) => {
+        return new Promise(resolve => {
+            let baseURL = "";
+            // Make new FileReader
+            let reader = new FileReader();
+            // Convert the file to base64 text
+            reader.readAsDataURL(file);
+
+            // on reader load somthing...
+            reader.onload = () => {
+                // Make a fileInfo Object
+
+                baseURL = reader.result;
+                resolve(baseURL);
+            };
+        });
+    };
+
+    const handleImgChange = (e) => {
+
+        var file = e.target.files[0];
+
+        console.log("file: ", file)
+        setFile(file.name)
+        getBase64(file)
+            .then(result => {
+                file["base64"] = result;
+                console.log("res: ", result)
+                setPicture(result)
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
+
+    const updateProduct = async () => {
+
+        // console.log("selected: ", selectedCategory, main_category, ARImage,title, description, price, main_category, color, colorCode)
+        // await editProduct({ pid:selected._id, title, description, picture, price, main_category, category: selectedCategory, color, colorCode, arImage: ARImage, sizes, ARImage})
+        //     .then(res => {
+        //         if (res.data.message === true) {
+        //             message.success('Updated!');
+        //         } else {
+        //             message.error(res.data.error)
+        //         }
+
+        //     })
+        //     .catch(err => {
+        //         alert(err);
+        //     })
+        var file2 = new FormData();
+        file2.append('dress', {
+            name: "dress.png",
+            uri: "vkjkf",
+            type: "image/png"
+        });
+        axios({
+            method: 'POST', //you can set what request you want to be
+            url: 'http://192.168.100.8:5000/arTryOn',
+            body: file2,
+            headers: {
+                'content-type': 'multipart/form-data',
             }
-            
-        })
-        .catch(err => {
-            alert(err);
+        }).then((res) => {
+            message.success("true")
+        }).catch((err) => {
+            message.error(err.message)
         })
     }
-
 
     return (
         <main>
@@ -70,7 +153,7 @@ export default function Products({ setShow, check, setCheck, handleToggleSidebar
                 </Link>
             </div>
             <div className="userContainer" >
-                <div className="userShow" style={{ height: height * 0.9, overflowY: 'scroll', width: width*0.7 }}>
+                <div className="userShow" style={{ height: height * 0.9, overflowY: 'scroll', width: width * 0.7 }}>
                     <div className="userShowTop" >
                         <h3>All Products</h3>
                         {products.map((item, key) => (
@@ -86,6 +169,14 @@ export default function Products({ setShow, check, setCheck, handleToggleSidebar
                                     className="EditBtn"
                                     onClick={() => {
                                         setSelected(item)
+                                        settitle(item.title)
+                                        setDescription(item.description)
+                                        setColor(item.color)
+                                        setColorCode(item.colorCode)
+                                        setPrice(item.price)
+                                        setPicture(item.picture)
+                                        setmain_category(item.main_category)
+                                        setSelectedCategory(item.category)
                                         setVisible(true)
                                     }}
 
@@ -103,7 +194,7 @@ export default function Products({ setShow, check, setCheck, handleToggleSidebar
                 </div>
                 <div className="userUpdate">
                     <span className="userUpdateTitle">Edit</span>
-                    <form className="userUpdateForm">
+                    <form className="userUpdateForm" onSubmit={(e) => e.preventDefault()}>
 
                         {visible ?
                             (
@@ -115,6 +206,7 @@ export default function Products({ setShow, check, setCheck, handleToggleSidebar
                                                 type="text"
                                                 className="userUpdateInput"
                                                 value={selected.title}
+                                                onChange={(e) => settitle(e.target.value)}
                                             />
                                         </div>
                                         <div className="userUpdateItem">
@@ -122,7 +214,8 @@ export default function Products({ setShow, check, setCheck, handleToggleSidebar
                                             <input
                                                 type="text"
                                                 className="userUpdateInput"
-                                                value={selected.description}
+                                                value={description}
+                                                onChange={(e) => setDescription(e.target.value)}
                                             />
                                         </div>
                                         <div className="userUpdateItem">
@@ -130,37 +223,38 @@ export default function Products({ setShow, check, setCheck, handleToggleSidebar
                                             <input
                                                 type="text"
                                                 className="userUpdateInput"
-                                                value={selected.price}
+                                                value={price}
+                                                onChange={(e) => setPrice(e.target.value)}
                                             />
                                         </div>
                                         <div className="userUpdateItem">
                                             <label>Color</label>
-                                            <input
-                                                type="text"
-                                                className="userUpdateInput"
-                                                value={selected.color}
-                                            />
+                                            <select name="colors" className="form-control" id="colors" value={color} onChange={(e) => setColor(e.target.value)}>
+                                                {colors.map((item, i) => {
+
+                                                    return <option key={i} value={item}>{item}</option>
+                                                })}
+                                            </select>
                                         </div>
                                         <div className="userUpdateItem">
                                             <label>Color Code</label>
-                                            <input
-                                                type="text"
-                                                className="userUpdateInput"
-                                                value={selected.colorCode}
-                                            />
+                                            <input name="colorCode" className="form-control" id="colors" value={colorCode} onChange={(e) => setColorCode(e.target.value)} />
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleFormControlFile1">Select Display Image</label>
+                                            <input type="file" class="form-control-file" id="exampleFormControlFile1" onChange={(e) => handleImgChange(e)} />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="exampleFormControlFile1">Select AR Image (Transparent Background)</label>
+                                            <input type="file" class="form-control-file" id="exampleFormControlFile2" onChange={(e) => setARImage(e.target.files[0])} />
                                         </div>
 
                                     </div>
                                     <div className="userUpdateRight">
-                                        {/* <div className="userUpdateUpload">
-                                            <img
-                                                className="userUpdateImg"
-                                                src={selected.img}
-                                                alt=""
-                                            />
-                                         
-                                        </div> */}
-                                        <button className="userUpdateButton">Update</button>
+
+                                        <button className="userUpdateButton" onClick={() => updateProduct()}>Update</button>
 
                                     </div>
                                 </>
