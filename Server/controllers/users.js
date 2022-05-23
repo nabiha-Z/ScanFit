@@ -313,6 +313,7 @@ export const changePassword = async (req, res) => {
 
 export const forgotPassword = async (req, res) => {
     const { email } = req.body;
+    console.log("email: ", email)
     try {
         await Users.findOne({ email: email })
             .then(users => {
