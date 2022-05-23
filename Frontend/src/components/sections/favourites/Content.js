@@ -79,7 +79,7 @@ function Content() {
 
                                 <li> <Link to="/profile"> Edit Profile</Link> </li>
                                 <li> <Link to="/favourites"  className="active"> Favourites </Link> </li>
-                                <li> <Link to="/measuremenets"> Body Measurements </Link> </li>
+                                <li> <Link to="/measurements"> Body Measurements </Link> </li>
                                 <li> <Link className="logout" to="/" onClick={() => {
                                     Cookies.remove('token');
                                     Cookies.remove('mail');

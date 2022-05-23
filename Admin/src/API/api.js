@@ -3,6 +3,9 @@ import Cookies from 'js-cookie';
 
 const API = axios.create({ baseURL: 'http://localhost:8000/' });
 
+// const API = axios.create({ baseURL: 'https://outfitadobe-server.herokuapp.com/' });
+
+
   export const login = admindata => API.post(`admin/login`, admindata);
   export const signup = admindata => API.post(`admin/signup`, admindata);
   export const forgotPassword = admindata => API.post(`admin/forgotpassword`, admindata);

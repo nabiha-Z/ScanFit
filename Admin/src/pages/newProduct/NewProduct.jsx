@@ -7,7 +7,7 @@ import { message } from 'antd';
 import { addProducts } from "../../API/api";
 
 export default function NewCategory({ handleToggleSidebar }) {
-
+  var [uploadInput, setUploadInput] = useState("");
   const [picture, setPicture] = useState("");
   const [ARImage, setARImage] = useState("");
   const [title, settitle] = useState("");
@@ -19,19 +19,26 @@ export default function NewCategory({ handleToggleSidebar }) {
   const [selectedCategory, setSelected] = useState("");
   const [main_category, setmain_category] = useState("");
   const colors = ['black', 'white', 'blue', 'red', 'orange', 'green', 'grey', 'yellow', 'pink', 'purple'];
-  const categories = ['Shirts', "Jeans", "Suits", "Dress", "Trousers","Dress Pants"];
+  const categories = ['Shirts', "Jeans", "Suits", "Dress", "Trousers", "Dress Pants"];
   const main_categories = ['Men', "Women"];
-  const sizes =['S', 'M', 'L'];
+  const sizes = ['S', 'M', 'L'];
   let history = useHistory();
 
   const addProduct = async () => {
 
     console.log("selectedCategory: ", selectedCategory, main_category)
-    await addProducts({ title, description, picture, price, main_category, category:selectedCategory, color, colorCode, arImage:ARImage, sizes })
+    await addProducts({ title, description, picture, price, main_category, category: selectedCategory, color, colorCode, arImage: ARImage, sizes })
       .then(res => {
         if (res.data.message === true) {
-          message.success('Product Added!');
-          history.push('/home')
+
+          console.log(typeof (res.data.id))
+          console.log("responseid: ", res.data.id)
+          var id = res.data.id;
+          id = id.toString();
+          console.log(id)
+          console.log(typeof (id))
+          addArImage(id);
+
         } else {
           message.error(res.data.error)
         }
@@ -40,6 +47,22 @@ export default function NewCategory({ handleToggleSidebar }) {
       .catch(err => {
         alert(err);
       })
+  }
+  const addArImage = (filename) => {
+    console.log("name: ", filename)
+    const data = new FormData();
+    data.append('file', uploadInput.files[0]);
+    data.append('filename', filename);
+
+    fetch(`http://192.168.100.8:5000/upload?filename=${filename}`, {
+      mode: "no-cors",
+      method: 'POST',
+      body: data,
+    }).then((response) => {
+
+      message.success('Product Added!');
+      history.push('/home')
+    });
   }
 
 
@@ -82,7 +105,7 @@ export default function NewCategory({ handleToggleSidebar }) {
 
     var file = e.target.files[0];
 
-    console.log("file: ", file)   
+    console.log("file: ", file)
     getBase64(file)
       .then(result => {
         file["base64"] = result;
@@ -121,7 +144,7 @@ export default function NewCategory({ handleToggleSidebar }) {
           <input type="text" className="form-control" value={title} onChange={(e) => settitle(e.target.value)} placeholder="Product Title" />
         </div>
         <div className="form-group">
-          <label for="exampleFormControlInput1">Title</label>
+          <label for="exampleFormControlInput1">Description</label>
           <input type="text" className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Description" />
         </div>
         <div className="form-group">
@@ -159,7 +182,7 @@ export default function NewCategory({ handleToggleSidebar }) {
             })}
           </select>
         </div>
-  
+
         <div class="form-group">
           <label for="exampleFormControlFile1">Select Display Image</label>
           <input type="file" class="form-control-file" id="exampleFormControlFile1" onChange={(e) => handleImgChange(e)} />
@@ -167,7 +190,8 @@ export default function NewCategory({ handleToggleSidebar }) {
 
         <div class="form-group">
           <label for="exampleFormControlFile1">Select AR Image (Transparent Background)</label>
-          <input type="file" class="form-control-file" id="exampleFormControlFile2" onChange={(e) => handleARImgChange(e)} />
+          <input ref={(ref) => { uploadInput = ref; }} type="file" class="form-control-file" id="exampleFormControlFile2" />
+
         </div>
 
         {/* <div className="form-group">
@@ -185,7 +209,7 @@ export default function NewCategory({ handleToggleSidebar }) {
              Small
             </label>
         </div> */}
-        
+
         <button type="submit" class="btn btn-primary" style={{ width: '30%' }} onClick={() => addProduct()}>Add</button>
       </form>
     </div>

@@ -13,7 +13,7 @@ router.patch('/edit',updateProfile);
 router.post('/forgotpassword',forgotPassword);
 router.post('/resetpassword',resetPassword);
 router.post('/getcurrentuser',getcurrentuser);
-router.get('/getProducts',getProducts);
+router.get('/getproducts',getProducts);
 router.post('/addproducts',addProducts);
 router.post('/getproduct', getProduct);
 router.post('/deleteProduct', deleteProduct);

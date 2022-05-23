@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import Cookies from 'js-cookie';
 import './header.css';
-import { loginuser } from '../../api';
+import { loginuser, currentuser } from '../../api';
 import { ImCart } from 'react-icons/im';
 import { HiShoppingCart } from 'react-icons/hi';
 import { useHistory } from 'react-router';

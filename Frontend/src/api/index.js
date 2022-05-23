@@ -1,8 +1,8 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const API = axios.create({ baseURL: 'http://localhost:8000/' });
-// const API = axios.create({ baseURL: 'https://outfit-adobe-server.herokuapp.com/' });
+// const API = axios.create({ baseURL: 'http://localhost:8000/' });
+const API = axios.create({ baseURL: 'https://outfitadobe-server.herokuapp.com/' });
 
 const flaskAPI = axios.create({ baseURL: 'http://192.168.100.8:5000' });
 
@@ -11,6 +11,7 @@ export const fetchProducts = () => API.get(`admin/getproducts`);
 export const login = userdata => API.post(`user/login`, userdata);
 export const searchLists = userdata => API.post(`listings/search`, userdata);
 export const loginuser = userdata => API.post(`user/loginuser`, userdata);
+export const currentuser = userdata => API.post(`user/currentuser`, userdata);
 export const signup = userdata => API.post(`user/signup`, userdata);
 export const takeMeasurements = userdata => flaskAPI.post(`/measurements`, userdata);
 export const fetchMeasurements = userdata => API.post(`user/getMeassurements`, userdata)
@@ -41,6 +42,7 @@ export const smartAdvisor = userdata => API.post(`user/smartAdvisor`, userdata);
 export const recommendations = userdata => API.post(`user/recommendations`, userdata);
 export const placeOrder = userdata => API.post(`user/placeorder`, userdata);
 export const messageSend = userdata => API.post(`user/send-message`, userdata);
+export const arTryon = userdata => flaskAPI.post(`/arTryOn`, userdata);
 
 
 // export const login = loginForm => API.post('user/login', loginForm);

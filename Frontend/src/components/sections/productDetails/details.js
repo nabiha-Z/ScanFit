@@ -11,7 +11,7 @@ import jwt_decode from "jwt-decode";
 import 'antd/dist/antd.css';
 import { message } from 'antd';
 import ProductSlider from './slider';
-import { smartAdvisor, addCart, favourite } from '../../../api/index';
+import { smartAdvisor, addCart, arTryon } from '../../../api/index';
 
 
 export default function Details() {
@@ -27,28 +27,43 @@ export default function Details() {
     const product = location.state.product;
 
     const addtocart = async () => {
-        if( Cookies.get('id')!==undefined){
+        if (Cookies.get('id') !== undefined) {
 
-        console.log("size: ", product)
-        if(selectedSize!==null){    
-            await addCart({ uid: Cookies.get('id'), product, size: selectedSize, color: product.color })
-            .then((response) => {
-                console.log("res:", response.data)
-                if (response.data.message === true) {
-                    message.success("Added to Cart")
-                }
-            }).catch((err) => {
-                console.log("err: ", err.message)
-                message.error(err.message)
-            })
-        }else{
-            message.error("Select Size")
+            console.log("size: ", product)
+            if (selectedSize !== null) {
+                await addCart({ uid: Cookies.get('id'), product, size: selectedSize, color: product.color })
+                    .then((response) => {
+                        console.log("res:", response.data)
+                        if (response.data.message === true) {
+                            message.success("Added to Cart")
+                        }
+                    }).catch((err) => {
+                        console.log("err: ", err.message)
+                        message.error(err.message)
+                    })
+            } else {
+                message.error("Select Size")
+            }
+        } else {
+            message.error("You need to login first!")
         }
-    }else{
-        message.error("You need to login first!")
     }
-    
-       
+
+    const ARApi = async (id) => {
+        var flag = 0;
+        console.log("product.category: ", product.category)
+        if(product.category === 'Jeans' || product.category === 'Trousers'){
+            flag = 1
+        }
+        if(product.category === 'Dress' ){
+            flag = 2
+        }
+                
+        id = id.toString()
+        await arTryon({dress:id, flag})
+        .then((res)=>{
+            console.log("true response")
+        })
     }
 
     return (
@@ -75,11 +90,11 @@ export default function Details() {
                             </div>
 
                             <div class="product-configuration">
-                                <div class="try-on" >
+                                <button class="try-on" onClick={() => ARApi(product._id)}>
                                     <span>Virtual Try-on</span>
-                                    <Link to="#" className="camera"><i className="fas fa-camera" /></Link>
-                                </div>
-                                <div class="product-color">
+                                    <i className="fas fa-camera"  style={{margin:10}}/>
+                                </button>
+                                <div class="product-color" style={{marginTop:30}}>
                                     <span>Color</span>
 
                                     <div class="color-choose">

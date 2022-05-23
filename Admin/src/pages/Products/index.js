@@ -15,6 +15,7 @@ import { BsListTask } from 'react-icons/bs';
 import axios from "axios";
 import 'antd/dist/antd.css';
 import { message } from 'antd';
+import { useHistory } from "react-router-dom";
 import { TiDeleteOutline } from 'react-icons/ti';
 import MultiImageInput from 'react-multiple-image-input';
 import image1 from '../../assests/illustration1.png';
@@ -22,11 +23,14 @@ import { deleteProduct, editProduct } from "../../API/api";
 
 export default function Products({ setShow, check, setCheck, handleToggleSidebar, products }) {
     setShow(true);
+    let history = useHistory();
+    var [uploadInput, setUploadInput] = useState("");
     const [selected, setSelected] = useState(null);
     const [visible, setVisible] = useState(false);
+    const [change, setChange] = useState(false);
     const [imagePath, setImagePath] = useState([]);
     const [picture, setPicture] = useState("");
-    const [ARImage, setARImage] = useState("");
+    const [itemId, setItemId] = useState("");
     const [title, settitle] = useState("");
     const [color, setColor] = useState("");
     const [price, setPrice] = useState();
@@ -93,39 +97,51 @@ export default function Products({ setShow, check, setCheck, handleToggleSidebar
 
     const updateProduct = async () => {
 
-        // console.log("selected: ", selectedCategory, main_category, ARImage,title, description, price, main_category, color, colorCode)
-        // await editProduct({ pid:selected._id, title, description, picture, price, main_category, category: selectedCategory, color, colorCode, arImage: ARImage, sizes, ARImage})
-        //     .then(res => {
-        //         if (res.data.message === true) {
-        //             message.success('Updated!');
-        //         } else {
-        //             message.error(res.data.error)
-        //         }
+        console.log("selectedCategory: ", selectedCategory, main_category)
+        await editProduct({ pid:selected._id, title, description, picture, price, main_category, category: selectedCategory, color, colorCode, sizes })
+            .then(res => {
+                if (res.data.message === true) {
 
-        //     })
-        //     .catch(err => {
-        //         alert(err);
-        //     })
-        var file2 = new FormData();
-        file2.append('dress', {
-            name: "dress.png",
-            uri: "vkjkf",
-            type: "image/png"
-        });
-        axios({
-            method: 'POST', //you can set what request you want to be
-            url: 'http://192.168.100.8:5000/arTryOn',
-            body: file2,
-            headers: {
-                'content-type': 'multipart/form-data',
-            }
-        }).then((res) => {
-            message.success("true")
-        }).catch((err) => {
-            message.error(err.message)
-        })
+                    console.log(typeof (res.data.id))
+                    console.log("responseid: ", res.data.id)
+                    var id = res.data.id;
+                    id = id.toString();
+                    console.log(id)
+                    console.log(typeof (id))
+                    {
+                        change ? addArImage(id) :
+                            message.success('Product Updated!');
+                        history.push('/home')
+                    }
+
+
+                } else {
+                    message.error(res.data.error)
+                }
+
+            })
+            .catch(err => {
+                alert(err);
+            })
+
     }
 
+    const addArImage = (filename) => {
+        console.log("name: ", filename)
+        const data = new FormData();
+        data.append('file', uploadInput.files[0]);
+        data.append('filename', filename);
+
+        fetch(`http://192.168.100.8:5000/upload?filename=${filename}`, {
+            mode: "no-cors",
+            method: 'POST',
+            body: data,
+        }).then((response) => {
+
+            message.success('Product Updated!');
+            history.push('/home')
+        });
+    }
     return (
         <main>
 
@@ -248,7 +264,7 @@ export default function Products({ setShow, check, setCheck, handleToggleSidebar
 
                                         <div class="form-group">
                                             <label for="exampleFormControlFile1">Select AR Image (Transparent Background)</label>
-                                            <input type="file" class="form-control-file" id="exampleFormControlFile2" onChange={(e) => setARImage(e.target.files[0])} />
+                                            <input ref={(ref) => { uploadInput = ref; }} type="file" class="form-control-file" id="exampleFormControlFile2" onChange={() => setChange(true)} />
                                         </div>
 
                                     </div>

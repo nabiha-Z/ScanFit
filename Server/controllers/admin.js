@@ -39,17 +39,17 @@ export const login = async (req, res) => {
     );
 
     if (!isPasswordCorrect)
-      return res.status(201).json({ message: false, error:"Invalid Password" });
+      return res.status(201).json({ message: false, error: "Invalid Password" });
 
-      console.log("dskdjskdj")
+    console.log("dskdjskdj")
     const token = jwt.sign(
       { email: existingUser.email, id: existingUser._id },
       process.env.SECRET,
       { expiresIn: "6h" }
     );
-    res.status(200).json({ message: true, token, user:existingUser._id });
+    res.status(200).json({ message: true, token, user: existingUser._id });
   } catch (error) {
-    res.status(500).json({ message: false, "error":error.message });
+    res.status(500).json({ message: false, "error": error.message });
   }
 };
 
@@ -249,12 +249,20 @@ export const resetPassword = async (req, res) => {
 
 export const getProducts = async (req, res) => {
 
+  console.log("products")
   try {
-    await products.find({})
+    await products.find({}).limit(10)
       .then((data) => {
-        res.status(200).json({ 'message': true, "products": data });
+        try {
+          console.log("data: ", data[0].title)
+          return res.status(200).json({ 'message': true, "products": data });
+        } catch (err) {
+          console.log("err: ", err.message)
+        }
+
       }).catch((err) => {
-        res.status(200).json({ 'message': false, "error": err.message });
+        console.log("err: ", err.message)
+        return res.status(200).json({ 'message': false, "error": err.message });
       })
 
   } catch (error) {
@@ -286,7 +294,7 @@ export const addProducts = async (req, res) => {
   try {
 
 
-    const g = await products.create({
+    const data = await products.create({
       title,
       description,
       picture,
@@ -298,9 +306,8 @@ export const addProducts = async (req, res) => {
       arImage,
       sizes
     });
-
     res.status(201).json({
-      message: true
+      message: true, "id": data._id
     });
 
 
@@ -333,26 +340,25 @@ export const editProduct = async (req, res) => {
     category,
     color,
     colorCode,
-    arImage,
     sizes,
-    ARImage
   } = req.body;
 
-  console.log("file: ", ARImage)
+  console.log("pid: ", pid)
 
   await products.findByIdAndUpdate({ _id: pid },
-    {title,
-    description,
-    picture,
-    price,
-    main_category,
-    category,
-    color,
-    colorCode,
-    arImage,
-    sizes}, {new:true})
+    {
+      title,
+      description,
+      picture,
+      price,
+      main_category,
+      category,
+      color,
+      colorCode,
+      sizes
+    }, { new: true })
     .then((data) => {
-      res.status(201).json({ 'message': true });
+      res.status(201).json({ 'message': true, 'id': data._id });
     }).catch((err) => {
       res.status(201).json({ 'message': false, 'error': err.message });
     })
@@ -363,7 +369,7 @@ export const deleteProduct = async (req, res) => {
   const pid = req.body.pid;
   await products.findByIdAndDelete({ _id: pid })
     .then((data) => {
-      
+
       res.status(201).json({ "message": true })
     }).catch((err) => {
       res.status(201).json({ 'message': false, 'error': err.message });
@@ -373,9 +379,9 @@ export const deleteProduct = async (req, res) => {
 export const gettOrders = async (req, res) => {
 
   await orders.find({})
-  .then((data) => {
-    res.status(201).json({ "message": true, "orders": data })
-  }).catch((err) => {
-    res.status(201).json({ 'message': false, 'error': err.message });
-  })
+    .then((data) => {
+      res.status(201).json({ "message": true, "orders": data })
+    }).catch((err) => {
+      res.status(201).json({ 'message': false, 'error': err.message });
+    })
 }

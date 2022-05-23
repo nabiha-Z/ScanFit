@@ -40,7 +40,9 @@ const Content = (props) => {
     }
 
     useEffect(async () => {
-        await fetchMeasurements({ uid: Cookies.get('id'), flag:"0" })
+        var uid = Cookies.get('id');
+        console.log("uid: ", uid)
+        await fetchMeasurements({ uid, flag:"0" })
             .then((response) => {
                 console.log("response: ", response.data.measurement[0])
                 if (response.data.message === true) {

@@ -108,7 +108,7 @@ export const login = async (req, res) => {
 
     var { email, password } = req.body;
     // email = 'nabihazubair100@gmail.com';
-    // console.log("email :", email);
+    console.log("email :", email);
 
 
     try {
@@ -121,7 +121,7 @@ export const login = async (req, res) => {
         } else {
 
             jwt.sign(
-                { email: existingUser.email, id: existingUser._id },
+                { email: existingUser.email, id: existingUser._id },    
                 config.get('jwtSecretKey'),
                 { expiresIn: "1h" },
                 (err, token) => {
@@ -405,7 +405,10 @@ export const resetPassword = async (req, res) => {
 export const fetchMeasurements = async (req, res) => {
 
     var id = req.body.uid;
-    console.log("type: ", req.body.id)
+ 
+    // id = parseInt(id)
+    console.log("id: ", id)
+    console.log("type: ", typeof(id))
     if (req.body.flag === "1" ) {
         id = JSON.parse(id)
     } else {
@@ -788,7 +791,7 @@ export const recommendations = async (req, res) => {
 
     const category = categories[maxIndex];
 
-    await products.find({category: category})
+    await products.find({category: category}).limit(10)
         .then((data) => {
             console.log("data: ", data.length)
             return res.status(201).json({ "message": true, "products": data });
