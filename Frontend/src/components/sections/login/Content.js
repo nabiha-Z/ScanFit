@@ -10,9 +10,9 @@ import { login } from '../../../api/index';
 
 
 const images = [
-    { img: 'images/img8.jpg', title: "Quote of the day", text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" },
-    { img: 'images/img1.png', title: "Quote of the day", text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" },
-    { img: 'images/img2.png', title: "Quote of the day", text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" },
+    { img: 'images/img8.jpg', title: "Quote of the day", text: "Style is something each of us already has, all we need is to find it" },
+    { img: 'images/img1.png', title: "Quote of the day", text: "Style is something each of us already has, all we need is to find it" },
+    { img: 'images/img2.png', title: "Quote of the day", text: "Style is something each of us already has, all we need is to find it" },
 ];
 
 function Content() {
@@ -102,8 +102,8 @@ function Content() {
                 <Slider className="acr-auth-bg-slider acr-cs-bg-slider" {...settings}>
                     {images.map((item, i) => (
                         <div key={i}>
-                            <div className="acr-cs-bg-item bg-cover bg-center" style={{ backgroundImage: "url(" + process.env.PUBLIC_URL + "/" + item.img + ")" }} >
-                                <div className="acr-auth-quote">
+                            <div className="acr-cs-bg-item bg-cover bg-center" style={{ backgroundImage: "url(" + process.env.PUBLIC_URL + "/" + item.img + ")",  justifyContent:'center', alignItems:'center'}} >
+                                <div className="acr-auth-quote" style={{alignSelf:'center'}}>
                                     <h6>{item.title}</h6>
                                     <p>{item.text}</p>
                                 </div>

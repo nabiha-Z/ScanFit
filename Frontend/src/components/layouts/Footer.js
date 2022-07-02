@@ -15,7 +15,7 @@ class Footer extends Component {
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-5 col-sm-12 footer-widget">
-                                <div className="footer-logo"> <img src={"/images/logo2.png"} alt="acres" /> </div>
+                                <div className="footer-logo"> <img src={"/logo2.png"} alt="acres" /> </div>
                                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's </p>
                               
                             </div>

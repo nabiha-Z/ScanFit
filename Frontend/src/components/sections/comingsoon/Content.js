@@ -23,7 +23,7 @@ class Content extends Component {
                 <div className="acr-cs-content">
                     <div className="acr-cs-content-head">
                         <div className="acr-cs-logo">
-                            <Link to="/"><img src={process.env.PUBLIC_URL + "/images/logo2.png"} width="40%" alt="logo" /></Link>
+                            <Link to="/"><img src={process.env.PUBLIC_URL + "/logo.png"} width="40%" alt="logo" /></Link>
                         </div>
                     </div>
                     <div className="acr-cs-content-body">

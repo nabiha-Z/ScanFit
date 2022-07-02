@@ -9,9 +9,9 @@ import { signup } from '../../../api';
 
 
 const images = [
-    { img: 'images/img7.jpg', title: "Quote of the day", text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" },
-    { img: 'images/img9.jpg', title: "Quote of the day", text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" },
-    { img: 'images/img1.png', title: "Quote of the day", text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s" },
+    { img: 'images/img7.jpg', title: "Quote of the day", text: "What you wear is how you present yourself to the world, especially today, when human contacts are so quick. Fashion is instant language" },
+    { img: 'images/img9.jpg', title: "Quote of the day", text: "What you wear is how you present yourself to the world, especially today, when human contacts are so quick. Fashion is instant language" },
+    { img: 'images/img1.png', title: "Quote of the day", text: "What you wear is how you present yourself to the world, especially today, when human contacts are so quick. Fashion is instant language" },
 ];
 
 

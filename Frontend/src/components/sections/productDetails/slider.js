@@ -154,7 +154,7 @@ export default function ProductSlider(props) {
     }
     return (
         <div className="container" style={{ padding: '20px' }}>
-            <h2> Suggested For You </h2>
+            <h2> Frequently bought together </h2>
            
                 <Slider {...settings}>
                     {products.map((item, key) => (

@@ -10,7 +10,7 @@ class Menu extends Component {
         <Link className="navbar-brand" to="/">
           
           <img
-            src={ "/logo2.png"}
+            src={ "/logo.png"}
             alt="logo"
             style={{width:'100%', height:'auto'}}
           />

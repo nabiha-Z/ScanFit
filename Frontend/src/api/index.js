@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 // const API = axios.create({ baseURL: 'http://localhost:8000/' });
 const API = axios.create({ baseURL: 'https://outfitadobe-server.herokuapp.com/' });
 
-const flaskAPI = axios.create({ baseURL: 'http://192.168.100.8:5000' });
+const flaskAPI = axios.create({ baseURL: 'http://192.168.1.63:5000' });
 
 export const fetchadmin =()=> API.get(`user/`);
 export const fetchProducts = () => API.get(`admin/getproducts`);

@@ -5,6 +5,7 @@ import Slider from 'react-slick';
 import { forgotPassword } from '../../../api';
 import 'antd/dist/antd.css';
 import { message, Space } from 'antd';
+import axios from 'axios';
 
 
 const images = [
@@ -42,7 +43,7 @@ function Content() {
 
     const sendCode = async () => {
         setLoading(true);
-        await forgotPassword({
+        await axios.post('http://localhost:8000/user/forgotpassword',{
             email: email
 
         })

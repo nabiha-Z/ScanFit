@@ -138,7 +138,7 @@ export default function Details() {
 
             </main>
             <div>
-                <p>{product.category}</p>
+
                 <ProductSlider category={product.category} color={product.color} mainCategory={product.main_category} />
             </div>
         </>
